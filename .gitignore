@@ -1,0 +1,6 @@
+# ignore this files
+yarn.lock
+
+# ignore this folders
+/.expo/
+/node_modules/
