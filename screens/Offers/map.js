@@ -235,9 +235,10 @@ renderModalContent = () => {
                   onPress={() => { this._toggleModal(!this.state.modalVisible, null) }} 
                   style={{  
                             alignItems:'center', justifyContent:'center', flexDirection:'row',
-                            height:30, backgroundColor: '#393863'
+                            height:30, backgroundColor: '#393863', overflow:'visible'
                         }}>
-                  <Icon name="chevron-down" type="FontAwesome"  style={{color:'white'}}/> 
+
+                  <Icon name="chevron-down" type="FontAwesome"  style={{color:'white', backgroundColor:'purple', padding: 20, borderRadius:50}}/>                   
                 </TouchableHighlight>
               
               <OfferInfo 

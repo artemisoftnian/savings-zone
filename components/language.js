@@ -31,6 +31,15 @@ export const Lang = {
             expiresInDays: "EXPIRA EN $days DÍAS",
             expiredMessage: "EXPIRADO",
             getBtnMessage: "OBTEN LA OFERTA",
+            categoryPicker: {
+                todos:'Todos',
+                belleza: 'Belleza',
+                entretenimiento: 'Entretenimiento',
+                escapadas: 'Escapadas',
+                restaurantes: 'Restaurantes',
+                servicios: 'Servicios',
+                viajes: 'Viajes'
+            }
         }, 
         scannerScreen:{
             message: "Escanea el Codigo QR para redimir"
@@ -81,6 +90,15 @@ export const Lang = {
             expiresInDays: "EXPIRES IN $days DAYS",
             expiredMessage: "EXPIRED",
             getBtnMessage: "GET THE OFFER",
+            categoryPicker: {
+                todos:'All',
+                belleza: 'Beuty',
+                entretenimiento: 'Enterteiment',
+                escapadas: 'Escapes',
+                restaurantes: 'Restaurants',
+                servicios: 'Services',
+                viajes: 'Travel'
+            }            
         }, 
         scannerScreen:{
             message: "Scan QR To Redeem Offer"

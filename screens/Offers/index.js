@@ -177,12 +177,13 @@ alertContents = () => {
   _toggleModal = (visible, data, expired = false) => {
 
     if(data){
+      console.log(data);
       this.setState({ 
         modalVisible: visible,
         title: data.post_data.post_title,
         desc:  data.post_data.post_content,
         price: data.post_meta.offer_price,
-        image: data.post_meta.offer_image_1,
+        image: [data.post_meta.offer_image_1, data.post_meta.offer_image_2, data.post_meta.offer_image_3, data.post_meta.offer_image_4 ],
         offer: data,
         daysRemain: this._getDaysRemain(data.post_meta.offer_exp_date), //data.remain
         expired: expired
@@ -240,9 +241,12 @@ alertContents = () => {
                   onPress={() => { this._toggleModal(!this.state.modalVisible, null) }} 
                   style={{  
                             alignItems:'center', justifyContent:'center', flexDirection:'row',
-                            height:30, backgroundColor: '#393863'
+                            height:30, backgroundColor: '#393863', overflow:'visible'
                         }}>
-                  <Icon name="chevron-down" type="FontAwesome"  style={{color:'white'}}/> 
+
+                  <Icon name="chevron-down" type="FontAwesome"  style={{color:'white', backgroundColor:'purple', padding: 20, borderRadius:50}}/> 
+
+                  
                 </TouchableHighlight>
 
                 
@@ -340,13 +344,13 @@ alertContents = () => {
                               selectedValue={this.state.selected}
                               onValueChange={this.onValueChange.bind(this)}
                             >
-                              <Picker.Item label="Todos" value="*" />
-                              <Picker.Item label="Belleza" value="belleza" />
-                              <Picker.Item label="Entretenimiento" value="entretenimiento" />
-                              <Picker.Item label="Escapadas" value="escapadas" />
-                              <Picker.Item label="Restauranes" value="restaurantes" />
-                              <Picker.Item label="Servicios" value="servicios" />
-                              <Picker.Item label="Viajes" value="viajes" />                              
+                              <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.todos} value="*" />
+                              <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.belleza} value="belleza" />
+                              <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.entretenimiento} value="entretenimiento" />
+                              <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.escapadas} value="escapadas" />
+                              <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.restaurantes} value="restaurantes" />
+                              <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.servicios} value="servicios" />
+                              <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.viajes} value="viajes" />                              
                             </Picker>
                           </Form> 
                     </View>

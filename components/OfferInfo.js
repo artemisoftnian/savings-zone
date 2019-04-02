@@ -48,13 +48,17 @@ export default class OfferInfo extends React.Component {
           <CardItem>
 
             <ScrollView
-              horizontal
-              pagingEnabled
-              showsHorizontalScrollIndicator={false}
+              horizontal //scrolling left to right instead of top to bottom
+              showsHorizontalScrollIndicator={false} //hides native scrollbar
+              scrollEventThrottle={10} //how often we update the position of the indicator bar
+              pagingEnabled //scrolls from one image to the next, instead of allowing any value inbetween
             >
-              <Image source={ {uri:this.props.image } } style={{ height: 200, width:300,  flex: 1 }} />
-              <Image source={ {uri:this.props.image_1 } } style={{ height: 200, width:300, flex: 1 }} />
-              <Image source={ {uri:this.props.image_2 } } style={{ height: 200, width:300, flex: 1 }} />
+              {
+                this.props.image.map(image => (
+                    <Image source={ {uri:image } } style={{ height: 200, width:300, flex: 1 }} />
+                  )
+                )
+              }
 
             </ScrollView>            
 
