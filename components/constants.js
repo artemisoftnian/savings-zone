@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 export const DemoSubs = [
   { 
     currency: "USD", 
@@ -43,49 +42,3 @@ export const DemoSubs = [
     type: "inapp", 
   },
 ]
-=======
-export const DemoSubs = [
-  { 
-    currency: "USD", 
-    description: "Sample description for product: com.savings.zone.sub.monthly.", 
-    freeTrialPeriodAndroid: "", 
-    introductoryPrice: "", 
-    introductoryPriceCyclesAndroid: "", 
-    introductoryPricePeriodAndroid: "", 
-    localizedPrice: "$2.99", 
-    price: "2.99", 
-    productId: "com.savings.zone.sub.monthly",  
-    subscriptionPeriodAndroid: "", 
-    title: "Montly", 
-    type: "inapp", 
-  },
-  { 
-    currency: "USD", 
-    description: "Sample description for product: com.savings.zone.sub.sixmonths.", 
-    freeTrialPeriodAndroid: "", 
-    introductoryPrice: "", 
-    introductoryPriceCyclesAndroid: "", 
-    introductoryPricePeriodAndroid: "", 
-    localizedPrice: "$17.99", 
-    price: "17.99", 
-    productId: "com.savings.zone.sub.sixmonths", 
-    subscriptionPeriodAndroid: "", 
-    title: "Six Months", 
-    type: "inapp", 
-  },
-  { 
-    currency: "USD", 
-    description: "Sample description for product: com.savings.zone.sub.year.", 
-    freeTrialPeriodAndroid: "", 
-    introductoryPrice: "", 
-    introductoryPriceCyclesAndroid: "", 
-    introductoryPricePeriodAndroid: "", 
-    localizedPrice: "$34.99", 
-    price: "34.99", 
-    productId: "com.savings.zone.sub.year", 
-    subscriptionPeriodAndroid: "", 
-    title: "Yearly", 
-    type: "inapp", 
-  },
-]
->>>>>>> 8afe828627badbc7538961adcb877521f4fa42a4
