@@ -121,8 +121,8 @@ class Offers extends React.Component {
         return;
       }
 
-      await this.props.saveOffer(item);
-      this._toggleModal(!this.state.modalVisible, null)
+      //await this.props.saveOffer(item);
+      this._toggleModal(false, null)
       this.showAlert('got');
     }
     
@@ -156,6 +156,10 @@ alertContents = () => {
     }
     else{
       return(
+        <View styles={{paddingTop:60}} style={{backgroundColor:'red', overflow:'visible'}}>
+                 <Icon name="chevron-down" type="FontAwesome"  
+            style={{color:'red', backgroundColor:'blue', padding: 20, borderRadius:50, zIndex: 12, position: 'absolute', top:-30}}/> 
+ 
         <View style= {styles.customMessage}>
           <Image
               style={{width: 50, height: 50}}
@@ -163,6 +167,7 @@ alertContents = () => {
           />    
           <Text style={{ marginTop:20 }}>¡FELICIDADES!</Text>
           <Text>Obtuviste la Oferta</Text>
+        </View>
         </View>
       )
     }  
@@ -220,9 +225,7 @@ alertContents = () => {
         return itemData.indexOf(textData) > -1;
       });   
     }
-
-	}  
-
+	}
 
   onValueChange(value) {
     this.setState({ selected: value, filter: null });
@@ -243,12 +246,8 @@ alertContents = () => {
                             alignItems:'center', justifyContent:'center', flexDirection:'row',
                             height:30, backgroundColor: '#393863', overflow:'visible'
                         }}>
-
                   <Icon name="chevron-down" type="FontAwesome"  style={{color:'white', backgroundColor:'purple', padding: 20, borderRadius:50}}/> 
-
-                  
                 </TouchableHighlight>
-
                 
                 <OfferInfo 
                   title={this.state.title}
@@ -393,6 +392,8 @@ alertContents = () => {
         </Modal>
 
         <AwesomeAlert
+          contentContainerStyle={{overflow:'visible', backgroundColor:'yellow', }}
+          overflow='visible'
           show={showAlert}
           showProgress={false}
           title=""

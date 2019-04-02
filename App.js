@@ -37,7 +37,7 @@ global.offerEmitter = new EventEmitter();
 const store = ConfigureStore();
 
 const AppStack = createStackNavigator({
-    Offers: OffersScreen,    
+    Offers: OffersScreen,     
     Scanner: ScannerScreen,
     MyOffers: MyOfferScreen,
     UserProfile: UserProfileScreen,
@@ -67,7 +67,7 @@ const MainNav = createSwitchNavigator(
   }
 );
 
-//console.disableYellowBox = false; 
+console.disableYellowBox = true; 
 
 export default class App extends React.Component {
 

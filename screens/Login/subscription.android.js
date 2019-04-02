@@ -6,26 +6,10 @@ import {  Text,  Button,  Left,  Right,  ListItem, Radio } from 'native-base';
 
 import {DemoSubs} from '../../components/constants.js';
 
+import InAppBilling from "react-native-billing";
 
-const itemSkus = Platform.select({
-  ios: [
-    'com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths'
-  ],
-  android: [
-    'android.test.purchased', 'android.test.canceled', 'android.test.item_unavailable',
-    'com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths'
-  ],
-});
-
-const itemSubs = Platform.select({
-  ios: [
-    'com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths'
-  ],
-  android: [
-    'android.test.purchased', 'android.test.canceled', 'android.test.item_unavailable',
-    'com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths'
-  ],
-});
+const testItems = [ 'android.test.purchased', 'android.test.canceled', 'android.test.refunded', 'android.test.item_unavailable' ];
+const itemSubs = ['com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths'];
 
 class SubscriptionScreen extends React.Component {
 
@@ -35,7 +19,8 @@ class SubscriptionScreen extends React.Component {
       subscriptions:[],
       refreshing: false,
       selectedPlan: '0',
-      selectedPlanPrice: 'Free'
+      selectedPlanPrice: 'Free',
+      selectedPlanCode: 'free'
     };
   }
 
@@ -67,7 +52,65 @@ class SubscriptionScreen extends React.Component {
   } 
 
   async componentDidMount(){
+    try {
+      // make sure the service is close before opening it
+      await InAppBilling.close();
+      await InAppBilling.open();
+
+      // product with Google Play id: gems.pack.500
+      const subcriptions = await InAppBilling.getSubscriptionDetailsArray(itemSubs)
+      .then(
+        //console.log(subscriptions)
+        this.setState({subcriptions: subcriptions})
+      );
+      //const details = await InAppBilling.getProductDetails('gems.pack.500');
+      //this.gemsPack.priceText = details.priceText;
+    } catch (error) {
+      // debug in device with the help of Alert component
+      console.log(error);
+    } finally {
+      await InAppBilling.close(); 
+    }    
   } 
+
+
+  async purchase() {
+    try {
+      await InAppBilling.open();
+
+      const response = InAppBilling.subscribe(this.state.selectedPlanCode).then(details => {
+
+        console.log(details);
+
+        if(details.purchaseState == 'PurchasedSuccessfully'){
+          //Update User Data on server here
+          //then
+          this.props.navigation.navigate('Offers');
+        }
+        
+      });
+     //const details = await InAppBilling.purchase(this.state.selectedPlanCode);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      await InAppBilling.close();
+    }
+  }
+  
+  async checkSubscription() {
+      try {
+      await InAppBilling.open();
+      // If subscriptions/products are updated server-side you
+      // will have to update cache with loadOwnedPurchasesFromGoogle()
+      await InAppBilling.loadOwnedPurchasesFromGoogle();
+      const isSubscribed = await InAppBilling.isSubscribed("myapp.productId")
+      console.log("Customer subscribed: ", isSubscribed);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      await InAppBilling.close();
+    }
+  }
 
   buyItem = async(sku) => {
     try {
@@ -88,7 +131,7 @@ class SubscriptionScreen extends React.Component {
         this.props.navigation.navigate('Offers');
       }
       else{
-          //this.buyItem(product.productId)
+          await this.purchase(product.productId);
 
           Alert.alert(
             'Not Programed Yet!',
@@ -99,6 +142,10 @@ class SubscriptionScreen extends React.Component {
             { cancelable: false }
           )          
       }
+  }
+
+  onSelectedItem = (product)=>{
+    this.setState({ selectedPlan: product.productId, selectedPlanPrice: product.localizedPrice, selectedPlanCode: product.productId })
   }
 
   render() {
@@ -119,7 +166,7 @@ class SubscriptionScreen extends React.Component {
       <KeyboardAvoidingView style={[styles.mainView,{backgroundColor:'#fff'}]}  behavior="padding" enabled>
           <View enabled style={{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20  }}>
 
-              <Text>{ screenProps.lang.subscriptionScreen.title  }</Text>
+              <Text>(andoid) { screenProps.lang.subscriptionScreen.title }</Text>
 
               <View style={{backgroundColor:'#fff', maxWidth:400}}>
 
@@ -128,7 +175,7 @@ class SubscriptionScreen extends React.Component {
                             return (
 
                               <ListItem
-                                  onPress={() => this.setState({ selectedPlan: product.productId, selectedPlanPrice: product.localizedPrice })}
+                                  onPress={() => this.onSelectedItem(product) }
                                   selected={this.state.selectedPlan == product.productId} 
                                   key={i.toString()}                    
                               >
@@ -137,7 +184,7 @@ class SubscriptionScreen extends React.Component {
                                 </Left>
                                 <Right>
                                   <Radio
-                                    onPress={() => this.setState({ selectedPlan: product.productId, selectedPlanPrice: product.localizedPrice })}
+                                    onPress={() => this.onSelectedItem(product)  }
                                     color={"#f0ad4e"}
                                     selectedColor={"#5cb85c"}
                                     selected={this.state.selectedPlan == product.productId}

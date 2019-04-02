@@ -121,29 +121,29 @@ class MapScreen extends React.Component {
 
     if (status !== 'granted') {
       this.setState({
-        locationResult: 'Permission to access location was denied',
+        //locationResult: 'Permission to access location was denied',
       });
     } else {
-      this.setState({ hasLocationPermissions: true });
+      //this.setState({ hasLocationPermissions: true });
     }
 
     if(this.state.locationResult === null){
-      this.setState({debugData: 'Finding your current location...'})  
+      //this.setState({debugData: 'Finding your current location...'})  
     }
 
     if(this.state.hasLocationPermissions === false){
-      this.setState({debugData: 'Location permissions are not granted.'})  
+      //this.setState({debugData: 'Location permissions are not granted.'})  
     }
 
     if(this.state.mapRegion === null){
-      this.setState({debugData: "Map region doesn't exist."}) 
+      //this.setState({debugData: "Map region doesn't exist."}) 
     }    
 
     let location = await Location.getCurrentPositionAsync({});
-    this.setState({ locationResult: JSON.stringify(location) });
+    //this.setState({ locationResult: JSON.stringify(location) });
     
     // Center the map on the location we just fetched.
-    this.setState({mapRegion: { latitude: location.coords.latitude, longitude: location.coords.longitude, latitudeDelta: 0.01, longitudeDelta: 0.01 }});//latitudeDelta: 0.0922, longitudeDelta: 0.0421 }});
+    //this.setState({mapRegion: { latitude: location.coords.latitude, longitude: location.coords.longitude, latitudeDelta: 0.01, longitudeDelta: 0.01 }});//latitudeDelta: 0.0922, longitudeDelta: 0.0421 }});
   }; 
 
   renderMap = () => {
