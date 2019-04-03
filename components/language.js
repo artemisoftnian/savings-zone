@@ -39,6 +39,18 @@ export const Lang = {
                 restaurantes: 'Restaurantes',
                 servicios: 'Servicios',
                 viajes: 'Viajes'
+            },
+            noSubscriptionMsg:{
+                h1:'Lo Sentimos! Pero estas en Test Drive',
+                h2:'Nesesitas una subscripción para poder obtener o redimir ofertas',
+                confirm:'SUBSCRIBETE AQUÍ',
+                cancel:'CANCELAR'
+            },
+            gotItMsg:{
+                h1:'¡FELICIDADES!',
+                h2:'Obtuviste la Oferta',
+                confirm:'Vea sus ofertas',
+                cancel:'CONTINUA AHORRANDO'
             }
         }, 
         scannerScreen:{
@@ -98,7 +110,19 @@ export const Lang = {
                 restaurantes: 'Restaurants',
                 servicios: 'Services',
                 viajes: 'Travel'
-            }            
+            },
+            noSubscriptionMsg:{
+                h1:'Sorry! You are on Test Drive',
+                h2:'You need a subscription to get or redeem offers',
+                confirm:'Get a real plan here!',
+                cancel:'CANCEL'
+            },
+            gotItMsg:{
+                h1:'¡CONGRATULATIONS!',
+                h2:'You Got The Offer',
+                confirm:'View Your Offers',
+                cancel:'CONTINUE SAVING'
+            }           
         }, 
         scannerScreen:{
             message: "Scan QR To Redeem Offer"

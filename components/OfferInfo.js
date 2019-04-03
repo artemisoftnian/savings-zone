@@ -55,7 +55,7 @@ export default class OfferInfo extends React.Component {
             >
               {
                 this.props.image.map(image => (
-                    <Image source={ {uri:image } } style={{ height: 200, width:300, flex: 1 }} />
+                    <Image source={ {uri:image } } style={{ height: 200, width:SCREEN_WIDTH - 50, flex: 1 }} />
                   )
                 )
               }

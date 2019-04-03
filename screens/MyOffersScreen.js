@@ -144,9 +144,8 @@ class MyOffersScreen extends React.Component {
             <Text style={styles.emptyText} >{screenProps.lang.myOffers.emptyListMessage}</Text>
           </View>
         }
-contentContainerStyle={[ { flexGrow: 1 } , this.state.myOffers.length ? null : { justifyContent: 'center'} ]}
+        contentContainerStyle={[ { flexGrow: 1 } , this.state.myOffers.length ? null : { justifyContent: 'center'} ]}
         ListHeaderComponent={ () => {
-
           if(!this.state.myOffers.lenght)
             return null
           else
@@ -245,7 +244,7 @@ contentContainerStyle={[ { flexGrow: 1 } , this.state.myOffers.length ? null : {
 
 const styles = StyleSheet.create({
   emptyContainer: {
-    backgroundColor:'#e8e8e8',
+    
     flex:1,
 		alignItems: 'center',
     justifyContent: "center",

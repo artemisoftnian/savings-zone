@@ -21,7 +21,7 @@ export default class MainWrapper extends React.Component {
           placeholder= { this.props.lang.main.searchBarPH }//"Offer Search"
           onChangeText={text => this.props.searchFunction(text) }  
           containerStyle={ { backgroundColor:'transparent', borderBottomWidth:0} }
-          inputStyle={ { backgroundColor:'transparent',  borderStyle:'solid', borderWidth:0, elevation:2 } } 
+          inputStyle={ { backgroundColor:'#fff',  borderStyle:'solid', borderWidth:0, elevation:2 } } 
         />
 
       );
@@ -32,7 +32,7 @@ export default class MainWrapper extends React.Component {
     if(this.props.showFooter){
       return ( 
         <Footer> 
-          <FooterTab  style={{backgroundColor:"#27205a"}}>
+          <FooterTab  style={{backgroundColor:"#4e2e59"}}> 
             <Button vertical 
               onPress={ () => this.props.nav.navigate('Offers') }
             >
@@ -70,7 +70,7 @@ export default class MainWrapper extends React.Component {
     const {screenProps} = this.props;
 
     return (
-      <Container style={{flex: 1}}>
+      <Container style={{flex: 1, backgroundColor:'#F5F5F5'}}>
         <Header 
           style={styles.header}
           noLeft

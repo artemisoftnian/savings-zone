@@ -31,7 +31,7 @@ class Offers extends React.Component {
       daysRemain:0,
       desc:'No Data',
       pirice:'0.00',
-      subscribed: true, //cambiar a false antes de publicar
+      subscribed: true, //Scar esta info del usuario
       result: [],
       dataSource: [],
 			filter: '',
@@ -96,32 +96,23 @@ class Offers extends React.Component {
 
     if(!this.state.subscribed){
         // Works on both iOS and Android
-        Alert.alert(
-          'Subscription Alert!',
-          'Sorry! You are on Test Drive:  You need a real plan to redeem offers',
-          [
-            {text: 'Get a real plan here!', onPress: () => this.props.navigation.navigate('Subscription') }, 
-            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'}
-          ],
-          { cancelable: false }
-        )  
-
+        this.showAlert('unsubscribed');
     }
     else{  
  
       if( this._checkOfferOwnership(item.post_data.ID) ) {           
         
-            Toast.show({
-                text: "You Alaready Have This Offer!",
-                buttonText: "Okay",
-                duration: 4000,
-                type: "danger"
-              })
+        Toast.show({
+            text: "You Alaready Have This Offer!",
+            buttonText: "Okay",
+            duration: 4000,
+            type: "danger"
+        })
 
         return;
       }
 
-      //await this.props.saveOffer(item);
+      await this.props.saveOffer(item);
       this._toggleModal(false, null)
       this.showAlert('got');
     }
@@ -139,39 +130,61 @@ class Offers extends React.Component {
     });
   }
 
-alertContents = () => {
-    const {alertType} = this.state; 
+  alertContents = () => {
+      const {alertType} = this.state; 
+      const { screenProps } = this.props;
 
-    if(alertType == 'fail'){
-      return(
-        <View style= {styles.customMessage}>
-          <Image
-              style={{width: 50, height: 50}}
-              source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}
-          />    
-          <Text style={{ marginTop:20 }}>¡oooohh ohhh!</Text>
-          <Text>Ya tienes esta oferta</Text>
-        </View>
-      )
-    }
-    else{
-      return(
-        <View styles={{paddingTop:60}} style={{backgroundColor:'red', overflow:'visible'}}>
-                 <Icon name="chevron-down" type="FontAwesome"  
-            style={{color:'red', backgroundColor:'blue', padding: 20, borderRadius:50, zIndex: 12, position: 'absolute', top:-30}}/> 
- 
-        <View style= {styles.customMessage}>
-          <Image
-              style={{width: 50, height: 50}}
-              source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}
-          />    
-          <Text style={{ marginTop:20 }}>¡FELICIDADES!</Text>
-          <Text>Obtuviste la Oferta</Text>
-        </View>
-        </View>
-      )
-    }  
-}
+      if(alertType == 'fail'){
+        return(
+          <View style= {styles.customMessage}>
+            <Image
+                style={{width: 50, height: 50}}
+                source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}
+            />    
+            <Text style={{ marginTop:20 }}>¡oooohh ohhh!</Text>
+            <Text>Ya tienes esta oferta</Text>
+          </View>
+        )
+      }
+      else if(alertType == 'unsubscribed'){
+        return(
+          <View style= {styles.alertMessageContainer}>            
+            <Icon name="ios-close-circle" type="Ionicons" style={[styles.alertMessageIcon, {backgroundColor:'#d9534f'}]} />
+            <View style={[styles.alertMessageBorder,{borderColor:'#d9534f'}]}>
+              <Text style={styles.alertMessageH1}>{screenProps.lang.offerScreen.noSubscriptionMsg.h1}</Text>
+              <Text style={styles.alertMessageH2}>{screenProps.lang.offerScreen.noSubscriptionMsg.h2}</Text>
+              <Button full  
+                style={{borderRadius:50, marginBottom:5, backgroundColor:'#47d782'}} 
+                onPress = { () => { this.hideAlert(); this.props.navigation.navigate('Subscription')} } >
+                <Text>{screenProps.lang.offerScreen.noSubscriptionMsg.confirm}</Text>               
+              </Button>             
+              <Button full warning style={{borderRadius:50}} onPress = { () => this.hideAlert() } >
+                <Text>{screenProps.lang.offerScreen.noSubscriptionMsg.cancel}</Text> 
+              </Button>
+            </View>          
+          </View>  
+        )      
+      }
+      else{
+        return(
+            <View style= {styles.alertMessageContainer}>            
+              <Icon name="check-circle" type="FontAwesome" style={styles.alertMessageIcon} />
+              <View style={[styles.alertMessageBorder,{borderColor:'#47d782'}]}>
+                <Text style={styles.alertMessageH1}>{screenProps.lang.offerScreen.gotItMsg.h1}</Text>
+                <Text style={styles.alertMessageH2}>{screenProps.lang.offerScreen.gotItMsg.h2}</Text>
+                <Button small full transparent warning 
+                  style={styles.myOffersBtn} 
+                  onPress = { () => { this.hideAlert(); this.props.navigation.navigate('MyOffers')} } >
+                  <Text>{screenProps.lang.offerScreen.gotItMsg.confirm}</Text>               
+                </Button>             
+                <Button full style={styles.alertMessageConfirmBtn} onPress = { () => this.hideAlert() } >
+                  <Text>{screenProps.lang.offerScreen.gotItMsg.cancel}</Text> 
+                </Button> 
+              </View>           
+            </View>
+        )
+      }
+  }
 
   _getDaysRemain = (expiration_date) => {
     var today = new Date().getTime();
@@ -392,29 +405,22 @@ alertContents = () => {
         </Modal>
 
         <AwesomeAlert
-          contentContainerStyle={{overflow:'visible', backgroundColor:'yellow', }}
+          contentContainerStyle={{margin:0, width:'70%' }}
           overflow='visible'
           show={showAlert}
           showProgress={false}
           title=""
           message=""
-          closeOnTouchOutside={false}
+          closeOnTouchOutside={true}
           closeOnHardwareBackPress={false}
-          showCancelButton={true}
-          showConfirmButton={true}
-          cancelText="Continua ahorrando"
-          cancelButtonColor="#36710b"
-          confirmText="Ver tus ofertas"
-          confirmButtonColor="#f29905"          
-          onCancelPressed={() => {
-            this.hideAlert();
-          }}
-          onConfirmPressed={() => {
-            this.hideAlert();
-          }}
+          showCancelButton={false}
+          showConfirmButton={false}
+          cancelButtonStyle={{}}  
+          confirmButtonStyle={{}}        
+          onCancelPressed={() => { this.hideAlert() }}
+          onConfirmPressed={() => { this.hideAlert() }}
           customView={ this.alertContents() }
-        />   
-        
+        />        
 
       </MainWrapper>
     );
@@ -438,7 +444,37 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
     padding:10,
     flexBasis:2
-  }  
+  },
+  alertMessageContainer:{
+    width:'100%', textAlign: 'center'
+  },
+  alertMessageIcon:{
+    color:'#fff', 
+    fontSize:50, 
+    backgroundColor:'#47d782', 
+    padding: 20, 
+    width:'100%', 
+    textAlign: 'center'
+  },
+  alertMessageH1:{
+    marginTop:20, textAlign: 'center', fontSize:18, marginBottom:5, fontWeight:'bold'
+  },
+  alertMessageH2:{
+    marginBottom:10, textAlign: 'center'
+  },
+  alertMessageConfirmBtn:{
+    marginBottom:5,
+    backgroundColor:'#326e3d',
+    borderRadius:50
+  },
+  alertMessageBorder:{
+    borderWidth:1,  width:'100%', padding:10, borderBottomStartRadius:5, borderBottomEndRadius:5, paddingBottom:20
+  },
+  myOffersBtn:{
+    marginTop:0,
+    paddingTop:0,
+    color: 'red'
+  }
 
 });
 
