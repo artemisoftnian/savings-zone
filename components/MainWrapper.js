@@ -36,14 +36,14 @@ export default class MainWrapper extends React.Component {
             <Button vertical 
               onPress={ () => this.props.nav.navigate('Offers') }
             >
-              <Icon name="home" />
-              <Text>{this.props.lang.main.homeIconText}</Text>
+              <Icon name="home" style={styles.iconColor} /> 
+              <Text style={styles.iconColor}>{this.props.lang.main.homeIconText}</Text>
             </Button>
             <Button vertical
               onPress={ () => this.props.nav.navigate('Map') }
             >
-              <Icon name="md-map" />
-              <Text>{this.props.lang.main.mapsIconText}</Text>
+              <Icon name="md-map" style={styles.iconColor}/>
+              <Text style={styles.iconColor}>{this.props.lang.main.mapsIconText}</Text>
             </Button>
             {/*
             <Button vertical
@@ -56,8 +56,8 @@ export default class MainWrapper extends React.Component {
             <Button vertical 
               onPress={ () => this.props.nav.navigate('UserProfile') }
             >
-              <Icon name="person" />
-              <Text>{this.props.lang.main.accountIconText}</Text>
+              <Icon name="person" style={styles.iconColor}/>
+              <Text style={styles.iconColor} >{this.props.lang.main.accountIconText}</Text>
             </Button>
           </FooterTab>
         </Footer> 
@@ -122,6 +122,9 @@ const styles = StyleSheet.create({
     marginTop:20, 
     backgroundColor:'#fff'    
   },
+  iconColor:{
+    color:'#fff'
+  }
 
 });
 

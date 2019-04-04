@@ -61,7 +61,10 @@ export const Lang = {
             shareMessage: 'Savings Zone: Subscribete a la nueva manera de ahorar en Puerto Rico',
             shareTitle: 'Ya supiste sobre Savings Zone?',
             shareUrl: 'http://www.savingszonepr.com',
-            shareDialogAndroidOnlyTitle: 'Comparte la dicha de Ahorrar!'
+            shareDialogAndroidOnlyTitle: 'Comparte la dicha de Ahorrar!',
+            privacyPolicyUrl: 'http://www.savingszonepr.com/politicas-de-privacidad',
+            termsConditionsUrl: 'http://www.savingszonepr.com/terminos-y-condiciones',
+            helpUrl: 'http://www.savingszonepr.com/preguntas-frecuentes'
         },
         myOffers:{
             emptyListMessage: "No tienes ninguna oferta en este momento."
@@ -132,7 +135,10 @@ export const Lang = {
             shareMessage: 'Savings Zone: Subscribete a la nueva manera de ahorar en Puerto Rico',
             shareTitle: 'Ya supiste sobre Savings Zone?',
             shareUrl: 'http://www.savingszonepr.com',
-            shareDialogAndroidOnlyTitle: 'Comparte la dicha de Ahorrar!'
+            shareDialogAndroidOnlyTitle: 'Comparte la dicha de Ahorrar!',
+            privacyPolicyUrl: 'http://www.savingszonepr.com/privacy-policy',
+            termsConditionsUrl: 'http://www.savingszonepr.com/terms-and-conditions',
+            helpUrl: 'http://www.savingszonepr.com/frequent-ask-questions'
         },
         myOffers:{
             emptyListMessage: "You don't have any offers right now."

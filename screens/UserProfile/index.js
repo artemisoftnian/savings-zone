@@ -5,7 +5,7 @@ import {
   View,
   StyleSheet,
   AsyncStorage,
-  Share
+  Share, Linking
 } from 'react-native';
 
 import { ListItem } from 'react-native-elements';
@@ -88,12 +88,12 @@ class UserProfileScreen extends React.Component {
   onShare = async () => {
     try {
       const result = await Share.share({
-        message: this.props.lang.myAccount.shareMessage,
-        url: this.props.lang.myAccount.shareUrl,
-        title: this.props.lang.myAccount.shareTitle
+        message: this.props.screenProps.lang.myAccount.shareMessage,
+        url: this.props.screenProps.lang.myAccount.shareUrl,
+        title: this.props.screenProps.lang.myAccount.shareTitle
       }, {
         // Android only:
-        dialogTitle: this.props.lang.myAccount.shareDialogAndroidOnlyTitle,
+        dialogTitle: this.props.screenProps.lang.myAccount.shareDialogAndroidOnlyTitle,
         // iOS only:
         excludedActivityTypes: [
           'com.apple.UIKit.activity.PostToTwitter'
@@ -113,6 +113,10 @@ class UserProfileScreen extends React.Component {
       alert(error.message);
     }
   };
+
+  _openUrl = (url)=> {
+    Linking.openURL(url).catch((err) => console.error('An error occurred', err));
+  }
 
   render() {
     const { screenProps } = this.props;
@@ -140,16 +144,20 @@ class UserProfileScreen extends React.Component {
 
     const  OptionsListEn = [
       {id:'1', optIcon:"md-trophy", optTitle: "My Offers", action: ()=>{ this.props.navigation.navigate('MyOffers') } },
-      {id:'2', optIcon:"md-person-add", optTitle: "Invite Friends", action: ()=>{ this.onShare() } },
-      {id:'3', optIcon:"md-help-circle", optTitle: "Help", action: ()=>{} },
-      {id:'4', optIcon:"md-log-out", optTitle: "Log Out", action: ()=>{ this._handleLogOut() } },
+      {id:'2', optIcon:"md-share", optTitle: "Invite Friends", action: ()=>{ this.onShare() } },
+      {id:'3', optIcon:"md-help-circle", optTitle: "Help", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.helpUrl)  } },
+      {id:'4', optIcon:"md-fingerprint", optTitle: "Privacy Policy", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.privacyPolicyUrl) } },
+      {id:'5', optIcon:"md-clipboard", optTitle: "Terms and Conditions", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.termsConditionsUrl) } },
+      {id:'6', optIcon:"md-log-out", optTitle: "Log Out", action: ()=>{ this._handleLogOut() } },
     ]; 
      
     const  OptionsListEs = [
       {id:'1', optIcon:"md-trophy", optTitle: "Mis Ofertas", action: ()=>{ this.props.navigation.navigate('MyOffers') } },
-      {id:'2', optIcon:"md-person-add", optTitle: "Invita a tus amigos", action: ()=>{ this.onShare() } },
-      {id:'3', optIcon:"md-help-circle", optTitle: "Ayuda", action: ()=>{} },
-      {id:'4', optIcon:"md-log-out", optTitle: "Cerrar Sesión", action: ()=>{ this._handleLogOut() } },
+      {id:'2', optIcon:"md-share", optTitle: "Invita a tus amigos", action: ()=>{ this.onShare() } },
+      {id:'3', optIcon:"md-help-circle", optTitle: "Ayuda", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.helpUrl)  } },
+      {id:'4', optIcon:"md-finger-print", optTitle: "Políticas de Privacidad", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.privacyPolicyUrl) } },
+      {id:'5', optIcon:"md-clipboard", optTitle: "Terminos y Condiciones", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.termsConditionsUrl) } },      
+      {id:'6', optIcon:"md-log-out", optTitle: "Cerrar Sesión", action: ()=>{ this._handleLogOut() } },
     ];         
 
     return (

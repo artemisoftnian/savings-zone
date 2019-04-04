@@ -76,12 +76,12 @@ export default class OfferPoster extends React.Component {
     const expired = this.expiredCheck(daysRemain);
 
     return (
-              <Card style={styles.container} >
+              <Card style={[styles.container]} >
                 <CardItem cardBody button onPress={() => _toggleModal(true, offer, expired) } >                
                   <Image  source={ {uri:post_meta.offer_image_1 } }  style={styles.offerImage} resizeMode="cover" /> 
                 </CardItem>
-                <CardItem style={ styles.noPadding } button onPress={() => _toggleModal(true, offer) } > 
-                    <Text>{post_data.post_title.substring(0,35)}...</Text> 
+                <CardItem style={ [styles.noPadding,{padding:10, marginTop:5}] } button onPress={() => _toggleModal(true, offer) } > 
+                    <Text numberOfLines={2} >{post_data.post_title}</Text> 
                 </CardItem>
                 <CardItem style={styles.offerPriceContainer} button onPress={() => _toggleModal(true, offer, expired) } >  
                   <Left style={{ paddingLeft:0}} >
@@ -101,11 +101,11 @@ export default class OfferPoster extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginLeft: 10,
+  container: {    
+    marginLeft: 10, marginRight:10,
     marginBottom: 5,    
     width: (width - 10) / cols - 10,
-    padding:5,
+    padding:0,
     flex:(1/cols)
   },
   offerImage:{
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     paddingTop: 0, paddingBottom: 0, paddingLeft:0
   },
   offerPrice:{
-    fontSize: 19, fontWeight:'bold',  color:'#d9534f', paddingLeft:0
+    fontSize: 19, fontWeight:'bold',  color:'purple', paddingLeft:0
   },
   addIcon:{
     fontSize:40
@@ -126,8 +126,10 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 0,
     marginLeft:0,
-    marginRight:0,
-    
+    marginRight:0,    
+  },
+  offerTitle:{
+    padding:5 
   }
   
 });

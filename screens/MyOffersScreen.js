@@ -149,7 +149,7 @@ class MyOffersScreen extends React.Component {
           if(!this.state.myOffers.lenght)
             return null
           else
-            return <Text style={{fontSize: 20, fontWeight:'bold'}}> <Icon name='md-pricetags' type='Ionicons'/> My Offers</Text>
+            return <Text key='text-header' style={{fontSize: 20, fontWeight:'bold'}}> <Icon name='md-pricetags' type='Ionicons'/> My Offers</Text>
         }
           
             
@@ -159,11 +159,12 @@ class MyOffersScreen extends React.Component {
         extraData={this.state}
         style={{ marginTop:30}}
         keyExtractor={(item, index) => item.id}
-        renderItem={({ item }) => {
+        renderItem={({ item}) => {
             var id = item.post_meta.ID;
             return (
 
             <SwipeRow
+                key={"item_id_"+item.post_meta.ID}
                 leftOpenValue={75}
                 rightOpenValue={-75}
                 style={{margin:0, padding:0}}

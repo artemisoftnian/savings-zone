@@ -168,7 +168,7 @@ class Offers extends React.Component {
       else{
         return(
             <View style= {styles.alertMessageContainer}>            
-              <Icon name="check-circle" type="FontAwesome" style={styles.alertMessageIcon} />
+              <Icon name="thumbs-up" type="Ionicons" style={styles.alertMessageIcon} />
               <View style={[styles.alertMessageBorder,{borderColor:'#47d782'}]}>
                 <Text style={styles.alertMessageH1}>{screenProps.lang.offerScreen.gotItMsg.h1}</Text>
                 <Text style={styles.alertMessageH2}>{screenProps.lang.offerScreen.gotItMsg.h2}</Text>
@@ -446,7 +446,7 @@ const styles = StyleSheet.create({
     flexBasis:2
   },
   alertMessageContainer:{
-    width:'100%', textAlign: 'center'
+    width:'100%'
   },
   alertMessageIcon:{
     color:'#fff', 
