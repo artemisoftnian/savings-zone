@@ -20,6 +20,7 @@ import LoginScreen from './screens/Login';
 import RegisterScreen from './screens/Login/register'; 
 import SubscriptionScreen from './screens/Login/subscription'; 
 import OffersScreen from './screens/Offers';
+import Oferta from './screens/Offers/oferta';
 import MapScreen from './screens/Offers/map';
 import UserProfileScreen from './screens/UserProfile';
 import AppLoadingScreen from './screens/AppLoading';
@@ -37,7 +38,8 @@ global.offerEmitter = new EventEmitter();
 const store = ConfigureStore();
 
 const AppStack = createStackNavigator({
-    Offers: OffersScreen,     
+    Offers: OffersScreen, 
+    Oferta: Oferta,   
     Scanner: ScannerScreen,
     MyOffers: MyOfferScreen,
     UserProfile: UserProfileScreen,

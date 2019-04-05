@@ -197,7 +197,8 @@ class Offers extends React.Component {
     if(data){
       console.log(data);
       this.setState({ 
-        modalVisible: visible,
+        //modalVisible: visible,
+        modalVisible: false,
         title: data.post_data.post_title,
         desc:  data.post_data.post_content,
         price: data.post_meta.offer_price,
@@ -206,6 +207,9 @@ class Offers extends React.Component {
         daysRemain: this._getDaysRemain(data.post_meta.offer_exp_date), //data.remain
         expired: expired
       });
+
+     this.props.navigation.navigate('Oferta',{'offer':data})
+
     }
     else{
       this.setState({  modalVisible: visible });      
@@ -384,6 +388,7 @@ class Offers extends React.Component {
               offer={item}
               _handleAddToMyOffers={this._handleAddToMyOffers}
               _toggleModal={this._toggleModal}
+              //_toggleModal={() => this.props.navigation.navigate('Oferta', {'offer':item}) }
               _getDaysRemain={this._getDaysRemain}
               lang = { this.props.screenProps.lang.offerScreen }
             />

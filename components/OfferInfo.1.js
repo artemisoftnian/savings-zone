@@ -35,23 +35,12 @@ export default class OfferInfo extends React.Component {
 
   render() {   
 
+    console.log(this.props);
+    
     
     return (
       <Content style={{flex:1,}}>  
-
-        <ScrollView
-          horizontal //scrolling left to right instead of top to bottom
-          showsHorizontalScrollIndicator={false} //hides native scrollbar
-          scrollEventThrottle={10} //how often we update the position of the indicator bar
-          pagingEnabled //scrolls from one image to the next, instead of allowing any value inbetween
-        >
-          {
-            this.props.image.map(image => (
-                <Image key={image} source={ {uri:image } } style={{ height: 200, width:SCREEN_WIDTH - 50, flex: 1 }} />
-              )
-            )
-          }              
-        </ScrollView>            
+      
         <Card>
 
           <CardItem header>
@@ -61,7 +50,19 @@ export default class OfferInfo extends React.Component {
           <CardItem>
             <Icon name="arrow-back" type="Ionicons" key='back-arrow' style={ [ styles.textWithShadow, styles.slideIcon, { left:30 }]} />
             <Icon name="arrow-forward" type="Ionicons" key='forward-arrow' style={ [ styles.textWithShadow, styles.slideIcon, {right:10}]} />
-      
+            <ScrollView
+              horizontal //scrolling left to right instead of top to bottom
+              showsHorizontalScrollIndicator={false} //hides native scrollbar
+              scrollEventThrottle={10} //how often we update the position of the indicator bar
+              pagingEnabled //scrolls from one image to the next, instead of allowing any value inbetween
+            >
+              {
+                this.props.image.map(image => (
+                    <Image key={image} source={ {uri:image } } style={{ height: 200, width:SCREEN_WIDTH - 50, flex: 1 }} />
+                  )
+                )
+              }              
+            </ScrollView>            
 
           {
             /* <Image source={ {uri:this.props.image } } style={{ height: 200, flex: 1 }} /> */
