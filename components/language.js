@@ -24,6 +24,9 @@ export const Lang = {
             noteTitle: "NOTA IMPORTANTE:",
             noteMessage: "Los planes se renuevan automáticamente al final del período del plan aplicable, al final de ese período se le cobrará la tarifa estándar de $price hasta que cancele.",
             planSelectBtnText: 'Seleccione este plan',
+            freeText: 'GRATIS',
+            freeDescription: 'Podrás ver, pero no obtener ni consumir ofertas.',
+            freeNoteMessage: "Mientras tengas este plan no habra costos de uso, sin embargo deberá obtener un plan si desea obtener y consumir ofertas."
         },
         offerScreen:{            
             offerListTitle: "Ofertas Disponibles",
@@ -64,7 +67,8 @@ export const Lang = {
             shareDialogAndroidOnlyTitle: 'Comparte la dicha de Ahorrar!',
             privacyPolicyUrl: 'http://www.savingszonepr.com/politicas-de-privacidad',
             termsConditionsUrl: 'http://www.savingszonepr.com/terminos-y-condiciones',
-            helpUrl: 'http://www.savingszonepr.com/preguntas-frecuentes'
+            helpUrl: 'http://www.savingszonepr.com/preguntas-frecuentes',
+            privatePolicyText: 'Politicas de Privacidad'
         },
         myOffers:{
             emptyListMessage: "No tienes ninguna oferta en este momento."

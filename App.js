@@ -38,7 +38,7 @@ global.offerEmitter = new EventEmitter();
 const store = ConfigureStore();
 
 const AppStack = createStackNavigator({
-    Offers: OffersScreen, 
+    Offers: SubscriptionScreen, //OffersScreen, 
     Oferta: Oferta,   
     Scanner: ScannerScreen,
     MyOffers: MyOfferScreen,
