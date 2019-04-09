@@ -10,12 +10,12 @@
     "primaryColor": "#cccccc",
     "icon": "./assets/icons/app-icon.png",
     "loading": {
-      "icon": "./assets/icons/loading-icon.png",
+      "icon": "./assets/icons/loading.png",
       "hideExponentText": false
     },
     "splash": {
-      "image": "./assets/icons/loading-icon.png",
-      "resizeMode": "cover"
+      "image": "./assets/icons/loading.png", 
+      "resizeMode": "cover" 
     },
     "packagerOpts": {
       "assetExts": [

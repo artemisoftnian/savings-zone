@@ -22,8 +22,8 @@ export default StyleSheet.create({
 	},
   inputContainer: {
     borderWidth: 0, // size/width of the border
-    borderColor: '#2d6ca2', // color of the border
-    backgroundColor: 'rgba(91, 103, 102, 0.77)',
+    borderColor: '#b3b3b3', // color of the border
+    backgroundColor: 'rgba(46, 51, 51, 0.7)',
     marginBottom:20
   },
   logoContainer: {
@@ -33,7 +33,7 @@ export default StyleSheet.create({
   },
   logo: {
     position: "absolute",
-    left: Platform.OS === "android" ? 40 : 50,
+    left: Platform.OS === "android" ? 55 : 50,
     top: Platform.OS === "android" ? 35 : 60,
     width: 280,
     height: 100

@@ -73,7 +73,7 @@ class LoginScreen extends React.Component {
             <KeyboardAvoidingView behavior="padding" enabled style={{margin:20}}>
                 <Text style={{color:'red'}}>{ this.props.user.error }</Text>
                  <Button 
-                    style={{backgroundColor:'rgba(41, 30, 38, 0.92)', marginBottom:30, width:'100%' }}
+                    style={{backgroundColor:'rgba(41, 30, 38, 0.92)', marginBottom:30, width:'100%', borderRadius:10 }}
                     disabled={this.state.validating}
                     onPress={() => {
                       this.props.navigation.navigate('Register'); 
@@ -109,6 +109,7 @@ class LoginScreen extends React.Component {
                   rounded
                   disabled={this.props.user.loading}
                   //disabled={this.state.validating}
+                  style={{backgroundColor:'#6f6fac', borderWidth:0, borderColor:'gray', marginBottom:20, elevation:10}}
                   onPress={() => {
                     if (this.state.user && this.state.password) {
                       this.validateUser();
