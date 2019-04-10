@@ -99,12 +99,14 @@ class Offers extends React.Component {
         this.showAlert('unsubscribed');
     }
     else{  
+
+      console.log(item.post_data.ID);
  
       if( this._checkOfferOwnership(item.post_data.ID) ) {           
         
         Toast.show({
             text: "You Alaready Have This Offer!",
-            buttonText: "Okay",
+            buttonText: "Ok!",
             duration: 4000,
             type: "danger"
         })
@@ -113,7 +115,7 @@ class Offers extends React.Component {
       }
 
       await this.props.saveOffer(item);
-      this._toggleModal(false, null)
+      //this._toggleModal(false, null)
       this.showAlert('got');
     }
     
@@ -397,7 +399,7 @@ class Offers extends React.Component {
         }}
       />
 
-        {/*INFO BOX - MODAL*/}
+        {/*INFO BOX - MODAL
         <Modal
           visible={this.state.modalVisible}
           transparent={true}
@@ -408,6 +410,7 @@ class Offers extends React.Component {
           >
           {this.renderModalContent()} 
         </Modal>
+        */}
 
         <AwesomeAlert
           contentContainerStyle={{margin:0, width:'70%' }}

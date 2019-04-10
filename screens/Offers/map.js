@@ -43,6 +43,8 @@ class MapScreen extends React.Component {
 
   static navigationOptions = {
     title: 'Caza Ofertas',
+    headerBackTitle : null,
+    headerTitleStyle : {width : '70%', textAlign: 'center'},    
   };  
 
   componentDidMount() {

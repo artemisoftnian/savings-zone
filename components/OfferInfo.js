@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {  Image,  StyleSheet, Dimensions, ScrollView } from 'react-native';
+import {  Image,  StyleSheet, Dimensions, ScrollView, View } from 'react-native';
 
 import MyWebView from 'react-native-webview-autoheight';
 const SCREEN_HEIGHT = Dimensions.get("window").height;
@@ -37,39 +37,42 @@ export default class OfferInfo extends React.Component {
 
     
     return (
-      <Content style={{flex:1,}}>  
+      <Content style={{flex:1}}>  
 
         <ScrollView
           horizontal //scrolling left to right instead of top to bottom
           showsHorizontalScrollIndicator={false} //hides native scrollbar
-          scrollEventThrottle={10} //how often we update the position of the indicator bar
+          scrollEventThrottle={20} //how often we update the position of the indicator bar
           pagingEnabled //scrolls from one image to the next, instead of allowing any value inbetween
         >
           {
-            this.props.image.map(image => (
-                <Image key={image} source={ {uri:image } } style={{ height: 200, width:SCREEN_WIDTH - 50, flex: 1 }} />
+            this.props.image.map(
+              image => (
+                <Image key={image} source={ {uri:image } } style={{ height: 200, width:SCREEN_WIDTH - 10 }} />
               )
             )
           }              
-        </ScrollView>            
-        <Card>
+        </ScrollView>
 
-          <CardItem header>
-            <Text>{this.props.title}</Text>
+        <Card transparent>
+
+          <CardItem cardBody>           
+            <Text style={{fontSize:10, color:'#555', fontWeight:'bold', marginLeft:20 }}>{this.props.category}</Text>
+          </CardItem>        
+
+          <CardItem>           
+            <Text style={{fontSize:18, color:'#555', fontWeight:'bold'}}>{this.props.title}</Text>
           </CardItem>
-          
+
+          {/*
           <CardItem>
             <Icon name="arrow-back" type="Ionicons" key='back-arrow' style={ [ styles.textWithShadow, styles.slideIcon, { left:30 }]} />
             <Icon name="arrow-forward" type="Ionicons" key='forward-arrow' style={ [ styles.textWithShadow, styles.slideIcon, {right:10}]} />
-      
+            <Image source={ {uri:this.props.image } } style={{ height: 200, flex: 1 }} /> 
+          </CardItem> 
+          */}
 
-          {
-            /* <Image source={ {uri:this.props.image } } style={{ height: 200, flex: 1 }} /> */
-          }
-
-          </CardItem>
           <CardItem> 
-            <Body style={{}} >
               <MyWebView 
                 //sets the activity indicator before loading content
                 startInLoadingState={true}
@@ -81,8 +84,8 @@ export default class OfferInfo extends React.Component {
                 domStorageEnabled={true}
                 scalesPageToFit={true}
               />            
-            </Body>
-          </CardItem>                
+          </CardItem>  
+
           <CardItem>
             <Left>
               <Button transparent>

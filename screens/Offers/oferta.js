@@ -24,6 +24,7 @@ class Oferta extends React.Component {
         isLoading: true,
         loading: false,
         error: '',
+        category:'',
         user: [],
         modalVisible:false,
         title:'No Data',
@@ -50,7 +51,9 @@ class Oferta extends React.Component {
   arrayholder = [];
   
   static navigationOptions = {
-    title: '',
+    title: 'Oferta',
+    headerBackTitle : null,
+    headerTitleStyle : {width : '90%', textAlign: 'center'} ,  
     headerRight: (
         <TouchableHighlight onPress={() => { console.log('shareeeee') }} >
             <Icon name="share" type="Ionicons" style={[{marginRight:20}]} />
@@ -69,7 +72,8 @@ class Oferta extends React.Component {
     this.setState({ 
         modalVisible: false,
         title: data.post_data.post_title,
-        desc:  data.post_data.post_content,
+        category: data_post.post,
+        description:  data.post_data.taxonomy.name,
         price: data.post_meta.offer_price,
         image: [data.post_meta.offer_image_1, data.post_meta.offer_image_2, data.post_meta.offer_image_3, data.post_meta.offer_image_4 ],
         offer: data,
@@ -96,6 +100,8 @@ class Oferta extends React.Component {
 
   _handleAddToMyOffers = async (item) => {
 
+    console.log(item);
+
     if(!this.state.subscribed){
         // Works on both iOS and Android
         this.showAlert('unsubscribed');
@@ -115,7 +121,6 @@ class Oferta extends React.Component {
       }
 
       await this.props.saveOffer(item);
-      this._toggleModal(false, null)
       this.showAlert('got');
     }
     
@@ -169,21 +174,21 @@ class Oferta extends React.Component {
       }
       else{
         return(
-            <View style= {styles.alertMessageContainer}>            
-              <Icon name="thumbs-up" type="Ionicons" style={styles.alertMessageIcon} />
-              <View style={[styles.alertMessageBorder,{borderColor:'#47d782'}]}>
-                <Text style={styles.alertMessageH1}>{screenProps.lang.offerScreen.gotItMsg.h1}</Text>
-                <Text style={styles.alertMessageH2}>{screenProps.lang.offerScreen.gotItMsg.h2}</Text>
-                <Button small full transparent warning 
-                  style={styles.myOffersBtn} 
-                  onPress = { () => { this.hideAlert(); this.props.navigation.navigate('MyOffers')} } >
-                  <Text>{screenProps.lang.offerScreen.gotItMsg.confirm}</Text>               
-                </Button>             
-                <Button full style={styles.alertMessageConfirmBtn} onPress = { () => this.hideAlert() } >
-                  <Text>{screenProps.lang.offerScreen.gotItMsg.cancel}</Text> 
-                </Button> 
-              </View>           
-            </View>
+          <View style= {styles.alertMessageContainer}>            
+            <Icon name="thumbs-up" type="Ionicons" style={styles.alertMessageIcon} />
+            <View style={[styles.alertMessageBorder,{borderColor:'#47d782'}]}>
+              <Text style={styles.alertMessageH1}>{screenProps.lang.offerScreen.gotItMsg.h1}</Text>
+              <Text style={styles.alertMessageH2}>{screenProps.lang.offerScreen.gotItMsg.h2}</Text>
+              <Button small full transparent warning 
+                style={styles.myOffersBtn} 
+                onPress = { () => { this.hideAlert(); this.props.navigation.navigate('MyOffers')} } >
+                <Text>{screenProps.lang.offerScreen.gotItMsg.confirm}</Text>               
+              </Button>             
+              <Button full style={styles.alertMessageConfirmBtn} onPress = { () => this.hideAlert() } >
+                <Text>{screenProps.lang.offerScreen.gotItMsg.cancel}</Text> 
+              </Button> 
+            </View>           
+          </View>
         )
       }
   }
@@ -204,19 +209,29 @@ class Oferta extends React.Component {
         <Root>
             
             <View enabled style={{ flex:1 }}>
-            <View style={styles.modalStyle}>
+              <View style={styles.modalStyle}>
+                  <OfferInfo 
+                  title={this.state.title}
+                  category={this.state.category}
+                  image={this.state.image}
+                  desc={this.state.desc}
+                  price={this.state.price}
+                  daysRemain={this.state.daysRemain}
+                  lang = { screenProps.lang.offerScreen }
+                  />                
+              </View>
 
-                <OfferInfo 
-                title={this.state.title}
-                image={this.state.image}
-                desc={this.state.desc}
-                price={this.state.price}
-                daysRemain={this.state.daysRemain}
-                lang = { screenProps.lang.offerScreen }
-                />
-
-                
-            </View>
+              {
+                (!this.state.expired)
+                ?
+                  <Button full onPress = { () => this._handleAddToMyOffers(this.state.offer) } >
+                    <Text>{ screenProps.lang.offerScreen.getBtnMessage }</Text>
+                  </Button> 
+                :
+                  <Button danger full onPress={() => { this._toggleModal(!this.state.modalVisible, null) }}  >
+                    <Text>{ screenProps.lang.offerScreen.expiredMessage }</Text> 
+                  </Button>
+              }
 
             </View>
 
@@ -236,7 +251,8 @@ class Oferta extends React.Component {
                 onCancelPressed={() => { this.hideAlert() }}
                 onConfirmPressed={() => { this.hideAlert() }}
                 customView={ this.alertContents() }
-            />                    
+            /> 
+
         </Root>
 
 
