@@ -149,7 +149,7 @@ class MyOffersScreen extends React.Component {
           if(!this.state.myOffers.lenght)
             return null
           else
-            return <Text key='text-header' style={{fontSize: 20, fontWeight:'bold'}}> <Icon name='md-pricetags' type='Ionicons'/> My Offers</Text>
+            return <Text  style={{fontSize: 20, fontWeight:'bold'}}> <Icon name='md-pricetags' type='Ionicons'/> My Offers</Text>
         }
           
             

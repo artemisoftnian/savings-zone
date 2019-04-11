@@ -212,7 +212,7 @@ class Oferta extends React.Component {
               <View style={styles.modalStyle}>
                   <OfferInfo 
                   title={this.state.title}
-                  category={this.state.category}
+                  //category={this.state.category}
                   image={this.state.image}
                   desc={this.state.desc}
                   price={this.state.price}

@@ -31,7 +31,7 @@ class Offers extends React.Component {
       daysRemain:0,
       desc:'No Data',
       pirice:'0.00',
-      subscribed: true, //Scar esta info del usuario
+      subscribed: false, //Scar esta info del usuario
       result: [],
       dataSource: [],
 			filter: '',
@@ -59,7 +59,8 @@ class Offers extends React.Component {
     const { user_id } = this.props.user;
     this.props.fetchOffersDataSource();
     this.arrayholder = this.props.offerList.dataSource;
-    this.setState({ start: true, dataSource: this.props.offerList.dataSource });
+    this.setState({ start: true, dataSource: this.props.offerList.dataSource });    
+
   }
 
   async componentDidMount() {
@@ -93,15 +94,13 @@ class Offers extends React.Component {
 
 
   _handleAddToMyOffers = async (item) => {
-
-    if(!this.state.subscribed){
+    const {user} = this.props;
+    if(user.user_meta.subscribed == 'false'){
         // Works on both iOS and Android
         this.showAlert('unsubscribed');
     }
     else{  
 
-      console.log(item.post_data.ID);
- 
       if( this._checkOfferOwnership(item.post_data.ID) ) {           
         
         Toast.show({
@@ -164,26 +163,26 @@ class Offers extends React.Component {
                 <Text>{screenProps.lang.offerScreen.noSubscriptionMsg.cancel}</Text> 
               </Button>
             </View>          
-          </View>  
+          </View> 
         )      
       }
       else{
         return(
-            <View style= {styles.alertMessageContainer}>            
-              <Icon name="thumbs-up" type="Ionicons" style={styles.alertMessageIcon} />
-              <View style={[styles.alertMessageBorder,{borderColor:'#47d782'}]}>
-                <Text style={styles.alertMessageH1}>{screenProps.lang.offerScreen.gotItMsg.h1}</Text>
-                <Text style={styles.alertMessageH2}>{screenProps.lang.offerScreen.gotItMsg.h2}</Text>
-                <Button small full transparent warning 
-                  style={styles.myOffersBtn} 
-                  onPress = { () => { this.hideAlert(); this.props.navigation.navigate('MyOffers')} } >
-                  <Text>{screenProps.lang.offerScreen.gotItMsg.confirm}</Text>               
-                </Button>             
-                <Button full style={styles.alertMessageConfirmBtn} onPress = { () => this.hideAlert() } >
-                  <Text>{screenProps.lang.offerScreen.gotItMsg.cancel}</Text> 
-                </Button> 
-              </View>           
-            </View>
+          <View style= {styles.alertMessageContainer}>            
+            <Icon name="thumbs-up" type="Ionicons" style={styles.alertMessageIcon} />
+            <View style={[styles.alertMessageBorder,{borderColor:'#47d782'}]}>
+              <Text style={styles.alertMessageH1}>{screenProps.lang.offerScreen.gotItMsg.h1}</Text>
+              <Text style={styles.alertMessageH2}>{screenProps.lang.offerScreen.gotItMsg.h2}</Text>
+              <Button small full transparent warning 
+                style={styles.myOffersBtn} 
+                onPress = { () => { this.hideAlert(); this.props.navigation.navigate('MyOffers')} } >
+                <Text>{screenProps.lang.offerScreen.gotItMsg.confirm}</Text>               
+              </Button>             
+              <Button full style={styles.alertMessageConfirmBtn} onPress = { () => this.hideAlert() } >
+                <Text>{screenProps.lang.offerScreen.gotItMsg.cancel}</Text> 
+              </Button> 
+            </View>           
+          </View>
         )
       }
   }
@@ -194,7 +193,9 @@ class Offers extends React.Component {
     return parseInt( (( exp - today ) / (1000 * 60 * 60 * 24)) + 2 ); 
   }
 
-  _toggleModal = (visible, data, expired = false) => {
+  _toggleModal = (data, expired = false) => {
+
+    console.log(data);
 
     if(data){
       console.log(data);
@@ -206,15 +207,12 @@ class Offers extends React.Component {
         price: data.post_meta.offer_price,
         image: [data.post_meta.offer_image_1, data.post_meta.offer_image_2, data.post_meta.offer_image_3, data.post_meta.offer_image_4 ],
         offer: data,
-        daysRemain: this._getDaysRemain(data.post_meta.offer_exp_date), //data.remain
+        daysRemain: this._getDaysRemain(data.post_meta.offer_exp_date),
         expired: expired
       });
 
      this.props.navigation.navigate('Oferta',{'offer':data})
 
-    }
-    else{
-      this.setState({  modalVisible: visible });      
     }
 
   }
@@ -250,6 +248,8 @@ class Offers extends React.Component {
     this.setState({ selected: value, filter: null });
   } 
   
+  /*
+
   renderModalContent = () => {
     const {screenProps} = this.props;
 
@@ -303,6 +303,8 @@ class Offers extends React.Component {
 
   };        
 
+  */
+
   render() {
     const {showAlert} = this.state;
     const { loading, dataSource } = this.props.offerList;
@@ -347,33 +349,33 @@ class Offers extends React.Component {
       > 
       <FlatList
         ListHeaderComponent={  
-            <View>
-                <View style={{flexDirection:"row"}}>
-                    <View style={{flex:2}}>
-                        <Text style={styles.offerListTitle}> 
-                          <Icon name='md-pricetags' type='Ionicons'/> {screenProps.lang.offerScreen.offerListTitle}
-                        </Text>
-                    </View>
-                    <View style={{flex:1}}>
-                          <Form>
-                            <Picker note
-                              mode="dropdown"
-                              style={{ width: 120 }}
-                              selectedValue={this.state.selected}
-                              onValueChange={this.onValueChange.bind(this)}
-                            >
-                              <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.todos} value="*" />
-                              <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.belleza} value="belleza" />
-                              <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.entretenimiento} value="entretenimiento" />
-                              <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.escapadas} value="escapadas" />
-                              <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.restaurantes} value="restaurantes" />
-                              <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.servicios} value="servicios" />
-                              <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.viajes} value="viajes" />                              
-                            </Picker>
-                          </Form> 
-                    </View>
-                </View>                
-            </View>
+          <View>
+            <View style={{flexDirection:"row"}}>
+                <View style={{flex:2}}>
+                    <Text style={styles.offerListTitle}> 
+                      <Icon name='md-pricetags' type='Ionicons'/> {screenProps.lang.offerScreen.offerListTitle}
+                    </Text>
+                </View>
+                <View style={{flex:1}}>
+                      <Form>
+                        <Picker note
+                          mode="dropdown"
+                          style={{ width: 120 }}
+                          selectedValue={this.state.selected}
+                          onValueChange={this.onValueChange.bind(this)}
+                        >
+                          <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.todos} value="*" />
+                          <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.belleza} value="belleza" />
+                          <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.entretenimiento} value="entretenimiento" />
+                          <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.escapadas} value="escapadas" />
+                          <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.restaurantes} value="restaurantes" />
+                          <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.servicios} value="servicios" />
+                          <Picker.Item label={screenProps.lang.offerScreen.categoryPicker.viajes} value="viajes" />                              
+                        </Picker>
+                      </Form> 
+                </View>
+            </View>                
+          </View>
         }
 
           

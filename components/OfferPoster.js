@@ -77,13 +77,13 @@ export default class OfferPoster extends React.Component {
 
     return (
               <Card style={[styles.container]} >
-                <CardItem cardBody button onPress={() => _toggleModal(true, offer, expired) } >                
+                <CardItem cardBody button onPress={() => _toggleModal(offer, expired) } >                
                   <Image  source={ {uri:post_meta.offer_image_1 } }  style={styles.offerImage} resizeMode="cover" /> 
                 </CardItem>
-                <CardItem style={ [styles.noPadding,{padding:10, marginTop:5}] } button onPress={() => _toggleModal(true, offer) } > 
+                <CardItem style={ [styles.noPadding,{padding:10, marginTop:5}] } button onPress={() => _toggleModal(offer) } > 
                     <Text numberOfLines={2} >{post_data.post_title}</Text> 
                 </CardItem>
-                <CardItem style={styles.offerPriceContainer} button onPress={() => _toggleModal(true, offer, expired) } >  
+                <CardItem style={styles.offerPriceContainer} button onPress={() => _toggleModal(offer, expired) } >  
                   <Left style={{ paddingLeft:0}} >
                     <Text style={styles.offerPrice}>${post_meta.offer_price}</Text>  
                   </Left>
