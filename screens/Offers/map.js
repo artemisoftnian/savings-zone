@@ -29,14 +29,6 @@ class MapScreen extends React.Component {
       //mapRegion: null,
       hasLocationPermissions: false,
       locationResult: null,
-      //offer modal view
-      modalVisible:false,
-      title:'No Data',
-      image: 'https://via.placeholder.com/300x150.jpg/282463/FFFFFF?text=Savings+Zone',//require('../../assets/offer_img/300x150.png'),
-      daysRemain:0,
-      desc:'No Data',
-      pirice:'0.00',
-      debugData: '',
     }; 
 
   }
@@ -180,7 +172,7 @@ class MapScreen extends React.Component {
                   description={item.description}
                   image={require('../../assets/icons/szMapMarker.png')}
                   //onCalloutPress={() => { this._handlePressDirections(item.latlng) } }
-                  onCalloutPress={() => { this._toggleModal(!this.state.modalVisible, item.offer) }}
+                  onCalloutPress={() => { this._openOffer(item.offer) }}
                 />
               ))
               
@@ -191,6 +183,27 @@ class MapScreen extends React.Component {
       )
     //}
 };
+
+_openOffer = async (data, expired = false) => {
+
+  if(data){
+
+    var estaOferta = {
+      modalVisible: false,
+      title: data.post_data.post_title,
+      desc:  data.post_data.post_content,
+      price: data.post_meta.offer_price,
+      image: [data.post_meta.offer_image_1, data.post_meta.offer_image_2, data.post_meta.offer_image_3, data.post_meta.offer_image_4 ],
+      offer: data,
+      daysRemain: this._getDaysRemain(data.post_meta.offer_exp_date),
+      expired: expired       
+    } 
+
+    this.props.navigation.navigate('Oferta',{'offer': estaOferta})
+
+  }
+
+}
 
 getOfferMarkers = () => {
 
@@ -224,79 +237,6 @@ getCoordinates = (data) => {
 
 }
 
-renderModalContent = () => {
-  const {screenProps} = this.props;
-
-  if(this.state.modalVisible){
-    return (
-        <Root>
-          <View enabled style={{ flex:1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-            <View style={styles.modalStyle}>
-
-                <TouchableHighlight
-                  onPress={() => { this._toggleModal(!this.state.modalVisible, null) }} 
-                  style={{  
-                            alignItems:'center', justifyContent:'center', flexDirection:'row',
-                            height:30, backgroundColor: '#393863', overflow:'visible'
-                        }}>
-
-                  <Icon name="chevron-down" type="FontAwesome"  style={{color:'white', backgroundColor:'purple', padding: 20, borderRadius:50}}/>                   
-                </TouchableHighlight>
-              
-              <OfferInfo 
-                title={this.state.title}
-                image={this.state.image}
-                desc={this.state.desc}
-                price={this.state.price}
-                daysRemain={this.state.daysRemain}
-                lang = { screenProps.lang.offerScreen }
-              />
-
-              {
-                  ( !this.state.expired ) ?
-                    <Button full onPress = { () => this._handleAddToMyOffers(this.state.offer) } >
-                      <Text>{ screenProps.lang.offerScreen.getBtnMessage }</Text> 
-                    </Button> 
-                  :
-                    <Button danger full onPress={() => { this._toggleModal(!this.state.modalVisible, null) }}  >
-                      <Text>{ screenProps.lang.offerScreen.expiredMessage }</Text> 
-                    </Button>
-              }
-              
-            </View>
-
-          </View>
-        </Root>
-    );
-  }
-  else{
-    return(
-      <View style={styles.modalStyle} /> 
-    )
-  }
-
-};   
-
-
-_toggleModal = (visible, data, expired = false) => {
-
-  if(data){
-    this.setState({ 
-      modalVisible: visible,
-      title: data.post_data.post_title,
-      desc:  data.post_data.post_content,
-      price: data.post_meta.offer_price,
-      image: data.post_meta.offer_image_1,
-      offer: data,
-      daysRemain: this._getDaysRemain(data.post_meta.offer_exp_date), //data.remain
-      expired: expired
-    });
-  }
-  else{
-    this.setState({ modalVisible: visible });      
-  }
-
-}
 
   // Render any loading content that you like here
   render() {
@@ -326,19 +266,8 @@ _toggleModal = (visible, data, expired = false) => {
               borderRadius:10
         }}>{JSON.stringify(this.state.debugData)}</Text>        
 
-        {this.renderMap()}       
+        {this.renderMap()}      
 
-        {/*INFO BOX - MODAL*/}
-        <Modal
-          visible={this.state.modalVisible}
-          transparent={true}
-          animationType="slide"
-          style={[ styles.modalStyle, StyleSheet.absoluteFill ]} 
-          onRequestClose = {() => {this.renderModalContent()}} 
-          avoidKeyboard={true}
-          >
-          {this.renderModalContent()} 
-        </Modal>
 
       </View>
     );

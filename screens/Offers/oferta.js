@@ -21,29 +21,20 @@ class Oferta extends React.Component {
     super(props);
 
     this.state = {
-        isLoading: true,
-        loading: false,
-        error: '',
         category:'',
         user: [],
-        modalVisible:false,
         title:'No Data',
-        image:'https://via.placeholder.com/300x150.jpg/282463/FFFFFF?text=Savings+Zone',
+        image:[],
         daysRemain:0,
         desc:'No Data',
         pirice:'0.00',
         subscribed: true, //Scar esta info del usuario
         result: [],
         dataSource: [],
-        filter: '',
-        offlineData: [],
-        refreshing: false,
-        isConnected: true,
-        start: false,
-        selected: "*",
         showAlert: false,
         alertType: 'got',
-        expired: false    
+        expired: false,
+        offer:[] 
     };
 
   }
@@ -64,28 +55,22 @@ class Oferta extends React.Component {
    //await AsyncStorage.removeItem('user')
   async componentWillMount() {
     const { user_id } = this.props.user;
-    //this.props.fetchOffersDataSource();
-    //this.arrayholder = this.props.offerList.dataSource;
-    //this.setState({ start: true, dataSource: this.props.offerList.dataSource });
 
-    let data = this.props.navigation.getParam('offer','no_offer_data');    
+    let data = await this.props.navigation.getParam('offer','no_offer_data');  
+
     this.setState({ 
-        modalVisible: false,
-        title: data.post_data.post_title,
-        category: data_post.post,
-        description:  data.post_data.taxonomy.name,
-        price: data.post_meta.offer_price,
-        image: [data.post_meta.offer_image_1, data.post_meta.offer_image_2, data.post_meta.offer_image_3, data.post_meta.offer_image_4 ],
-        offer: data,
-        daysRemain: this._getDaysRemain(data.post_meta.offer_exp_date), //data.remain
+        title: data.title,
+        //category: data.data_post.post,
+        desc:  data.desc,
+        price: data.price,
+        image: data.image,
+        offer: data.offer,
+        daysRemain: this._getDaysRemain(data.offer.post_meta.offer_exp_date), 
       });
 
   }
 
-  async componentDidMount() {
-
-  }
-
+  async componentDidMount() { }
 
   _handleOfferClick = (navigation, item) => {
     console.log("offer clicked",item);
@@ -100,9 +85,8 @@ class Oferta extends React.Component {
 
   _handleAddToMyOffers = async (item) => {
 
-    console.log(item);
-
-    if(!this.state.subscribed){
+    const {user} = this.props;
+    if(user.user_meta.subscribed == 'false'){
         // Works on both iOS and Android
         this.showAlert('unsubscribed');
     }
@@ -307,7 +291,7 @@ const styles = StyleSheet.create({
   myOffersBtn:{
     marginTop:0,
     paddingTop:0,
-    color: 'red'
+    //color: 'red'
   }
 
 });

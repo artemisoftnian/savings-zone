@@ -168,7 +168,7 @@ class Offers extends React.Component {
       }
       else{
         return(
-          <View style= {styles.alertMessageContainer}>            
+          <View style= {styles.alertMessageContainer}>             
             <Icon name="thumbs-up" type="Ionicons" style={styles.alertMessageIcon} />
             <View style={[styles.alertMessageBorder,{borderColor:'#47d782'}]}>
               <Text style={styles.alertMessageH1}>{screenProps.lang.offerScreen.gotItMsg.h1}</Text>
@@ -178,7 +178,7 @@ class Offers extends React.Component {
                 onPress = { () => { this.hideAlert(); this.props.navigation.navigate('MyOffers')} } >
                 <Text>{screenProps.lang.offerScreen.gotItMsg.confirm}</Text>               
               </Button>             
-              <Button full style={styles.alertMessageConfirmBtn} onPress = { () => this.hideAlert() } >
+              <Button full style={styles.alertMessageConfirmBtn} onPress = { () => this.hideAlert() } > 
                 <Text>{screenProps.lang.offerScreen.gotItMsg.cancel}</Text> 
               </Button> 
             </View>           
@@ -212,6 +212,27 @@ class Offers extends React.Component {
       });
 
      this.props.navigation.navigate('Oferta',{'offer':data})
+
+    }
+
+  }
+
+  _openOffer = async (data, expired = false) => {
+
+    if(data){
+
+      var estaOferta = {
+        modalVisible: false,
+        title: data.post_data.post_title,
+        desc:  data.post_data.post_content,
+        price: data.post_meta.offer_price,
+        image: [data.post_meta.offer_image_1, data.post_meta.offer_image_2, data.post_meta.offer_image_3, data.post_meta.offer_image_4 ],
+        offer: data,
+        daysRemain: this._getDaysRemain(data.post_meta.offer_exp_date),
+        expired: expired       
+      } 
+
+      this.props.navigation.navigate('Oferta',{'offer': estaOferta})
 
     }
 
@@ -391,8 +412,7 @@ class Offers extends React.Component {
             <OfferPoster
               offer={item}
               _handleAddToMyOffers={this._handleAddToMyOffers}
-              _toggleModal={this._toggleModal}
-              //_toggleModal={() => this.props.navigation.navigate('Oferta', {'offer':item}) }
+              _openOffer = {this._openOffer}
               _getDaysRemain={this._getDaysRemain}
               lang = { this.props.screenProps.lang.offerScreen }
             />

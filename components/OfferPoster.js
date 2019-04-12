@@ -20,17 +20,17 @@ export default class OfferPoster extends React.Component {
     // Movie object with title, genre, and poster
     offer: PropTypes.object.isRequired,
     // Called when user taps on a poster
-    _toggleModal: PropTypes.func.isRequired,
+    _openOffer: PropTypes.func.isRequired,
     _handleAddToMyOffers: PropTypes.func.isRequired,
     _getDaysRemain: PropTypes.func.isRequired
   }
 
   _isExperied = (expired, days) => {
-     const { offer,  _toggleModal , lang} = this.props;
+     const { offer,  _openOffer , lang} = this.props;
 
       if(!expired){
         return(
-          <Button style={{width: '100%'}} full onPress={() => _toggleModal(true, offer) }>
+          <Button style={{width: '100%'}} full onPress={() => _openOffer(true, offer) }>
             <Text>{ (days==1) ? lang.expiresToday : lang.expiresInDays.replace('$days',days) } </Text>
           </Button>
         )
@@ -71,19 +71,19 @@ export default class OfferPoster extends React.Component {
 
 
   render() { 
-    const { offer, offer: { post_meta, post_data }, _toggleModal, _handleAddToMyOffers, _getDaysRemain, lang } = this.props;
+    const { offer, offer: { post_meta, post_data }, _openOffer, _getDaysRemain, lang } = this.props;
     const daysRemain = _getDaysRemain(post_meta.offer_exp_date);
     const expired = this.expiredCheck(daysRemain);
 
     return (
               <Card style={[styles.container]} >
-                <CardItem cardBody button onPress={() => _toggleModal(offer, expired) } >                
+                <CardItem cardBody button onPress={() => _openOffer(offer, expired) } >                
                   <Image  source={ {uri:post_meta.offer_image_1 } }  style={styles.offerImage} resizeMode="cover" /> 
                 </CardItem>
-                <CardItem style={ [styles.noPadding,{padding:10, marginTop:5}] } button onPress={() => _toggleModal(offer) } > 
+                <CardItem style={ [styles.noPadding,{padding:10, marginTop:5}] } button onPress={() => _openOffer(offer) } > 
                     <Text numberOfLines={2} >{post_data.post_title}</Text> 
                 </CardItem>
-                <CardItem style={styles.offerPriceContainer} button onPress={() => _toggleModal(offer, expired) } >  
+                <CardItem style={styles.offerPriceContainer} button onPress={() => _openOffer(offer, expired) } >  
                   <Left style={{ paddingLeft:0}} >
                     <Text style={styles.offerPrice}>${post_meta.offer_price}</Text>  
                   </Left>

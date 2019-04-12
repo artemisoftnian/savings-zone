@@ -33,8 +33,7 @@ export default class OfferInfo extends React.Component {
 
 
 
-  render() {   
-
+  render() {  
     
     return (
       <Content style={{flex:1}}>  
