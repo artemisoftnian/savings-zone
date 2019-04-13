@@ -155,14 +155,14 @@ class MapScreen extends React.Component {
           onRegionChange={this._handleMapRegionChange}
         >
           {
-            [
+            [ /* Se Añadira mas adelante
               <MapView.Marker
                 key="me-car-hunting-offers"
                 coordinate={mapRegion}
                 title={"I'ts me Ma...?"}
                 description={'In the hunt for offers!'}
                 image={require('../../assets/icons/szCarMarker.png')}
-              />,
+              />,*/
 
               offerMarkers.map( (item, index) => (
                 <MapView.Marker
@@ -262,8 +262,9 @@ getCoordinates = (data) => {
               left: 10,
               zIndex: 10,
               textAlign:'center',
-              backgroundColor:'#0000001a',
-              borderRadius:10
+              backgroundColor:'#0000001a', backgroundColor:'transparent', color:'transparent',
+              borderRadius:10,
+              transform: [{ scale: 0 }]
         }}>{JSON.stringify(this.state.debugData)}</Text>        
 
         {this.renderMap()}      
@@ -288,7 +289,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     //paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#ecf0f1',
+    backgroundColor: '#ecf0f1',   transform: [{ scale: 0 }]
   },
   paragraph: {    
     
