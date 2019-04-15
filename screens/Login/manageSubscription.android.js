@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { ActivityIndicator, View,  Image,  StyleSheet, Alert,  
-  Platform,  KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+  Platform,  KeyboardAvoidingView, TouchableOpacity, Linking } from 'react-native';
 
-import {  Text,  Button,  Left,  Right,  ListItem, Radio } from 'native-base';
+import {  Text,  Button, Body, Left,  Right,  ListItem, Radio } from 'native-base';
 
-import { NativeModules } from 'react-native'
-const { InAppUtils } = NativeModules
+import {AndroidData} from '../../components/constants.js';
 
-import {iosData} from '../../components/constants.js';
+import InAppBilling from "react-native-billing";
 
+const testItems = [ 'android.test.purchased', 'android.test.canceled', 'android.test.refunded', 'android.test.item_unavailable' ];
 const itemSubs = ['com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths'];
 
 class SubscriptionScreen extends React.Component {
@@ -59,7 +59,8 @@ class SubscriptionScreen extends React.Component {
       await InAppBilling.open();
 
       // product with Google Play id: gems.pack.500
-      const subcriptions = await InAppBilling.getSubscriptionDetailsArray(itemSubs)
+      //const subcriptions = await InAppBilling.getSubscriptionDetailsArray(itemSubs)
+      const subscriptions =  await InAppBilling.getSubscriptionDetailsArray(testItems)
       .then(
         //console.log(subscriptions)
         this.setState({subcriptions: subcriptions})
@@ -76,7 +77,7 @@ class SubscriptionScreen extends React.Component {
 
 
   async purchase() {
-    
+
     try {
       await InAppBilling.open();
 
@@ -113,45 +114,6 @@ class SubscriptionScreen extends React.Component {
       await InAppBilling.close();
     }
   }
-
-
-  handleRestorePurchases = async () => {
-
-    this.setState(() => ({ isLoading: true }));
-  
-    InAppUtils.restorePurchases((error, response) => {
-  
-      if (error) {
-  
-        this.setState(() => ({ isLoading: false }));
-  
-        this.delayedInfoAlert("itunes Error", "Could not connect to itunes store.");
-  
-      } else {
-  
-        if (response.length === 0) {
-  
-        this.setState(() => ({ isLoading: false }));
-  
-        this.delayedInfoAlert("No Purchases", "We didn’t find any purchases to restore.");
-  
-        return;
-  
-      }
-  
-      // sort purchases
-  
-      const sortedPurchases = this.sortPurchases(response.slice()).reverse();
-  
-      // send latest purchase to API
-  
-      this.handleSuccessfullPurchase(sortedPurchases[0]);
-  
-      }
-  
-    });
-  
-  }  
 
   buyItem = async(sku) => {
     try {
@@ -299,11 +261,11 @@ class SubscriptionScreen extends React.Component {
                   <Button small full transparent warning 
                     style={{marginTop:20}} 
                     onPress = { () => { 
-                      this.props.navigation.navigate('ManageSubscription')
+                      Linking.openURL(this.props.screenProps.lang.myAccount.privacyPolicyUrl)
                       .catch((err) => console.error('An error occurred', err)) } 
                     } >
                     <Text style={{textDecorationLine:'underline', color:'blue'}}>{screenProps.lang.myAccount.subscribedAlreadyLink}</Text>               
-                  </Button>                  
+                  </Button>                   
 
                   <Button small full transparent warning 
                     style={{marginTop:20}} 

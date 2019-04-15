@@ -299,15 +299,6 @@ class SubscriptionScreen extends React.Component {
                   <Button small full transparent warning 
                     style={{marginTop:20}} 
                     onPress = { () => { 
-                      this.props.navigation.navigate('ManageSubscription')
-                      .catch((err) => console.error('An error occurred', err)) } 
-                    } >
-                    <Text style={{textDecorationLine:'underline', color:'blue'}}>{screenProps.lang.myAccount.subscribedAlreadyLink}</Text>               
-                  </Button>                  
-
-                  <Button small full transparent warning 
-                    style={{marginTop:20}} 
-                    onPress = { () => { 
                       Linking.openURL(this.props.screenProps.lang.myAccount.privacyPolicyUrl)
                       .catch((err) => console.error('An error occurred', err)) } 
                     } >

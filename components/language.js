@@ -26,7 +26,9 @@ export const Lang = {
             planSelectBtnText: 'Seleccione este plan',
             freeText: 'GRATIS',
             freeDescription: 'Podrás ver, pero no obtener ni consumir ofertas.',
-            freeNoteMessage: "Mientras tengas este plan no habra costos de uso, sin embargo deberá obtener un plan si desea obtener y consumir ofertas."
+            freeNoteMessage: "Mientras tengas este plan no habra costos de uso, sin embargo deberá obtener un plan si desea obtener y consumir ofertas.",
+            iosNote: "Cancele la suscripción en cualquier momento. La suscripción se renueva automáticamente a menos que la renovación automática esté desactivada al menos 24 horas antes del final del período actual, vaya a la configuración de la cuenta de iOS después de la compra. El pago se cargará a la cuenta de iTunes. Cualquier porción no utilizada del período de prueba gratuito, si se ofrece, se perderá cuando compre una suscripción.",
+            subscribedAlreadyLink: "Recupere su Supcripcion Aquí"
         },
         offerScreen:{            
             offerListTitle: "Ofertas Disponibles",
@@ -102,6 +104,11 @@ export const Lang = {
             noteTitle: "IMPORTANT:",
             noteMessage: "Plans automatically renew at the end of the applicable plan period, at the end of that period you will be charged the standard fee of $price until you cancel.",
             planSelectBtnText: 'Select This Plan',
+            freeText: 'FREE',
+            freeDescription: 'You can see, but not obtain or consume offers.',
+            freeNoteMessage: "While you have this plan there will be no cost of use, however you must get a plan if you want to get and consume offers.",
+            iosNote: "Cancel subscription any time. Subscription automatically renews unless auto-renew is turned off at least 24-hours before the end of the current period by going to your iOS Account Settings after purchase. Payment will be charged to iTunes Account. Any unused portion of free trial period, if offered, will be forfeited when you purchase a subscription.",
+            subscribedAlreadyLink: "Recover a Subscription Here!"
         },        
         offerScreen:{            
             offerListTitle: "Available Offers",
