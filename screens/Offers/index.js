@@ -95,7 +95,7 @@ class Offers extends React.Component {
 
   _handleAddToMyOffers = async (item) => {
     const {user} = this.props;
-    if(user.user_meta.subscribed == 'false'){
+    if(user.user_meta.subscribed == 'true'){
         // Works on both iOS and Android
         this.showAlert('unsubscribed');
     }

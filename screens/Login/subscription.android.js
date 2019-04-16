@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ActivityIndicator, View,  Image,  StyleSheet, Alert,  
-  Platform,  KeyboardAvoidingView, TouchableOpacity, Linking } from 'react-native';
+  Platform,  KeyboardAvoidingView, TouchableOpacity, Linking, ScrollView } from 'react-native';
 
 import {  Text,  Button, Body, Left,  Right,  ListItem, Radio } from 'native-base';
 
@@ -172,7 +172,7 @@ class SubscriptionScreen extends React.Component {
     const {screenProps} = this.props;
 
     return (
-      <KeyboardAvoidingView style={[styles.mainView,{backgroundColor:'#fff'}]}  behavior="padding" enabled>
+      <ScrollView style={[styles.mainView,{backgroundColor:'#fff'}]}  behavior="padding" enabled>
           <View enabled style={{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20  }}>
 
               <Text style={styles.areaTitle} >{ screenProps.lang.subscriptionScreen.title }</Text>
@@ -211,10 +211,10 @@ class SubscriptionScreen extends React.Component {
                                   key={i.toString()}   
                                   style={[styles.listItem, product.subscriptionPeriod === this.state.selectedPeriod ? styles.selectedItem : {}]}                 
                               >
-                                <Left>
+                                <Left style={{padding:0,margin:0}}>
                                   <Text style={[styles.listItemPrice,product.subscriptionPeriod === this.state.selectedPeriod ? styles.selectedText : {}]}  >{product.priceText}</Text>                                  
                                 </Left>
-                                <Body>
+                                <Body style={{padding:0,margin:0}}>
                                   <Text style={[styles.listItemDescription,product.subscriptionPeriod === this.state.selectedPeriod ? styles.selectedText : {}]}  >{product.description}</Text>
                                 </Body>                                
                                 <Right>
@@ -232,20 +232,7 @@ class SubscriptionScreen extends React.Component {
                           })
                       }
                       
- 
-
-                  <Text style={{marginTop:30}} >                      
-                      <Text  style={{textAlign: 'center', fontWeight:'bold'}}>{screenProps.lang.subscriptionScreen.noteTitle}</Text>
-                      <Text>
-                        {this.state.selectedPeriod == 'free'?
-                          screenProps.lang.subscriptionScreen.freeNoteMessage
-                          :
-                          screenProps.lang.subscriptionScreen.noteMessage.replace('$price', this.state.selectedPlanPrice)
-                        }
-                       
-                      </Text>
-                  </Text>
-                     
+                    
 
                   <Button 
                     block
@@ -264,7 +251,7 @@ class SubscriptionScreen extends React.Component {
                       this.props.navigation.navigate('ManageSubscription')
                       .catch((err) => console.error('An error occurred', err)) } 
                     } >
-                    <Text style={{textDecorationLine:'underline', color:'blue'}}>{screenProps.lang.myAccount.subscribedAlreadyLink}</Text>               
+                    <Text style={{textDecorationLine:'underline', color:'purple'}}>{screenProps.lang.subscriptionScreen.subscribedAlreadyLink}</Text>               
                   </Button>                   
 
                   <Button small full transparent warning 
@@ -274,13 +261,26 @@ class SubscriptionScreen extends React.Component {
                       .catch((err) => console.error('An error occurred', err)) } 
                     } >
                     <Text style={{textDecorationLine:'underline', color:'blue'}}>{screenProps.lang.myAccount.privatePolicyText}</Text>               
-                  </Button>                   
+                  </Button> 
+
+                  <Text style={{marginTop:30}} >                      
+                      <Text  style={{textAlign: 'center', fontWeight:'bold'}}>{screenProps.lang.subscriptionScreen.noteTitle}</Text>
+                      <Text>
+                        {this.state.selectedPeriod == 'free'?
+                          screenProps.lang.subscriptionScreen.freeNoteMessage
+                          :
+                          screenProps.lang.subscriptionScreen.noteMessage.replace('$price', this.state.selectedPlanPrice)
+                        }
+                       
+                      </Text>
+                  </Text>                  
+
               </View>
               
 
           </View>
 
-      </KeyboardAvoidingView>
+      </ScrollView>
     );
   }
 }
@@ -302,8 +302,8 @@ const styles = StyleSheet.create({
     marginLeft:0
   },
   listItemPrice:{
-     width:140,
-     fontSize:25, 
+     width:120,
+     fontSize:21, 
      fontWeight:'bold',
      paddingLeft:10,
      color:'#71839a',
@@ -312,12 +312,15 @@ const styles = StyleSheet.create({
      textAlign:'center'  
   },
   listItemDescription:{
-    color:'#71839a'
+    color:'#71839a',
+    width:"100%",
+    fontSize:15,     
   },
   listItemRadio:{
   },
   selectedItem:{    
-    backgroundColor:'#4e2e59'
+    backgroundColor:'#4e2e59',
+    elevation:5
   },
   selectedText:{
     color:'#ffffff',
