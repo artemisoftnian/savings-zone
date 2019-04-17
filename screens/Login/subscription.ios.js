@@ -9,6 +9,9 @@ const { InAppUtils } = NativeModules
 
 import {iosData} from '../../components/constants.js';
 
+import { connect } from 'react-redux';
+import { updateSubscription } from './reducer';
+
 const itemSubs = ['com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths'];
 
 class SubscriptionScreen extends React.Component {
@@ -323,7 +326,12 @@ class SubscriptionScreen extends React.Component {
   }
 }
 
-export default SubscriptionScreen;
+const mapStateToProps = state => {
+  const { user } = state;
+  return { user };
+};
+
+export default connect(mapStateToProps, { updateSubscription } )(SubscriptionScreen);
 
 const styles = StyleSheet.create({
   mainView: {

@@ -6,6 +6,9 @@ import {  Text,  Button, Body, Left,  Right,  ListItem, Radio } from 'native-bas
 
 import {AndroidData} from '../../components/constants.js';
 
+import { connect } from 'react-redux';
+import { updateSubscription } from './reducer';
+
 import InAppBilling from "react-native-billing";
 
 const testItems = [ 'android.test.purchased', 'android.test.canceled', 'android.test.refunded', 'android.test.item_unavailable' ];
@@ -75,29 +78,28 @@ class SubscriptionScreen extends React.Component {
     }    
   } 
 
-
-  async purchase() {
+  getSubscription = async ( selectedProduct ) =>{
 
     try {
       await InAppBilling.open();
-
-      const response = InAppBilling.subscribe(this.state.selectedPlanCode).then(details => {
-
-        console.log(details);
+      const response = InAppBilling.subscribe(this.state.selectedPlanCode).then( details => {
 
         if(details.purchaseState == 'PurchasedSuccessfully'){
           //Update User Data on server here
-          //then
+          const isAuth = await this.props.updateSubscription(this.props.user.user_id, details);
+          //then if all went good!
           this.props.navigation.navigate('Offers');
         }
         
       });
      //const details = await InAppBilling.purchase(this.state.selectedPlanCode);
     } catch (err) {
-      console.log(err);
+      console.log(err)
+      
     } finally {
+
       await InAppBilling.close();
-    }
+    } 
   }
   
   async checkSubscription() {
@@ -134,8 +136,8 @@ class SubscriptionScreen extends React.Component {
         this.props.navigation.navigate('Offers');
       }
       else{
-          await this.purchase(product.productId);
-
+          await this.getSubscription(this.state.selectedPlanCode);
+          /*
           Alert.alert(
             'Not Programed Yet!',
             'This area is in development',
@@ -143,7 +145,8 @@ class SubscriptionScreen extends React.Component {
               {text: 'Continue to offers', onPress: () => this.props.navigation.navigate('Offers') },
             ],
             { cancelable: false }
-          )          
+          ) 
+          */         
       }
   }
 
@@ -231,9 +234,6 @@ class SubscriptionScreen extends React.Component {
                             );
                           })
                       }
-                      
-                    
-
                   <Button 
                     block
                     style={[styles.selectBtn,{marginTop:30}]}
@@ -273,19 +273,21 @@ class SubscriptionScreen extends React.Component {
                         }
                        
                       </Text>
-                  </Text>                  
+                  </Text>
 
               </View>
-              
-
           </View>
-
       </ScrollView>
     );
   }
 }
 
-export default SubscriptionScreen;
+const mapStateToProps = state => {
+  const { user, subscribed } = state;
+  return { user, subscribed };
+};
+
+export default connect(mapStateToProps, { updateSubscription } )(SubscriptionScreen);
 
 const styles = StyleSheet.create({
   mainView: {
