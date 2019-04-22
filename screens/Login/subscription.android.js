@@ -86,7 +86,7 @@ class SubscriptionScreen extends React.Component {
 
         if(details.purchaseState == 'PurchasedSuccessfully'){
           //Update User Data on server here
-          const isAuth = await this.props.updateSubscription(this.props.user.user_id, details);
+          const isAuth = await this.props.updateSubscription(this.props.user.user_id, details, "android");
           //then if all went good!
           this.props.navigation.navigate('Offers');
         }

@@ -25,12 +25,14 @@ export const logOutUser = () => ({
 });
 
 
-export const updateSubscription = ( userId = null, detail = null, osType = null  ) => async dispatch => {
+export const updateSubscription = ( userId = null, detail = null, osType = null, ioState = null  ) => async dispatch => {
     try{
         dispatch({ type: FETCH_SUBSCRIPTION_UPDATE });
         const pathService = global.wpSite + '/wp-json/svapphelper/v2/subscription';
+        var toSendData = null;
         
-        /* Android Details returns the following:        
+        /* 
+        ----------------    Android Details returns the following      -----------        
         productId: String
         orderId: String
         purchaseToken: String
@@ -41,7 +43,7 @@ export const updateSubscription = ( userId = null, detail = null, osType = null 
         autoRenewing Boolean
         developerPayload: String
 
-        IOS Return Details
+        ------------------------     IOS Return Details       --------------------
         originalTransactionDate 	    number 	The original transaction date (ms since epoch)
         originalTransactionIdentifier 	string 	The original transaction identifier
         transactionDate 	            number 	The transaction date (ms since epoch)
@@ -50,6 +52,27 @@ export const updateSubscription = ( userId = null, detail = null, osType = null 
         transactionReceipt 	            string 	The transaction receipt as a base64 encoded string
         */
 
+        if(osType == "android"){
+            toSendData = {
+                user_id: userId,
+                subscription_type: detail.productId,
+                subscription_exp_date: detail.purchaseTime,
+                subscription_receipt: detail.receiptData,
+                subscription_expired: detail.purchaseState,
+                subscription_os_type: osType,
+            }
+        }
+        else if(osType == "ios"){
+            toSendData = {
+                user_id: userId,
+                subscription_type: detail.productIdentifier,
+                subscription_exp_date: detail.transactionDate,
+                subscription_receipt: detail.transactionReceipt,
+                subscription_expired: ioState,
+                subscription_os_type: osType,                
+            }
+        }
+
         let data = await fetch(pathService, {
             method: 'POST',
             headers: {
@@ -57,14 +80,7 @@ export const updateSubscription = ( userId = null, detail = null, osType = null 
               accept: 'application/json',
               app_check: 'savings_zone_app',
             },
-            body: JSON.stringify({
-              user_id: userId,
-              subscription_type: detail.productId,
-              subscription_exp_date: detail.purchaseTime,
-              subscription_receipt: detail.receiptData,
-              subscription_expired: detail.purchaseState,
-              subscription_os_type: osType,
-            })
+            body: JSON.stringify(toSendData)
         });
 
         if (data.status === 200){
