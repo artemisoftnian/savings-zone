@@ -11,7 +11,7 @@ import {
 import { ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 
-import {Content,  Card,  CardItem,  Thumbnail,  Text, Icon,  Left,  Body } from 'native-base';
+import {Content,  Card,  CardItem,  Thumbnail,  Text, Icon,  Left,  Body, Button } from 'native-base';
 
 import MainWrapper from '../../components/MainWrapper';
 const avatarImg = require('../../assets/avatar.png');
@@ -48,9 +48,10 @@ class UserProfileScreen extends React.Component {
 
     this.setState({ 
       user: this.props.user, 
-      subscribed: this.props.user.user_meta.subscribed, 
+      subscribed: this.props.user.user_meta.app_subscribed, 
       userName: this.props.user.user_meta.first_name,
-      userLastName: this.props.user.user_meta.last_name
+      userLastName: this.props.user.user_meta.last_name,
+      subscriptionExpDate: this.props.user.user_meta.subscription_exp_date
     });
 
   }
@@ -67,6 +68,7 @@ class UserProfileScreen extends React.Component {
   };
 
   userInfo = () => {    
+    const {screenProps} = this.props;
        return (
             <Content>
               <Card style={{flex: 0}}>
@@ -75,8 +77,20 @@ class UserProfileScreen extends React.Component {
                     <Thumbnail source={avatarImg} />
                     <Body>
                       <Text>{this.state.userName + " " + this.state.userLastName}</Text>
-                      <Text note>Savings So Far: $55.49</Text>  
-                      <Text note>Subscrition Util: November 25, 2019</Text>
+                      {
+                        (this.state.subscription === "true")?
+                        [<Text note>Subscrition From:  {this.state.subscriptionExpDate}</Text>,
+                        <Text note>Subscrition Util:  {this.state.subscriptionExpDate}</Text>]
+                        :
+                        [
+                          <Text >{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.h2}</Text>, 
+                        <Button small full transparent warning 
+                          style={{marginTop:1, textAlign:"left"}} 
+                          onPress = { ()=>{ this.props.navigation.navigate('Subscription') }  } >                           
+                          <Text style={{textDecorationLine:'underline', color:'blue'}}>{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.confirm}</Text>               
+                        </Button>]
+                      }
+
                     </Body>
                   </Left>
                 </CardItem>
@@ -143,7 +157,7 @@ class UserProfileScreen extends React.Component {
      ];
 
     const  OptionsListEn = [
-      {id:'1', optIcon:"md-trophy", optTitle: "My Offers", action: ()=>{ this.props.navigation.navigate('MyOffers') } },
+      {id:'1', optIcon:"md-cart", optTitle: "My Offers", action: ()=>{ this.props.navigation.navigate('MyOffers') } },
       {id:'2', optIcon:"md-share", optTitle: "Invite Friends", action: ()=>{ this.onShare() } },
       {id:'3', optIcon:"md-help-circle", optTitle: "Help", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.helpUrl)  } },
       {id:'4', optIcon:"md-fingerprint", optTitle: "Privacy Policy", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.privacyPolicyUrl) } },
@@ -152,7 +166,7 @@ class UserProfileScreen extends React.Component {
     ]; 
      
     const  OptionsListEs = [
-      {id:'1', optIcon:"md-trophy", optTitle: "Mis Ofertas", action: ()=>{ this.props.navigation.navigate('MyOffers') } },
+      {id:'1', optIcon:"md-cart", optTitle: "Mis Ofertas", action: ()=>{ this.props.navigation.navigate('MyOffers') } },
       {id:'2', optIcon:"md-share", optTitle: "Invita a tus amigos", action: ()=>{ this.onShare() } },
       {id:'3', optIcon:"md-help-circle", optTitle: "Ayuda", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.helpUrl)  } },
       {id:'4', optIcon:"md-finger-print", optTitle: "Políticas de Privacidad", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.privacyPolicyUrl) } },
@@ -165,7 +179,7 @@ class UserProfileScreen extends React.Component {
       
       <MainWrapper
         //title="Savings Zone"
-        onScanPress = {() => this.props.navigation.navigate('Scanner')}
+        onScanPress = {() => this.props.navigation.navigate('MyOffers')}
         view ='horizontal'
         nav = { this.props.navigation }
         lang ={screenProps.lang} 

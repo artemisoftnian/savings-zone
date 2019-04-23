@@ -95,9 +95,9 @@ class Offers extends React.Component {
 
   _handleAddToMyOffers = async (item) => {
     const {user} = this.props;
-    if(user.user_meta.subscribed == 'true'){
+    if(user.user_meta.app_subscribed == 'false'){ 
         // Works on both iOS and Android
-        this.showAlert('unsubscribed');
+        this.showAlert('unsubscribed'); 
     }
     else{  
 
@@ -355,7 +355,7 @@ class Offers extends React.Component {
 
       <MainWrapper
         //title="Savings Zone"
-        onScanPress={() => this.props.navigation.navigate('Scanner')}
+        onScanPress={() => this.props.navigation.navigate('MyOffers')} 
         view='horizontal'
         useSearchBar
         searchFunction = {this.handleSearchFilter}

@@ -87,9 +87,9 @@ export default class MainWrapper extends React.Component {
           <Right> 
               <Button 
                 transparent
-                onPress={ this.props.onScanPress }
+                onPress={ this.props.onScanPress  }
               >
-              <Icon name='md-barcode' type='Ionicons' style={{color:'#27205a', fontSize:30}}/>
+              <Icon name='md-cart' type='Ionicons' style={{color:'#27205a', fontSize:30}}/>
             </Button>          
           </Right>                          
         </Header>

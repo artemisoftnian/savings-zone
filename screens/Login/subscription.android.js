@@ -66,7 +66,7 @@ class SubscriptionScreen extends React.Component {
       const subscriptions =  await InAppBilling.getSubscriptionDetailsArray(testItems)
       .then(
         //console.log(subscriptions)
-        this.setState({subcriptions: subcriptions})
+        this.setState({subcriptions: subscriptions})
       );
       //const details = await InAppBilling.getProductDetails('gems.pack.500');
       //this.gemsPack.priceText = details.priceText;
@@ -86,7 +86,7 @@ class SubscriptionScreen extends React.Component {
 
         if(details.purchaseState == 'PurchasedSuccessfully'){
           //Update User Data on server here
-          const isAuth = await this.props.updateSubscription(this.props.user.user_id, details, "android");
+          const isAuth = this.props.updateSubscription(this.props.user.user_id, details, "android");
           //then if all went good!
           this.props.navigation.navigate('Offers');
         }

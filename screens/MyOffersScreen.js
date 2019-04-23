@@ -131,7 +131,7 @@ class MyOffersScreen extends React.Component {
     return (
       
       <MainWrapper
-        onScanPress={() => this.props.navigation.navigate('Scanner')}
+        onScanPress={() => this.props.navigation.navigate('MyOffers')}
         view='horizontal'
         nav = { this.props.navigation }
         lang = {screenProps.lang}
@@ -139,10 +139,23 @@ class MyOffersScreen extends React.Component {
 
       <FlatList 
         ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Icon style={styles.emptyIcon} name='md-sad' type='Ionicons'/>
-            <Text style={styles.emptyText} >{screenProps.lang.myOffers.emptyListMessage}</Text>
-          </View>
+
+            (this.props.user.user.user_meta.app_subscribed === "true")?
+              <View style={styles.emptyContainer}>
+                <Icon style={styles.emptyIcon} name='md-sad' type='Ionicons'/>
+                <Text style={styles.emptyText} >{screenProps.lang.myOffers.emptyListMessage}</Text>
+              </View>
+            :
+              <View style={[styles.emptyContainer,{margin:20}]}>
+                <View style={[{margin:20, borderWidth:1, borderColor:'purple', borderRadius:15, padding:5}]}>
+                  <Text style={{textAlign:'center'}} >{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.h2}</Text>
+                  <Button small full transparent warning 
+                    style={{marginTop:1, textAlign:"left"}} 
+                    onPress = { ()=>{ this.props.navigation.navigate('Subscription') }  } >                           
+                    <Text style={{textDecorationLine:'underline', color:'blue'}}>{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.confirm}</Text>               
+                  </Button>
+                </View>
+              </View>
         }
         contentContainerStyle={[ { flexGrow: 1 } , this.state.myOffers.length ? null : { justifyContent: 'center'} ]}
         ListHeaderComponent={ () => {
