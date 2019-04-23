@@ -29,6 +29,8 @@ export const updateSubscription = ( userId = null, detail = null, osType = null,
     try{
         dispatch({ type: FETCH_SUBSCRIPTION_UPDATE });
         const pathService = global.wpSite + '/wp-json/svapphelper/v2/subscription';
+
+        console.log(pathService);
         var toSendData = null;
         
         /* 
@@ -51,25 +53,36 @@ export const updateSubscription = ( userId = null, detail = null, osType = null,
         productIdentifier 	            string 	The product identifier
         transactionReceipt 	            string 	The transaction receipt as a base64 encoded string
         */
-
-        if(osType == "android"){
+        if(detail === 'free'){
             toSendData = {
                 user_id: userId,
-                subscription_type: detail.productId,
-                subscription_exp_date: detail.purchaseTime,
-                subscription_receipt: detail.receiptData,
-                subscription_expired: detail.purchaseState,
+                subscription_type: 'free',
+                subscription_exp_date: 'never',
+                subscription_receipt: 'na',
+                subscription_expired: 'true',
                 subscription_os_type: osType,
-            }
+            }            
         }
-        else if(osType == "ios"){
-            toSendData = {
-                user_id: userId,
-                subscription_type: detail.productIdentifier,
-                subscription_exp_date: detail.transactionDate,
-                subscription_receipt: detail.transactionReceipt,
-                subscription_expired: ioState,
-                subscription_os_type: osType,                
+        else{
+            if(osType === "android"){
+                toSendData = {
+                    user_id: userId,
+                    subscription_type: detail.productId,
+                    subscription_exp_date: detail.purchaseTime,
+                    subscription_receipt: detail.receiptData,
+                    subscription_expired: detail.purchaseState,
+                    subscription_os_type: osType,
+                }
+            }
+            else if(osType === "ios"){
+                toSendData = {
+                    user_id: userId,
+                    subscription_type: detail.productIdentifier,
+                    subscription_exp_date: detail.transactionDate,
+                    subscription_receipt: detail.transactionReceipt,
+                    subscription_expired: ioState,
+                    subscription_os_type: osType,                
+                }
             }
         }
 
@@ -196,6 +209,7 @@ export default (state = INITIAL_STATE, action) => {
             return { ...INITIAL_STATE, registered: true, subscribed: true };
         }
         case FETCH_SUBSCRIPTION_UPDATE_SUCCESS: {
+            console.log('from reducer, returned',action.payload);
             return { ...INITIAL_STATE, registered: true, isAuth: true, subscribed: true, user: action.payload };
         }
         case FETCH_SUBSCRIPTION_UPDATE_FAILED: {

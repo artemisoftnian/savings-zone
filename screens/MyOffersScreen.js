@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     flex:1,
 		alignItems: 'center',
     justifyContent: "center",
-    height: SCREEN_HEIGHT - 90 - Constants.statusBarHeight , //responsible for 100% height,
+    height: SCREEN_HEIGHT - 90 - Constants.statusBarHeight , //responsible for 100% height, 
 	},
   emptyIcon:{
     color:'#c6c6c6',

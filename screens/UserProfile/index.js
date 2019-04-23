@@ -78,7 +78,7 @@ class UserProfileScreen extends React.Component {
                     <Body>
                       <Text>{this.state.userName + " " + this.state.userLastName}</Text>
                       {
-                        (this.state.subscription === "true")?
+                        (this.state.subscribed == "true") ?
                         [<Text note>Subscrition From:  {this.state.subscriptionExpDate}</Text>,
                         <Text note>Subscrition Util:  {this.state.subscriptionExpDate}</Text>]
                         :

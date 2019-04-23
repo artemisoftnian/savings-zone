@@ -14,8 +14,8 @@
       "hideExponentText": false
     },
     "splash": {
-      "image": "./assets/icons/loading.png", 
-      "resizeMode": "cover" 
+      "image": "./assets/icons/loading.png",
+      "resizeMode": "cover"
     },
     "packagerOpts": {
       "assetExts": [
@@ -39,6 +39,10 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.savings.zone",
       "buildNumber": "2"
-    }
+    },
+    "platforms": [
+      "android",
+      "ios"
+    ]
   }
 }

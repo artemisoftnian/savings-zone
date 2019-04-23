@@ -79,27 +79,47 @@ class SubscriptionScreen extends React.Component {
   } 
 
   getSubscription = async ( selectedProduct ) =>{
+    console.log('seleccionaaaddooo', selectedProduct);
 
-    try {
-      await InAppBilling.open();
-      const response = InAppBilling.subscribe(this.state.selectedPlanCode).then( details => {
-
-        if(details.purchaseState == 'PurchasedSuccessfully'){
-          //Update User Data on server here
-          const isAuth = this.props.updateSubscription(this.props.user.user_id, details, "android");
-          //then if all went good!
-          this.props.navigation.navigate('Offers');
-        }
+    if(selectedProduct != 'free'){
+      try {
+        await InAppBilling.open();
+        const response = InAppBilling.subscribe(this.state.selectedPlanCode).then( async details => {
+  
+          if(details.purchaseState == 'PurchasedSuccessfully'){
+            //Update User Data on server here
+            const isAuth = this.props.updateSubscription(this.props.user.user.user_id, details, "android");
+            //then if all went good!
+            this.props.navigation.navigate('Offers');
+          }
+          
+        });
+       //const details = await InAppBilling.purchase(this.state.selectedPlanCode);
+      } catch (err) {
+        console.log(err)
         
-      });
-     //const details = await InAppBilling.purchase(this.state.selectedPlanCode);
-    } catch (err) {
-      console.log(err)
-      
-    } finally {
+      } finally {
+  
+        await InAppBilling.close();
+      } 
+    }
+    else{
+      const returned = await this.props.updateSubscription(this.props.user.user.user_id, 'free', "android");
 
-      await InAppBilling.close();
-    } 
+      console.log("que retorno?",returned);
+
+      if(returned.status){
+        console.log(returned.message);
+        this.props.navigation.navigate('Offers');
+      }
+      else{
+        console.log("que error retorno?",returned);
+        console.log("something went wrong", returned.message)
+      }
+      
+    }
+
+
   }
   
   async checkSubscription() {
@@ -133,6 +153,7 @@ class SubscriptionScreen extends React.Component {
 
   _handleSubscriptionType = async () =>{
       if(this.state.selectedPlan == '0'){
+        await this.getSubscription(this.state.selectedPlanCode);
         this.props.navigation.navigate('Offers');
       }
       else{
@@ -236,7 +257,7 @@ class SubscriptionScreen extends React.Component {
                       }
                   <Button 
                     block
-                    style={[styles.selectBtn,{marginTop:30}]}
+                    style={[ styles.selectBtn, {marginTop:30} ]}
                     onPress={() => {
                       this._handleSubscriptionType();
                     // this.props.navigation.navigate('App');
