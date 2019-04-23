@@ -85,18 +85,6 @@ export default class OfferInfo extends React.Component {
               />            
           </CardItem>  
 
-          <CardItem>
-            <Left>
-              <Button transparent>
-                <Icon active name="md-cash" />
-                <Text>${ this.props.price }</Text>
-              </Button>
-            </Left>
-            <Right>
-              <Text> { this.props.lang.expiresInDays.replace('$days',this.props.daysRemain) } </Text>
-            </Right>
-          </CardItem>
-      
         </Card>       
       </Content>
       
@@ -118,5 +106,6 @@ const styles = StyleSheet.create({
     //backgroundColor:'rgba(255, 255, 255, 0.50)',
     
   }
+
 });
 

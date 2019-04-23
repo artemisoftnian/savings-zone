@@ -142,17 +142,18 @@ class MyOffersScreen extends React.Component {
 
             (this.props.user.user.user_meta.app_subscribed === "true")?
               <View style={styles.emptyContainer}>
-                <Icon style={styles.emptyIcon} name='md-sad' type='Ionicons'/>
+                <Icon style={styles.emptyIcon} name='alert' type='Ionicons'/>
                 <Text style={styles.emptyText} >{screenProps.lang.myOffers.emptyListMessage}</Text>
               </View>
             :
               <View style={[styles.emptyContainer,{margin:20}]}>
+                <Icon name='alert' style={{fontSize: 100, color: '#939393'}}/>
                 <View style={[{margin:20, borderWidth:1, borderColor:'purple', borderRadius:15, padding:5}]}>
                   <Text style={{textAlign:'center'}} >{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.h2}</Text>
                   <Button small full transparent warning 
-                    style={{marginTop:1, textAlign:"left"}} 
+                    style={{marginTop:1}} 
                     onPress = { ()=>{ this.props.navigation.navigate('Subscription') }  } >                           
-                    <Text style={{textDecorationLine:'underline', color:'blue'}}>{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.confirm}</Text>               
+                    <Text style={{textDecorationLine:'underline', color:'purple'}}>{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.confirm}</Text>               
                   </Button>
                 </View>
               </View>
@@ -257,8 +258,7 @@ class MyOffersScreen extends React.Component {
 
 
 const styles = StyleSheet.create({
-  emptyContainer: {
-    
+  emptyContainer: {    
     flex:1,
 		alignItems: 'center',
     justifyContent: "center",
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     fontSize:30,
     color:'#c6c6c6',
     fontWeight:'bold',
-    textAlign: 'center',
+    
 		justifyContent: 'center', 
     textShadowColor: 'rgba(0, 0, 0, 0.1)',
     textShadowOffset: {width: 1, height: 0.5},

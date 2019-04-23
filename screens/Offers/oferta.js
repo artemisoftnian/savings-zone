@@ -1,26 +1,26 @@
 import * as React from 'react';
 
-import { FlatList, ActivityIndicator, View, StyleSheet, TouchableHighlight,  
-  Modal, Alert,  RefreshControl, Image } from 'react-native';
+import {  View, StyleSheet, TouchableHighlight, Image } from 'react-native';
 
 import { Toast} from 'native-base'; 
 
 import { connect } from 'react-redux';
 import { fetchOffersDataSource, saveOffer } from './reducer';
 
-import { Text, Button,  Icon, Picker, Form, Root }  from 'native-base';
+import { Text, Button,  Icon, Root, CardItem, Right, Left, Fab, Footer, FooterTab }  from 'native-base';
 
-import MainWrapper from '../../components/MainWrapper';
+//import MainWrapper from '../../components/MainWrapper';
 import OfferInfo from '../../components/OfferInfo';
-import OfferPoster from '../../components/OfferPoster';
+//import OfferPoster from '../../components/OfferPoster';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
-class Oferta extends React.Component {
+class Oferta extends React.Component { 
 
   constructor(props) {
     super(props);
 
     this.state = {
+        active: false,
         category:'',
         user: [],
         title:'No Data',
@@ -205,17 +205,36 @@ class Oferta extends React.Component {
                   />                
               </View>
 
-              {
-                (!this.state.expired)
-                ?
-                  <Button full onPress = { () => this._handleAddToMyOffers(this.state.offer) } >
-                    <Text>{ screenProps.lang.offerScreen.getBtnMessage }</Text>
-                  </Button> 
-                :
-                  <Button danger full onPress={() => { this._toggleModal(!this.state.modalVisible, null) }}  >
-                    <Text>{ screenProps.lang.offerScreen.expiredMessage }</Text> 
-                  </Button>
-              }
+              <Fab
+                active={false}
+                direction="left"
+                containerStyle={{left: '43.5%', top:'80%'}}
+                style={{ backgroundColor: '#4e2e59' }}
+                position="bottomRight"
+                //onPress={() => this.setState({ active: !this.state.active })}>
+                onPress={ () => this._handleAddToMyOffers(this.state.offer) }>
+                <Icon name="cart" />
+              </Fab>               
+
+              <Footer style={{backgroundColor:"#fff"}}> 
+                <Left style={[styles.priceText, {paddingLeft:20, justifyContent:'center'}]}>                
+                    <Text style={{fontSize:20, color:'purple', fontWeight:'bold'}}>${ this.state.price }</Text>
+                    <Text style={{fontSize:13}}> <Icon name="clock" style={{fontSize:14, color:'green'}}/>  { screenProps.lang.offerScreen.expiresInDays.replace('$days',this.state.daysRemain) } </Text>
+                </Left>
+                <Right style={[styles.expireText]}>
+                  {
+                    (!this.state.expired)
+                    ?
+                      <Button full onPress = { () => this._handleAddToMyOffers(this.state.offer) } >
+                        <Text>{ screenProps.lang.offerScreen.getBtnMessage }</Text>
+                      </Button> 
+                    :
+                      <Button danger full onPress={() => { this._toggleModal(!this.state.modalVisible, null) }}  >
+                        <Text>{ screenProps.lang.offerScreen.expiredMessage }</Text> 
+                      </Button>
+                  }                  
+                </Right>
+              </Footer> 
 
             </View>
 
@@ -238,20 +257,25 @@ class Oferta extends React.Component {
             /> 
 
         </Root>
-
-
-
     );
   }
 }
 
 const styles = StyleSheet.create({
+  priceText:{
+    padding:5,
+    flex:1,
+    justifyContent:'center'
+  },
+  expireText:{
+    padding:5,
+    flex:1,
+  },
   modalStyle:{
     backgroundColor:'#fff', 
     flex:1, 
     borderRadius: 0,
     margin:0,
-
     padding:5, 
     marginBottom:0, 
     borderBottomStartRadius:0, 
@@ -291,8 +315,17 @@ const styles = StyleSheet.create({
   myOffersBtn:{
     marginTop:0,
     paddingTop:0,
-    //color: 'red'
-  }
+  },
+  noPadding:{
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+    marginLeft: 0,
+    marginRight: 0,
+    marginTop: 0,
+    marginBottom: 0,  
+  }  
 
 });
 

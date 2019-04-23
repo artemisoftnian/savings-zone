@@ -70,25 +70,27 @@ class UserProfileScreen extends React.Component {
   userInfo = () => {    
     const {screenProps} = this.props;
        return (
-            <Content>
+            <Content> 
               <Card style={{flex: 0}}>
                 <CardItem>
                   <Left>
-                    <Thumbnail source={avatarImg} />
+                    <Thumbnail source={avatarImg} /> 
                     <Body>
                       <Text>{this.state.userName + " " + this.state.userLastName}</Text>
                       {
                         (this.state.subscribed == "true") ?
-                        [<Text note>Subscrition From:  {this.state.subscriptionExpDate}</Text>,
-                        <Text note>Subscrition Util:  {this.state.subscriptionExpDate}</Text>]
+                        [
+                        <Text key="algo1" note>Subscrition From:  {this.state.subscriptionExpDate}</Text>,
+                        <Text  key="algo2" note>Subscrition Util:  {this.state.subscriptionExpDate}</Text>]
                         :
                         [
-                          <Text >{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.h2}</Text>, 
-                        <Button small full transparent warning 
-                          style={{marginTop:1, textAlign:"left"}} 
+                        <Text  key="algo1" >{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.h2}</Text>, 
+                        <Button  key="algo2" small full transparent warning 
+                          style={{marginTop:1}} 
                           onPress = { ()=>{ this.props.navigation.navigate('Subscription') }  } >                           
                           <Text style={{textDecorationLine:'underline', color:'blue'}}>{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.confirm}</Text>               
-                        </Button>]
+                        </Button>
+                        ]
                       }
 
                     </Body>

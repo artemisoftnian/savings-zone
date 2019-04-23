@@ -33,8 +33,8 @@ import MerchantHomeScreen from './screens/Merchant';
 //LOCALIZATION
 import { Lang } from './components/language';
 
-//global.wpSite = "https://savingszonepr.com";
-global.wpSite = "http://www.svz.com:8080"
+global.wpSite = "https://savingszonepr.com";
+//global.wpSite = "http://www.svz.com:8080"
 global.offerEmitter = new EventEmitter();
 
 const store = ConfigureStore();

@@ -89,7 +89,7 @@ export default class MainWrapper extends React.Component {
                 transparent
                 onPress={ this.props.onScanPress  }
               >
-              <Icon name='md-cart' type='Ionicons' style={{color:'#27205a', fontSize:30}}/>
+              <Icon name='md-cart' type='Ionicons' style={{color:'#4e2e59', fontSize:30}}/>
             </Button>          
           </Right>                          
         </Header>
@@ -120,7 +120,9 @@ const styles = StyleSheet.create({
     paddingLeft:0,
     paddingBottom:20,
     marginTop:20, 
-    backgroundColor:'#fff'    
+    backgroundColor:'#fff',
+    borderBottomWidth:2,
+    borderBottomColor:'#4e2e59'  
   },
   iconColor:{
     color:'#fff'
