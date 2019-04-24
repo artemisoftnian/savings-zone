@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { ActivityIndicator, View,  Image,  StyleSheet, Alert,  
-  Platform,  KeyboardAvoidingView, TouchableOpacity, Linking, ScrollView } from 'react-native';
+import { ActivityIndicator, View,  Image,  StyleSheet, Alert,  TouchableOpacity, Linking, ScrollView } from 'react-native';
 
 import {  Text,  Button, Body, Left,  Right,  ListItem, Radio } from 'native-base';
 

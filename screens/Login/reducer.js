@@ -80,7 +80,7 @@ export const updateSubscription = ( userId = null, detail = null, osType = null,
                     subscription_type: detail.productIdentifier,
                     subscription_exp_date: detail.transactionDate,
                     subscription_receipt: detail.transactionReceipt,
-                    subscription_expired: ioState,
+                    subscription_expired: null,
                     subscription_os_type: osType,                
                 }
             }
