@@ -23,7 +23,8 @@ class SubscriptionScreen extends React.Component {
       selectedPlan: '0',
       selectedPlanPrice: 'Free',
       selectedPlanCode: 'free',
-      selectedPeriod: 'free'
+      selectedPeriod: 'free',
+      storeTest: true,
     };
   }
 
@@ -56,25 +57,31 @@ class SubscriptionScreen extends React.Component {
 
   async componentDidMount(){
     try {
+      //put loading here....
       // make sure the service is close before opening it
       await InAppBilling.close();
       await InAppBilling.open();
+      const subscriptions = null;
 
-      // product with Google Play id: gems.pack.500
-      //const subcriptions = await InAppBilling.getSubscriptionDetailsArray(itemSubs)
-      const subscriptions =  await InAppBilling.getSubscriptionDetailsArray(testItems)
+
+      if(!this.state.storeTest)
+        subscriptions = await InAppBilling.getSubscriptionDetailsArray(itemSubs)
+      else 
+        subscriptions =  await InAppBilling.getSubscriptionDetailsArray(testItems)
+
       .then(
-        //console.log(subscriptions)
-        this.setState({subcriptions: subscriptions})
+        async subscriptions => {
+          console.log(subscriptions),
+          await this.setState({subscriptions})
+        }
       );
-      //const details = await InAppBilling.getProductDetails('gems.pack.500');
-      //this.gemsPack.priceText = details.priceText;
+
     } catch (error) {
       // debug in device with the help of Alert component
       console.log(error);
     } finally {
       await InAppBilling.close(); 
-    }    
+    }
   } 
 
   getSubscription = async ( selectedProduct ) =>{
