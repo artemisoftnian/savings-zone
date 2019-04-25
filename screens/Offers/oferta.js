@@ -1,17 +1,13 @@
 import * as React from 'react';
 
-import {  View, StyleSheet, TouchableHighlight, Image } from 'react-native';
-
-import { Toast} from 'native-base'; 
+import {  View, StyleSheet, TouchableHighlight, Image, Platform, Linking, Share } from 'react-native';
 
 import { connect } from 'react-redux';
 import { fetchOffersDataSource, saveOffer } from './reducer';
 
-import { Text, Button,  Icon, Root, CardItem, Right, Left, Fab, Footer, FooterTab }  from 'native-base';
+import { Toast, Text, Button,  Icon, Root, Right, Left, Footer,  FooterTab }  from 'native-base';
 
-//import MainWrapper from '../../components/MainWrapper';
 import OfferInfo from '../../components/OfferInfo';
-//import OfferPoster from '../../components/OfferPoster';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
 class Oferta extends React.Component { 
@@ -41,15 +37,25 @@ class Oferta extends React.Component {
 
   arrayholder = [];
   
-  static navigationOptions = {
+  static navigationOptions = ({ navigation }) => {
+    return {
+    headerTransparent: false,
     title: 'Oferta',
     headerBackTitle : null,
     headerTitleStyle : {width : '90%', textAlign: 'center'} ,  
     headerRight: (
-        <TouchableHighlight onPress={() => { console.log('shareeeee') }} >
-            <Icon name="share" type="Ionicons" style={[{marginRight:20}]} />
-        </TouchableHighlight>       
-      ),    
+        [
+          <TouchableHighlight style={{backgroundColor:'transparent', height:35, width:35,  marginRight:20, padding:4, borderRadius:100}} 
+            key="shareBtn" onPress={navigation.getParam('shareFunction')} > 
+              <Icon name="share" type="Ionicons" style={[{ color:'#00be50'}]} />
+          </TouchableHighlight>, 
+          <TouchableHighlight  style={{backgroundColor:'transparent', height:35,width:35,  marginRight:15, padding:4, paddingLeft:9, borderRadius:100}} 
+            key="locationBtn"  onPress={navigation.getParam('getDirections')} >
+            <Icon name="pin" type="Ionicons" style={[{color:'#dd4b3e'}]} />
+          </TouchableHighlight>,           
+        ]
+      ),
+    }    
   };  
 
    //await AsyncStorage.removeItem('user')
@@ -68,13 +74,66 @@ class Oferta extends React.Component {
         daysRemain: this._getDaysRemain(data.offer.post_meta.offer_exp_date), 
       });
 
+
+      this.props.navigation.setParams({ 
+        title: this.state.title,
+        getDirections: () => { this._handlePressDirections(data.offer.post_meta.offer_location) } , 
+        shareFunction: () => { this.onShare() }
+
+       });
+
   }
 
-  async componentDidMount() { }
+  async componentDidMount() {
+    //this.props.navigation.setParams({ cosa: this.state.title });
+  }
 
   _handleOfferClick = (navigation, item) => {
     console.log("offer clicked",item);
   };
+
+  onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: this.props.screenProps.lang.myAccount.shareMessage,
+        url: this.props.screenProps.lang.myAccount.shareUrl,
+        title: this.props.screenProps.lang.myAccount.shareTitle
+      }, {
+        // Android only:
+        dialogTitle: this.props.screenProps.lang.myAccount.shareDialogAndroidOnlyTitle,
+        // iOS only:
+        excludedActivityTypes: [
+          'com.apple.UIKit.activity.PostToTwitter'
+        ]
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };  
+
+  _handlePressDirections = (data) => {
+
+    console.log("coords", data);
+
+      let coords = `${data.latitude},${data.longitude}`;
+
+      if (Platform.OS === 'ios') {
+        Linking.openURL(`http://maps.apple.com/?daddr=${data}`);
+      } else {
+        Linking.openURL(`http://maps.google.com/?daddr=${data}`);
+      }
+
+  }
 
   _checkOfferOwnership = (id) =>{
       var found = this.props.offerList.offlineDataSource.some((el) => {
@@ -191,9 +250,8 @@ class Oferta extends React.Component {
     return (
 
         <Root>
-            
-            <View enabled style={{ flex:1 }}>
-              <View style={styles.modalStyle}>
+            <View enabled style={{ flex:1, marginTop:0, marginBottom:0, marginLeft:0, marginRight:0 }}>
+              <View style={[styles.modalStyle,{ marginTop:0, marginLeft:0, marginRight:0, paddingLeft:0, paddingRight:0, padding:0, paddingTop:0,}]}>
                   <OfferInfo 
                   title={this.state.title}
                   //category={this.state.category}
@@ -205,41 +263,65 @@ class Oferta extends React.Component {
                   />                
               </View>
 
-              <Fab
-                active={false}
-                direction="left"
-                containerStyle={{left: '43.5%', top:'80%'}}
-                style={{ backgroundColor: '#4e2e59' }}
-                position="bottomRight"
-                //onPress={() => this.setState({ active: !this.state.active })}>
-                onPress={ () => this._handleAddToMyOffers(this.state.offer) }>
-                <Icon name="cart" />
-              </Fab>               
+              { /*
 
-              <Footer style={{backgroundColor:"#fff"}}> 
-                <Left style={[styles.priceText, {paddingLeft:20, justifyContent:'center'}]}>                
-                    <Text style={{fontSize:20, color:'purple', fontWeight:'bold'}}>${ this.state.price }</Text>
-                    <Text style={{fontSize:13}}> <Icon name="clock" style={{fontSize:14, color:'green'}}/>  { screenProps.lang.offerScreen.expiresInDays.replace('$days',this.state.daysRemain) } </Text>
+                <Fab
+                active={this.state.active}
+                direction="right"
+                containerStyle={{left: '43.5%', top:170}}
+                style={{ backgroundColor: '#4e2e59', borderWidth:2, borderColor:'#fff' }}
+                position="topRight"
+                //onPress={ () => this._handleAddToMyOffers(this.state.offer) }
+                onPress={() => this.setState({ active: !this.state.active })}>                
+                  <Icon name="add" />
+                  <Button style={{ backgroundColor: '#34A34F' }}>
+                    <Icon name="share" />
+                  </Button>
+                  <Button style={{ backgroundColor: '#3B5998' }}>
+                    <Icon name="pin" />
+                  </Button>
+                </Fab>      
+               */
+              }
+         
+              <View style={{backgroundColor:"#fff", padding:6}}></View>
+              <Footer style={{backgroundColor:"#f7f7f7"}}>
+              <FooterTab style={{backgroundColor:"#f7f7f7", padding:10}}>
+                <Left style={[styles.priceText, {paddingLeft:20, justifyContent:'center'}]}>                              
+                    <Text style={{fontSize:21, color:'purple', fontWeight:'bold'}}>${ this.state.price }</Text>
+                    {
+                      (this.state.daysRemain >= 0)
+                      ?
+                        <Text style={{fontSize:12, color:'gray'}}> <Icon name="alarm" style={{fontSize:13, color:'gray'}}/> { screenProps.lang.offerScreen.expiresInDays.replace('$days',this.state.daysRemain) }  </Text>
+                      :
+                        <Text style={{fontSize:12, color:'red'}}> <Icon name="alarm" style={{fontSize:13, color:'red'}}/> { screenProps.lang.offerScreen.expiredMessage }   </Text>
+                    }
+
+                    
                 </Left>
-                <Right style={[styles.expireText]}>
+
+                </FooterTab>
+                <FooterTab style={{backgroundColor:"#f7f7f7", padding:10}}>
+                <Right style={[styles.expireText]}> 
                   {
-                    (!this.state.expired)
+                    (this.state.daysRemain >= 0)
                     ?
-                      <Button full onPress = { () => this._handleAddToMyOffers(this.state.offer) } >
+                      <Button  onPress = { () => this._handleAddToMyOffers(this.state.offer) } >
                         <Text>{ screenProps.lang.offerScreen.getBtnMessage }</Text>
                       </Button> 
                     :
-                      <Button danger full onPress={() => { this._toggleModal(!this.state.modalVisible, null) }}  >
+                      <Button danger >
                         <Text>{ screenProps.lang.offerScreen.expiredMessage }</Text> 
                       </Button>
                   }                  
                 </Right>
+                </FooterTab>
               </Footer> 
 
             </View>
 
             <AwesomeAlert
-                contentContainerStyle={{margin:0, width:'70%' }}
+                contentContainerStyle={{margin:0, width:'70%' }} 
                 overflow='visible'
                 show={showAlert}
                 showProgress={false}

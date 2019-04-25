@@ -166,7 +166,7 @@ class SubscriptionScreen extends React.Component {
           }
     
           response.forEach((purchase) => {
-            if (purchase.productIdentifier === 'com.xyz.abc') {
+            if (purchase.productIdentifier === productId) {
               // Handle purchased product.
             }
           });

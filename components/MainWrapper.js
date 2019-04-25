@@ -121,8 +121,8 @@ const styles = StyleSheet.create({
     paddingBottom:20,
     marginTop:20, 
     backgroundColor:'#fff',
-    borderBottomWidth:2,
-    borderBottomColor:'#4e2e59'  
+    borderBottomWidth:1,
+    borderBottomColor:'#a182cc'  
   },
   iconColor:{
     color:'#fff'

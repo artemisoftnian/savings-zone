@@ -117,7 +117,7 @@ class LoginScreen extends React.Component {
 
                   }}                  
                 >
-                { this.props.user.loading ? <ActivityIndicator style={{alignSelf: 'center'}} color="#3a6a90" size="small"  /> : <Text style={{color:'#fff'}}>Login</Text> } 
+                  { this.props.user.loading ? <ActivityIndicator style={{alignSelf: 'center'}} color="#fff" size="small"  /> : <Text style={{color:'#fff'}}>Login</Text> } 
                   
                 </Button>
 

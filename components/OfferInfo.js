@@ -36,18 +36,19 @@ export default class OfferInfo extends React.Component {
   render() {  
     
     return (
-      <Content style={{flex:1}}>  
+      <Content style={{flex:1,marginTop:0, marginBottom:0, marginLeft:0, marginRight:0, paddingLeft:0, paddingRight:0}}>  
 
         <ScrollView
           horizontal //scrolling left to right instead of top to bottom
           showsHorizontalScrollIndicator={false} //hides native scrollbar
           scrollEventThrottle={20} //how often we update the position of the indicator bar
           pagingEnabled //scrolls from one image to the next, instead of allowing any value inbetween
+          style={{ }}
         >
           {
             this.props.image.map(
               image => (
-                <Image key={image} source={ {uri:image } } style={{ height: 200, width:SCREEN_WIDTH - 10 }} />
+                <Image key={image} source={ {uri:image } } style={{ height: 200, width:SCREEN_WIDTH }} />
               )
             )
           }              
