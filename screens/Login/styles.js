@@ -1,6 +1,7 @@
 import { StyleSheet, Dimensions, Platform  } from 'react-native';
 
 const deviceHeight = Dimensions.get("window").height;
+const deviceWidth = Dimensions.get("window").width;
 
 export default StyleSheet.create({
 	mainView: {
@@ -33,7 +34,7 @@ export default StyleSheet.create({
   },
   logo: {
     position: "absolute",
-    left: Platform.OS === "android" ? 55 : 50,
+    left: Platform.OS === "android" ? (deviceWidth/2)-150 : (deviceWidth/2)-150,
     top: Platform.OS === "android" ? 35 : 60,
     width: 280,
     height: 100
