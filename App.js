@@ -5,6 +5,8 @@ import { persistStore } from 'redux-persist'
 import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import { Root } from "native-base"; 
 
+import { DeviceEventEmitter} from 'react-native';
+
 
 import { offline } from '@redux-offline/redux-offline';
 import offlineConfig from '@redux-offline/redux-offline/lib/defaults'; 
@@ -13,7 +15,7 @@ import offlineConfig from '@redux-offline/redux-offline/lib/defaults';
 import { Provider } from 'react-redux';
 import ConfigureStore from './screens/rootRedux';
 
-import EventEmitter from 'EventEmitter';
+//import EventEmitter from 'EventEmitter';
 
 //SCREENS
 import LoginScreen from './screens/Login';
@@ -35,7 +37,9 @@ import { Lang } from './components/language';
 
 global.wpSite = "https://savingszonepr.com";
 //global.wpSite = "http://www.svz.com:8080"
-global.offerEmitter = new EventEmitter();
+//global.offerEmitter = new EventEmitter(); 
+global.offerEmitter = DeviceEventEmitter;
+
 
 const store = ConfigureStore();
 
@@ -101,7 +105,8 @@ export default class App extends React.Component {
 
 		persistStore(store, null, () => { 
 			this.setState({ persistLoaded: true }); 
-			global.offerEmitter.addListener('offersOffline', () => {	this.runSyncData(store); } );
+      global.offerEmitter.addListener('offersOffline', () => {	this.runSyncData(store); } );
+      global.offerEmitter.removeListener("offersOffline");
       this.runSyncData(store);
 		});
   }
