@@ -141,12 +141,12 @@ class MyOffersScreen extends React.Component {
         ListEmptyComponent={
 
             (this.props.user.user.user_meta.app_subscribed === "true")?
-              <View style={styles.emptyContainer}>
+              <View key="emptyMessage" style={styles.emptyContainer}>
                 <Icon style={styles.emptyIcon} name='alert' type='Ionicons'/>
                 <Text style={styles.emptyText} >{screenProps.lang.myOffers.emptyListMessage}</Text>
               </View>
             :
-              <View style={[styles.emptyContainer,{margin:20}]}>
+              <View key="notSubscribedMessage" style={[styles.emptyContainer,{margin:20}]}>
                 <Icon name='alert' style={{fontSize: 100, color: '#939393'}}/>
                 <View style={[{margin:20, borderWidth:1, borderColor:'purple', borderRadius:15, padding:5}]}>
                   <Text style={{textAlign:'center'}} >{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.h2}</Text>
@@ -163,7 +163,7 @@ class MyOffersScreen extends React.Component {
           if(!this.state.myOffers.lenght)
             return null
           else
-            return <Text  style={{fontSize: 20, fontWeight:'bold'}}> <Icon name='md-pricetags' type='Ionicons'/> My Offers</Text>
+            return <Text key="listTitle" style={{fontSize: 20, fontWeight:'bold'}}> <Icon name='md-pricetags' type='Ionicons'/> My Offers</Text>
         }
           
             
@@ -183,12 +183,12 @@ class MyOffersScreen extends React.Component {
                 rightOpenValue={-75}
                 style={{margin:0, padding:0}}
                 left={
-                  <Button success onPress={() => this._toggleModal(true, item) }>
+                  <Button key={"redeem_"+item.post_meta.ID} success onPress={() => this._toggleModal(true, item) }>
                     <Icon active name="cart" />
                   </Button>
                 }
                 body={
-                  <View style={{flexDirection:"row", alignItems: 'stretch', justifyContent: 'center'}}>
+                  <View key={"body_of_"+item.post_meta.ID} style={{flexDirection:"row", alignItems: 'stretch', justifyContent: 'center'}}>
                   
                     <View style={{flex:1}}>
                       <Thumbnail small style={{marginLeft:10}} source={{uri: item.post_meta.offer_image_1}} />  
@@ -201,8 +201,7 @@ class MyOffersScreen extends React.Component {
                   </View>
                 }
                 right={
-                  <Button danger 
-                  //onPress={() => alert('Trash')}
+                  <Button danger key={"remove_"+item.post_meta.ID}
                   onPress={ () => this._removeLocalOfferHandler(item) }
                   >
                     <Icon active name="trash" />
@@ -223,29 +222,34 @@ class MyOffersScreen extends React.Component {
           onRequestClose = {() => console.log("closing modal now!")} 
           avoidKeyboard={true}>
 
-          <View enabled style={{ flex:1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-            <View style={styles.modalStyle}>
+            <View enabled style={{ flex:1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+              <View style={[styles.modalStyle]} >
+                <TouchableHighlight
+                  onPress={() => { this._toggleModal(!this.state.modalVisible, null) }} 
+                  style={{  alignItems:'center', justifyContent:'center', flexDirection:'row',
+                            height:30, backgroundColor: '#393863', overflow:'visible', marginBottom:20
+                        }}>
+                  <Icon name="chevron-down" type="FontAwesome"  style={{color:'white', backgroundColor:'purple', padding: 20, borderRadius:50}}/> 
+                </TouchableHighlight>
 
-              <TouchableHighlight
-                onPress={() => { this._toggleModal(!this.state.modalVisible, null) }} 
-                style={{margin:5,alignItems:'center',
-                justifyContent:'center', flexBasis:25, height:25, alignSelf:'flex-end' }}>
-                <Icon name="md-close-circle"  color={'#999'}/>
-              </TouchableHighlight>
+                <Text style={{textAlign:'center'}}>{screenProps.lang.myOffers.redeemMessage}</Text>
 
-              <View style={styles.container}>
+              <View style={[{flex:1, alignItems: 'center', justifyContent: 'center'}]}>
               
-                <QRCode
-                  value={JSON.stringify(this.state.qrData)}
+                <QRCode    
+          
+                  value={JSON.stringify(this.state.qrData)} 
                   size={200}
                   bgColor='purple'
-                  fgColor='white'/>
+                  fgColor='white'
+                />
 
-                  <Button full success 
-                    onPress = { () => this.testRedem(this.state.qrData) } >
-                    <Text>Test Redemption Here</Text>
-                  </Button>  
-                  <Text>{this.state.returnMessage}</Text>
+                <Button full success 
+                  onPress = { () => this.testRedem(this.state.qrData) } >
+                  <Text>Test Redemption Here</Text>
+                </Button>  
+
+                <Text>{this.state.returnMessage}</Text>
 
               </View>
             </View>
@@ -258,6 +262,18 @@ class MyOffersScreen extends React.Component {
 
 
 const styles = StyleSheet.create({
+  modalStyle:{
+    backgroundColor:'#fff', 
+    flex:1, 
+    borderRadius: 0,
+    margin:0,
+    marginTop:60, 
+    padding:5, 
+    marginBottom:0, 
+    borderBottomStartRadius:0, 
+    borderBottomEndRadius:0,
+    width:'100%'
+  },
   emptyContainer: {    
     flex:1,
 		alignItems: 'center',

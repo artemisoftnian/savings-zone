@@ -73,7 +73,8 @@ export const Lang = {
             privatePolicyText: 'Politicas de Privacidad'
         },
         myOffers:{
-            emptyListMessage: "No tienes ninguna oferta en este momento."
+            emptyListMessage: "No tienes ninguna oferta en este momento.",
+            redeemMessage: "Para redimir la oferta muestre este codigo al comerciante"
         },
         mapScreen:{
 
