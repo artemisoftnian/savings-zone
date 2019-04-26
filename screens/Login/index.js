@@ -109,9 +109,9 @@ class LoginScreen extends React.Component {
                   rounded
                   disabled={this.props.user.loading}
                   //disabled={this.state.validating}
-                  style={{backgroundColor:'trasparent', borderWidth:1, borderColor:'gray', marginBottom:20, elevation:1}}
+                  style={{backgroundColor:'transparent', borderWidth:1, borderColor:'gray', marginBottom:20, elevation:1}}
                   onPress={() => {
-                    if (this.state.user && this.state.password) {
+                    if (this.state.user && this.state.password) { 
                       this.validateUser();
                     }
 
