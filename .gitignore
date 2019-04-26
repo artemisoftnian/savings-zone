@@ -1,6 +1,6 @@
 # ignore this files
 yarn.lock
+package-lock.json
 
 # ignore this folders
-/.expo/
 /node_modules/
