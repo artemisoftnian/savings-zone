@@ -4,7 +4,7 @@
     "description": "Great coupons, one great price",
     "slug": "snack-SJGRR2H1N",
     "privacy": "unlisted",
-    "sdkVersion": "31.0.0",
+    "sdkVersion": "30.0.0",
     "version": "1.0.1",
     "orientation": "portrait",
     "primaryColor": "#cccccc",
