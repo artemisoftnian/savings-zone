@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { ActivityIndicator, View,  Image,  StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, View,  Image,  StyleSheet, Alert,  TouchableOpacity, Linking, ScrollView } from 'react-native';
 
-import {  Text,  Button,  Left,  Right,  ListItem, Radio } from 'native-base';
+import {  Text,  Button, Body, Left,  Right,  ListItem, Radio } from 'native-base';
+
 
 import { NativeModules } from 'react-native'
 const { InAppUtils } = NativeModules
-
 import {iosData} from '../../components/constants.js';
 
 import { connect } from 'react-redux';
@@ -30,7 +30,7 @@ class SubscriptionScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: (
       <Image
-        style={{ width: 120, height: 39, flex: 1 }}
+        style={{ height: 25, width:50, flex: 1 }}
         resizeMode="contain"
         source={require('../../assets/logo-text.png')}
       />

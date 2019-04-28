@@ -91,14 +91,24 @@ export default class App extends React.Component {
 
   async componentWillMount(){
 
-    await Font.loadAsync({      
-      //Descomentar en Production
+    await Font.loadAsync({
       'Roboto': require("native-base/Fonts/Roboto.ttf"),
-      'Roboto_medium': require("native-base/Fonts/Roboto_medium.ttf"),
-      'Ionicons': require('@expo/vector-icons/fonts/Ionicons.ttf'),
-      'MaterialIcons': require('@expo/vector-icons/fonts/MaterialIcons.ttf'),
-      'FontAwesome': require('@expo/vector-icons/fonts/FontAwesome.ttf')
     });
+    await Font.loadAsync({
+      'Roboto_medium': require("native-base/Fonts/Roboto_medium.ttf"),
+    });
+    await Font.loadAsync({
+      'Ionicons': require('@expo/vector-icons/fonts/Ionicons.ttf'),
+    });
+    await Font.loadAsync({
+      'FontAwesome': require('@expo/vector-icons/fonts/FontAwesome.ttf')
+    });    
+    await Font.loadAsync({
+      'MaterialIcons': require('@expo/vector-icons/fonts/MaterialIcons.ttf'),
+    }); 
+    await Font.loadAsync({
+      'Material Icons': require('@expo/vector-icons/fonts/MaterialIcons.ttf'),
+    });     
 
     
     this.setState({ loadingAssets: true }); 

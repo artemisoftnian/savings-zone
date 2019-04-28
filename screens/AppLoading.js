@@ -1,12 +1,17 @@
 import * as React from 'react';
 import { View, StatusBar, ActivityIndicator, Text} from 'react-native';
 import { connect } from "react-redux";
+import { Font } from 'expo';
 
 
 class AppLoading extends React.Component {
   constructor(props) {
     super(props);
     this._bootstrapAsync();
+  }
+
+
+  async componentDidMount(){
   }
 
    // Fetch the token from storage then navigate to our appropriate place

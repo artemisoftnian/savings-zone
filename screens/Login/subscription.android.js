@@ -31,7 +31,7 @@ class SubscriptionScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: (
       <Image
-        style={{ width: 120, height: 39, flex: 1 }}
+        style={{ height: 25, width:50, flex: 1 }}
         resizeMode="contain"
         source={require('../../assets/logo-text.png')}
       />

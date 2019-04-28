@@ -36,7 +36,7 @@ export default class MainWrapper extends React.Component {
             <Button vertical 
               onPress={ () => this.props.nav.navigate('Offers') }
             >
-              <Icon name="home" style={styles.iconColor} /> 
+              <Icon name="md-home" type="Ionicons" style={styles.iconColor} /> 
               <Text style={styles.iconColor}>{this.props.lang.main.homeIconText}</Text>
             </Button>
             <Button vertical
@@ -56,7 +56,7 @@ export default class MainWrapper extends React.Component {
             <Button vertical 
               onPress={ () => this.props.nav.navigate('UserProfile') }
             >
-              <Icon name="person" style={styles.iconColor}/>
+              <Icon name="md-person" style={styles.iconColor}/>
               <Text style={styles.iconColor} >{this.props.lang.main.accountIconText}</Text>
             </Button>
           </FooterTab>
@@ -71,27 +71,25 @@ export default class MainWrapper extends React.Component {
 
     return (
       <Container style={{flex: 1, backgroundColor:'#F5F5F5'}}>
-        <Header 
-          style={styles.header}
-          noLeft
+        <Header
+        style={styles.header}
+        noLeft
         >
           <Left>
-            <Button transparent>
-              <Icon name='menu' />
-            </Button>
+            <Image  source={require('../assets/logo-text.png')}  style={{  height: 25 }} resizeMode="contain" /> 
           </Left>
           <Body>
-             <Image  source={require('../assets/logo-text.png')}  style={{  height: 25 }} resizeMode="contain" /> 
-             {/*<Title>{this.props.title}</Title>*/}
+            {/*<Title>{this.props.title}</Title>*/}
           </Body>
-          <Right> 
-              <Button 
+          <Right>
+              <Button
                 transparent
                 onPress={ this.props.onScanPress  }
               >
+
               <Icon name='md-cart' type='Ionicons' style={{color:'#4e2e59', fontSize:30}}/>
-            </Button>          
-          </Right>                          
+            </Button>
+          </Right> 
         </Header>
 
         {this.searchBar()}         

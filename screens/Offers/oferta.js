@@ -47,11 +47,11 @@ class Oferta extends React.Component {
         [
           <TouchableHighlight style={{backgroundColor:'transparent', height:35, width:35,  marginRight:20, padding:4, borderRadius:100}} 
             key="shareBtn" onPress={navigation.getParam('shareFunction')} > 
-              <Icon name="share" type="Ionicons" style={[{ color:'#00be50'}]} />
+              <Icon name="md-share" type="Ionicons" style={[{ color:'#00be50'}]} />
           </TouchableHighlight>, 
           <TouchableHighlight  style={{backgroundColor:'transparent', height:35,width:35,  marginRight:15, padding:4, paddingLeft:9, borderRadius:100}} 
             key="locationBtn"  onPress={navigation.getParam('getDirections')} >
-            <Icon name="pin" type="Ionicons" style={[{color:'#dd4b3e'}]} />
+            <Icon name="md-pin" type="Ionicons" style={[{color:'#dd4b3e'}]} />
           </TouchableHighlight>,           
         ]
       ),
@@ -292,9 +292,9 @@ class Oferta extends React.Component {
                     {
                       (this.state.daysRemain >= 0)
                       ?
-                        <Text style={{fontSize:12, color:'gray'}}> <Icon name="alarm" style={{fontSize:13, color:'gray'}}/> { screenProps.lang.offerScreen.expiresInDays.replace('$days',this.state.daysRemain) }  </Text>
+                        <Text  adjustsFontSizeToFit numberOfLines={1} style={{fontSize:12, color:'gray'}}> <Icon name="md-alarm" style={{fontSize:13, color:'gray'}}/> { screenProps.lang.offerScreen.expiresInDays.replace('$days',this.state.daysRemain) }  </Text>
                       :
-                        <Text style={{fontSize:12, color:'red'}}> <Icon name="alarm" style={{fontSize:13, color:'red'}}/> { screenProps.lang.offerScreen.expiredMessage }   </Text>
+                        <Text  adjustsFontSizeToFit numberOfLines={1} style={{fontSize:12, color:'red'}}> <Icon name="md-alarm" style={{fontSize:13, color:'red'}}/> { screenProps.lang.offerScreen.expiredMessage }   </Text>
                     }
 
                     
@@ -307,11 +307,11 @@ class Oferta extends React.Component {
                     (this.state.daysRemain >= 0)
                     ?
                       <Button  onPress = { () => this._handleAddToMyOffers(this.state.offer) } >
-                        <Text>{ screenProps.lang.offerScreen.getBtnMessage }</Text>
+                        <Text adjustsFontSizeToFit numberOfLines={1}>{ screenProps.lang.offerScreen.getBtnMessage }</Text>
                       </Button> 
                     :
                       <Button danger >
-                        <Text>{ screenProps.lang.offerScreen.expiredMessage }</Text> 
+                        <Text adjustsFontSizeToFit numberOfLines={1}>{ screenProps.lang.offerScreen.expiredMessage }</Text> 
                       </Button>
                   }                  
                 </Right>

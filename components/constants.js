@@ -53,39 +53,39 @@ export const AndroidData = [
 ]
 
 export const iosData = [
-  { 
+  {
+    "countryCode": "US",
+    "currencyCode": "USD",
+    "currencySymbol": "$",
+    "description": "Enjoy all coupons for 1 month",
+    "downloadable": "false",
     "identifier": "com.savings.zone.sub.monthly",
-    "price": 2.99,
-    "currencySymbol": "$",
-    "currencyCode": "USD",
+    "price": 2.9899999999999998,
     "priceString": "$2.99",
-    "countryCode": "US",
-    "downloadable": false,
-    "description": "Savings Zone Monthly Subscription",
-    "title": "Savings Zone Monthly Subscription (Savings Zone)",
+    "title": "Savings Zone (1 Month)",
   },
-  { 
+  {
+    "countryCode": "US",
+    "currencyCode": "USD",
+    "currencySymbol": "$",
+    "description": "Enjoy all coupons for 6 months",
+    "downloadable": "false",
     "identifier": "com.savings.zone.sub.sixmonths",
-    "price": 17.99,
-    "currencySymbol": "$",
-    "currencyCode": "USD",
+    "price": 17.990000000000002,
     "priceString": "$17.99",
-    "countryCode": "US",
-    "downloadable": false,
-    "description": "Savings Zone Six Months Subscription",
-    "title": "Savings Zone Six Months Subscription (Savings Zone)",
+    "title": "Savings Zone (6 Months)",
   },
-  { 
-    "identifier": "com.savings.zone.sub.year",
-    "price": 34.99,
-    "currencySymbol": "$",
-    "currencyCode": "USD",
-    "priceString": "$34.99",
+  {
     "countryCode": "US",
-    "downloadable": false,
-    "description": "Savings Zone Yearly Subscription",
-    "title": "Savings Zone 1 Year Subscription (Savings Zone)"
-  }
+    "currencyCode": "USD",
+    "currencySymbol": "$",
+    "description": "Enjoy all coupons for 1 year",
+    "downloadable": "false",
+    "identifier": "com.savings.zone.sub.year",
+    "price": 34.989999999999995,
+    "priceString": "$34.99",
+    "title": "Savings Zone (1 Year)",
+  },
 ]
 
 
