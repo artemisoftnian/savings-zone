@@ -85,12 +85,20 @@ class SubscriptionScreen extends React.Component {
   } 
 
   getSubscription = async ( selectedProduct ) =>{
-    console.log('seleccionaaaddooo', selectedProduct);
+    console.log('seleccionaaaddooo', selectedProduct); 
+    var response = null;
 
     if(selectedProduct != 'free'){
       try {
+        
         await InAppBilling.open();
-        const response = InAppBilling.subscribe(this.state.selectedPlanCode).then( async details => {
+
+        if(this.state.storeTest)
+          response = InAppBilling.purchase(selectedProduct)
+        else
+          response = InAppBilling.subscribe(selectedProduct)         
+          
+        .then( async details => {
   
           if(details.purchaseState == 'PurchasedSuccessfully'){
             //Update User Data on server here
@@ -158,27 +166,18 @@ class SubscriptionScreen extends React.Component {
   }  
 
   _handleSubscriptionType = async () =>{
-      if(this.state.selectedPlan == '0'){
-        await this.getSubscription(this.state.selectedPlanCode);
+      console.log("about to get:", this.state.selectedPlan);
+      if(this.state.selectedPlan == 'free'){
+        await this.getSubscription(this.state.selectedPlan);
         this.props.navigation.navigate('Offers');
       }
       else{
-          await this.getSubscription(this.state.selectedPlanCode);
-          /*
-          Alert.alert(
-            'Not Programed Yet!',
-            'This area is in development',
-            [
-              {text: 'Continue to offers', onPress: () => this.props.navigation.navigate('Offers') },
-            ],
-            { cancelable: false }
-          ) 
-          */         
+          await this.getSubscription(this.state.selectedPlan);      
       }
   }
 
   onSelectedItem = (product)=>{
-    console.log(product.productId);
+    //console.log(product.productId);
     this.setState({ 
       selectedPlan: product.productId, 
       selectedPlanPrice: product.priceText, 
@@ -213,19 +212,19 @@ class SubscriptionScreen extends React.Component {
                           onPress={() => this.setState({ selectedPlan: 'free', selectedPlanPrice: 'Free', selectedPlanCode: 'free', selectedPeriod: 'free' })}
                           selected={this.state.selectedPlan == 'free'}
                           key='freePlan'
-                          style={[styles.listItem,'free'=== this.state.selectedPlan ? styles.selectedItem : {}]}                   
+                          style={[styles.listItem,'free' == this.state.selectedPlan ? styles.selectedItem : {}]}                   
                       >
                         <Left>
-                          <Text  style={[styles.listItemPrice,'free'=== this.state.selectedPlan ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeText}</Text>                          
+                          <Text  style={[styles.listItemPrice,'free'== this.state.selectedPlan ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeText}</Text>                          
                         </Left>
                         <Body>
                           <Text  style={[styles.listItemDescription,'free'=== this.state.selectedPlan ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeDescription}</Text>
                         </Body>                          
                         <Right>
                           <Radio
-                            onPress={() => this.setState({ selectedPlan: '0', selectedPlanPrice:'Free', selectedPeriod:'free' })}
+                            onPress={() => this.setState({ selectedPlan: 'free', selectedPlanPrice:'Free', selectedPeriod:'free' })}
                             color={'#71839a'}  selectedColor={'#fff'}
-                            selected={this.state.selectedPlan == '0'} 
+                            selected={this.state.selectedPlan == 'free'} 
                             style={[styles.listItemRadio,{}]} 
                           />
                         </Right>
