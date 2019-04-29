@@ -26,7 +26,7 @@ class MerchantHomeScreen extends React.Component {
       user: [],
       modalVisible:false,
       title:'No Data',
-      image: require('../../assets/offer_img/300x150.png'),
+      image: '',
       daysRemain:0,
       desc:'No Data',
       pirice:'0.00',

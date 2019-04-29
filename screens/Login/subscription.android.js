@@ -20,7 +20,7 @@ class SubscriptionScreen extends React.Component {
     this.state = {
       subscriptions:[],
       refreshing: false,
-      selectedPlan: '0',
+      selectedPlan: 'free',
       selectedPlanPrice: 'Free',
       selectedPlanCode: 'free',
       selectedPeriod: 'free',
@@ -52,7 +52,7 @@ class SubscriptionScreen extends React.Component {
  });
 
   async componentWillMount() {
-      this.setState({ subscriptions: AndroidData })
+    this.setState({ subscriptions: AndroidData })
   } 
 
   async componentDidMount(){
@@ -61,7 +61,7 @@ class SubscriptionScreen extends React.Component {
       // make sure the service is close before opening it
       await InAppBilling.close();
       await InAppBilling.open();
-      const subscriptions = null;
+      var subscriptions = null;
 
 
       if(!this.state.storeTest)
@@ -178,12 +178,12 @@ class SubscriptionScreen extends React.Component {
   }
 
   onSelectedItem = (product)=>{
-    console.log(product.subscriptionPeriod);
+    console.log(product.productId);
     this.setState({ 
       selectedPlan: product.productId, 
       selectedPlanPrice: product.priceText, 
       selectedPlanCode: product.productId,
-      selectedPeriod: product.subscriptionPeriod
+      selectedPeriod: product.productId
     })
   }
 
@@ -210,16 +210,16 @@ class SubscriptionScreen extends React.Component {
               <View style={{backgroundColor:'#fff', maxWidth:400}}>
 
                       <ListItem
-                          onPress={() => this.setState({ selectedPlan: '0', selectedPlanPrice: 'Free', selectedPlanCode: 'free', selectedPeriod: 'free' })}
-                          selected={this.state.selectedPlan == '0'}
+                          onPress={() => this.setState({ selectedPlan: 'free', selectedPlanPrice: 'Free', selectedPlanCode: 'free', selectedPeriod: 'free' })}
+                          selected={this.state.selectedPlan == 'free'}
                           key='freePlan'
-                          style={[styles.listItem,'free'=== this.state.selectedPeriod ? styles.selectedItem : {}]}                   
+                          style={[styles.listItem,'free'=== this.state.selectedPlan ? styles.selectedItem : {}]}                   
                       >
                         <Left>
-                          <Text  style={[styles.listItemPrice,'free'=== this.state.selectedPeriod ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeText}</Text>                          
+                          <Text  style={[styles.listItemPrice,'free'=== this.state.selectedPlan ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeText}</Text>                          
                         </Left>
                         <Body>
-                          <Text  style={[styles.listItemDescription,'free'=== this.state.selectedPeriod ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeDescription}</Text>
+                          <Text  style={[styles.listItemDescription,'free'=== this.state.selectedPlan ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeDescription}</Text>
                         </Body>                          
                         <Right>
                           <Radio
@@ -239,13 +239,13 @@ class SubscriptionScreen extends React.Component {
                                   onPress={() => this.onSelectedItem(product) }
                                   selected={this.state.selectedPlan == product.productId} 
                                   key={i.toString()}   
-                                  style={[styles.listItem, product.subscriptionPeriod === this.state.selectedPeriod ? styles.selectedItem : {}]}                 
+                                  style={[styles.listItem, product.productId === this.state.selectedPlan ? styles.selectedItem : {}]}                 
                               >
                                 <Left style={{padding:0,margin:0}}>
-                                  <Text style={[styles.listItemPrice,product.subscriptionPeriod === this.state.selectedPeriod ? styles.selectedText : {}]}  >{product.priceText}</Text>                                  
+                                  <Text style={[styles.listItemPrice,product.productId === this.state.selectedPlan ? styles.selectedText : {}]}  >{product.priceText}</Text>                                  
                                 </Left>
                                 <Body style={{padding:0,margin:0}}>
-                                  <Text style={[styles.listItemDescription,product.subscriptionPeriod === this.state.selectedPeriod ? styles.selectedText : {}]}  >{product.description}</Text>
+                                  <Text style={[styles.listItemDescription,product.productId === this.state.selectedPlan ? styles.selectedText : {}]}  >{product.description}</Text>
                                 </Body>                                
                                 <Right>
                                   <Radio

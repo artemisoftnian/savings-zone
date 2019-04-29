@@ -154,7 +154,7 @@ class UserProfileScreen extends React.Component {
           { 
             name: '', 
             savings: '$155.90', 
-            avatar: require('../../assets/offer_img/300x150.png')
+            avatar: ''
           }
      ];
 
