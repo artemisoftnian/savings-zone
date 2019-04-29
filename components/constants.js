@@ -49,7 +49,7 @@ export const AndroidData = [
     "subscriptionFreeTrialPeriod": "",
     "subscriptionPeriod": "P1Y",
     "title": "Savings Zone 1 Year Subscription (Savings Zone)",
-  },
+  }
 ]
 export const AndroidDataTest = [
   {
@@ -119,9 +119,8 @@ export const AndroidDataTest = [
     "subscriptionFreeTrialPeriod": "",
     "subscriptionPeriod": "",
     "title": "Sample Title",
-  },
+  }
 ]
-
 export const iosData = [
   {
     "countryCode": "US",
@@ -157,6 +156,14 @@ export const iosData = [
     "title": "Savings Zone (1 Year)",
   },
 ]
+
+export const gpbErrors = {
+  'PAYMENT_OK':'Suecess',
+  'PAYMENT_CANCELLED':'Purchase or subscribe failed with error: 1',
+  'PAYMENT_DECLINED':'Purchase or subscribe failed with error: 6',
+  'PAYMENT_BUG':'Purchase or subscribe failed with error: 102',
+  'ITEM_UNAVAILABLE':'Purchase or subscribe failed with error: 4'
+}
 
 
 

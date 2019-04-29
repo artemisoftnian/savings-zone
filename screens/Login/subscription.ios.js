@@ -123,22 +123,12 @@ class SubscriptionScreen extends React.Component {
   }
 
   _handleSubscriptionType = async () =>{
-    if(this.state.selectedPlan == '0'){
+    if(this.state.selectedPlan == 'free'){
       await this.getSubscription(this.state.selectedPlanCode);
       this.props.navigation.navigate('Offers');
     }
     else{
-        await this.getSubscription(this.state.selectedPlanCode);
-        /*
-        Alert.alert(
-          'Not Programed Yet!',
-          'This area is in development',
-          [
-            {text: 'Continue to offers', onPress: () => this.props.navigation.navigate('Offers') },
-          ],
-          { cancelable: false }
-        ) 
-        */         
+        await this.getSubscription(this.state.selectedPlanCode);     
     }
 }  
   
@@ -227,22 +217,22 @@ class SubscriptionScreen extends React.Component {
               <View style={{backgroundColor:'#fff', maxWidth:400}}>
 
                       <ListItem
-                          onPress={() => this.setState({ selectedPlan: '0', selectedPlanPrice: 'Free', selectedPlanCode: 'free', selectedPeriod: 'free' })}
-                          selected={this.state.selectedPlan == '0'}
+                          onPress={() => this.setState({ selectedPlan: 'free', selectedPlanPrice: 'Free', selectedPlanCode: 'free', selectedPeriod: 'free' })}
+                          selected={this.state.selectedPlan == 'free'}
                           key='freePlan'
-                          style={[styles.listItem,'free'=== this.state.selectedPeriod ? styles.selectedItem : {}]}                   
+                          style={[styles.listItem, this.state.selectedPlan == 'free' ? styles.selectedItem : {}] }                   
                       >
                         <Left>
-                          <Text  style={[styles.listItemPrice,'free'=== this.state.selectedPeriod ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeText}</Text>                          
+                          <Text  style={[styles.listItemPrice,'free'== this.state.selectedPlan ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeText}</Text>                          
                         </Left>
                         <Body>
-                          <Text  style={[styles.listItemDescription,'free'=== this.state.selectedPeriod ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeDescription}</Text>
+                          <Text  style={[styles.listItemDescription,'free'== this.state.selectedPlan ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeDescription}</Text>
                         </Body>                          
                         <Right>
                           <Radio
                             onPress={() => this.setState({ selectedPlan: 'free', selectedPlanPrice:'Free', selectedPeriod:'free' })}
                             color={'#71839a'}  selectedColor={'#fff'}
-                            selected={this.state.selectedPlan == 'free'} 
+                            selected={ this.state.selectedPlan == 'free' } 
                             style={[styles.listItemRadio,{}]} 
                           />
                         </Right>
@@ -314,8 +304,7 @@ class SubscriptionScreen extends React.Component {
                           screenProps.lang.subscriptionScreen.freeNoteMessage
                           :
                           screenProps.lang.subscriptionScreen.noteMessage.replace('$price', this.state.selectedPlanPrice)
-                        }
-                       
+                        }                       
                       </Text>
                   </Text>
 

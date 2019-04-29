@@ -3,14 +3,14 @@ import { ActivityIndicator, View,  Image,  StyleSheet, Alert,  TouchableOpacity,
 
 import {  Text,  Button, Body, Left,  Right,  ListItem, Radio } from 'native-base';
 
-import {AndroidData} from '../../components/constants.js';
+import {AndroidData, gpbErrors} from '../../components/constants.js';
 
 import { connect } from 'react-redux';
 import { updateSubscription } from './reducer';
 
 import InAppBilling from "react-native-billing";
 
-const testItems = [ 'android.test.purchased', 'android.test.canceled', 'android.test.refunded', 'android.test.item_unavailable' ];
+const testItems = ['android.test.canceled', 'android.test.refunded', 'android.test.item_unavailable', 'android.test.purchased' ];
 const itemSubs = ['com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths'];
 
 class SubscriptionScreen extends React.Component {
@@ -67,11 +67,10 @@ class SubscriptionScreen extends React.Component {
       if(!this.state.storeTest)
         subscriptions = await InAppBilling.getSubscriptionDetailsArray(itemSubs)
       else 
-        subscriptions =  await InAppBilling.getSubscriptionDetailsArray(testItems)
+        subscriptions =  await InAppBilling.getProductDetailsArray(testItems) 
 
       .then(
         async subscriptions => {
-          console.log(subscriptions),
           await this.setState({subscriptions})
         }
       );
@@ -84,33 +83,52 @@ class SubscriptionScreen extends React.Component {
     }
   } 
 
+  processReturnedPurchase = async (details) => { 
+    await console.log('a ver que retorno', details);  
+    if(details.purchaseState == 'PurchasedSuccessfully'){ 
+       console.log('compras procesada por google correctametne');
+      //Update User Data on server here
+      const isAuth = await this.props.updateSubscription(this.props.user.user.user_id, details, "android");
+      //then if all went good!
+      this.props.navigation.navigate('Offers');
+    }  
+  }
+
   getSubscription = async ( selectedProduct ) =>{
-    console.log('seleccionaaaddooo', selectedProduct); 
+    const {screenProps} = this.props;
+
     var response = null;
 
-    if(selectedProduct != 'free'){
+    if( selectedProduct != 'free' ){
       try {
-        
+        console.log("about to get:", selectedProduct );
+
         await InAppBilling.open();
 
         if(this.state.storeTest)
-          response = InAppBilling.purchase(selectedProduct)
+          response = await InAppBilling.purchase(selectedProduct).then( async details => { this.processReturnedPurchase(details) });
         else
-          response = InAppBilling.subscribe(selectedProduct)         
+          response = await InAppBilling.subscribe(selectedProduct).then( async details => { this.processReturnedPurchase(details) });
           
-        .then( async details => {
-  
-          if(details.purchaseState == 'PurchasedSuccessfully'){
-            //Update User Data on server here
-            const isAuth = this.props.updateSubscription(this.props.user.user.user_id, details, "android");
-            //then if all went good!
-            this.props.navigation.navigate('Offers');
-          }
-          
-        });
+
        //const details = await InAppBilling.purchase(this.state.selectedPlanCode);
-      } catch (err) {
-        console.log(err)
+      } catch (error) {
+
+          console.log(error);
+        
+          if (error.message === gpbErrors.PAYMENT_BUG) {
+            //if (repurchaseTries >= maxRepurchaseTries) {
+            //  reject(new Error(`Failed to purchase ${id} after ${maxRepurchaseTries} retries.`));
+            //} else {
+            //  repurchaseTries += 1;
+            //  buyInAppProduct();
+            //}
+          } else if ( error.message === gpbErrors.PAYMENT_DECLINED ) {
+            // Communicate to the user that the payment was declined
+            Alert.alert(screenProps.lang.subscriptionScreen.errorDeclinedTitle, screenProps.lang.subscriptionScreen.errorDeclinedMessage);
+          } else if ( error.message === gpbErrors.PAYMENT_CANCELLED ) {
+            Alert.alert(screenProps.lang.subscriptionScreen.errorCancelledTitle, screenProps.lang.subscriptionScreen.errorCancelledMessage);
+          }
         
       } finally {
   
@@ -165,8 +183,7 @@ class SubscriptionScreen extends React.Component {
     }
   }  
 
-  _handleSubscriptionType = async () =>{
-      console.log("about to get:", this.state.selectedPlan);
+  _handleSubscriptionType = async () =>{      
       if(this.state.selectedPlan == 'free'){
         await this.getSubscription(this.state.selectedPlan);
         this.props.navigation.navigate('Offers');

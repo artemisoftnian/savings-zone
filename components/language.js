@@ -28,7 +28,11 @@ export const Lang = {
             freeDescription: 'Podrás ver, pero no obtener ni consumir ofertas.',
             freeNoteMessage: "Mientras tengas este plan no habra costos de uso, sin embargo deberá obtener un plan si desea obtener y consumir ofertas.",
             iosNote: "Cancele la suscripción en cualquier momento. La suscripción se renueva automáticamente a menos que la renovación automática esté desactivada al menos 24 horas antes del final del período actual, vaya a la configuración de la cuenta de iOS después de la compra. El pago se cargará a la cuenta de iTunes. Cualquier porción no utilizada del período de prueba gratuito, si se ofrece, se perderá cuando compre una suscripción.",
-            subscribedAlreadyLink: "Recupere su Supcripcion Aquí"
+            subscribedAlreadyLink: "Recupere su Supcripcion Aquí",
+            errorCancelledTitle:'Payment was cancelled',
+            errorCancelledMessage:'An error is encountered with the order process, You are not going to be charged for this trasaction.',
+            errorDeclinedTitle:'Payment was Declined',
+            errorDeclinedMessage:'The Payment has been declined, please check Your Google Play Account for account balance or valid payment method'            
         },
         offerScreen:{            
             offerListTitle: "Ofertas Disponibles",
