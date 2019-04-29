@@ -49,7 +49,7 @@ export const AndroidData = [
     "subscriptionFreeTrialPeriod": "",
     "subscriptionPeriod": "P1Y",
     "title": "Savings Zone 1 Year Subscription (Savings Zone)",
-  }
+  },
 ]
 export const AndroidDataTest = [
   {
@@ -119,8 +119,9 @@ export const AndroidDataTest = [
     "subscriptionFreeTrialPeriod": "",
     "subscriptionPeriod": "",
     "title": "Sample Title",
-  }
+  },
 ]
+
 export const iosData = [
   {
     "countryCode": "US",
