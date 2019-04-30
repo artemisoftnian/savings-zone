@@ -172,15 +172,6 @@ class SubscriptionScreen extends React.Component {
       }
       else{
           await this.purchase(product.productId);
-
-          Alert.alert(
-            'Not Programed Yet!',
-            'This area is in development',
-            [
-              {text: 'Continue to offers', onPress: () => this.props.navigation.navigate('Offers') },
-            ],
-            { cancelable: false }
-          )          
       }
   }
 
@@ -223,10 +214,10 @@ class SubscriptionScreen extends React.Component {
                           style={[styles.listItem, this.state.selectedPlan == 'free' ? styles.selectedItem : {}] }                   
                       >
                         <Left>
-                          <Text  style={[styles.listItemPrice,'free'== this.state.selectedPlan ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeText}</Text>                          
+                          <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.listItemPrice,'free'== this.state.selectedPlan ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeText}</Text>                          
                         </Left>
                         <Body>
-                          <Text  style={[styles.listItemDescription,'free'== this.state.selectedPlan ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeDescription}</Text>
+                          <Text adjustsFontSizeToFit numberOfLines={3} style={[styles.listItemDescription,'free'== this.state.selectedPlan ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeDescription}</Text>
                         </Body>                          
                         <Right>
                           <Radio
@@ -249,13 +240,13 @@ class SubscriptionScreen extends React.Component {
                                   style={[styles.listItem,  this.state.selectedPlan == product.identifier ? styles.selectedItem : {}]}                 
                               >
                                 <Left style={{padding:0,margin:0}}>
-                                  <Text style={[styles.listItemPrice, this.state.selectedPlan == product.identifier ? styles.selectedText : {}]}  >{product.priceString}</Text>                                  
+                                  <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.listItemPrice, this.state.selectedPlan == product.identifier ? styles.selectedText : {}]}  >{product.priceString}</Text>                                  
                                 </Left>
                                 <Body style={{padding:0,margin:0}}>
-                                  <Text style={[styles.listItemDescription, this.state.selectedPlan == product.identifier ? styles.selectedText : {}]}  >{product.description}</Text>
+                                  <Text adjustsFontSizeToFit numberOfLines={3} style={[styles.listItemDescription, this.state.selectedPlan == product.identifier ? styles.selectedText : {}]}  >{product.description}</Text>
                                 </Body>                                
                                 <Right>
-                                  <Radio
+                                  <Radio 
                                     onPress={() => this.onSelectedItem(product)  }
                                     color={'#71839a'}  selectedColor={'#fff'}
                                     selected={this.state.selectedPlan == product.identifier}
@@ -270,7 +261,7 @@ class SubscriptionScreen extends React.Component {
                       }
                   <Button 
                     block
-                    style={[ styles.selectBtn, {marginTop:30} ]}
+                    style={[ styles.selectBtn, {marginTop:15} ]}
                     onPress={() => {
                       this._handleSubscriptionType();
                     // this.props.navigation.navigate('App');
@@ -280,7 +271,7 @@ class SubscriptionScreen extends React.Component {
                   </Button>
 
                   <Button small full transparent warning 
-                    style={{marginTop:20}} 
+                    style={{marginTop:5}} 
                     onPress = { () => { 
                       this.props.navigation.navigate('ManageSubscription')
                       .catch((err) => console.error('An error occurred', err)) } 
@@ -289,7 +280,7 @@ class SubscriptionScreen extends React.Component {
                   </Button>                   
 
                   <Button small full transparent warning 
-                    style={{marginTop:20}} 
+                    style={{marginTop:5}} 
                     onPress = { () => { 
                       Linking.openURL(this.props.screenProps.lang.myAccount.privacyPolicyUrl)
                       .catch((err) => console.error('An error occurred', err)) } 
@@ -297,7 +288,7 @@ class SubscriptionScreen extends React.Component {
                     <Text style={{textDecorationLine:'underline', color:'blue'}}>{screenProps.lang.myAccount.privatePolicyText}</Text>               
                   </Button> 
 
-                  <Text style={{marginTop:30}} >                      
+                  <Text style={{marginTop:10}} >                      
                       <Text  style={{textAlign: 'center', fontWeight:'bold'}}>{screenProps.lang.subscriptionScreen.noteTitle}</Text>
                       <Text>
                         {this.state.selectedPeriod == 'free'?

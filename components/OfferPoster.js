@@ -31,14 +31,14 @@ export default class OfferPoster extends React.Component {
       if(!expired){
         return(
           <Button style={{width: '100%'}} full onPress={() => _openOffer(true, offer) }>
-            <Text>{ (days==1) ? lang.expiresToday : lang.expiresInDays.replace('$days',days) } </Text>
+            <Text adjustsFontSizeToFit numberOfLines={1} >{ (days==1) ? lang.expiresToday : lang.expiresInDays.replace('$days',days) } </Text>
           </Button>
         )
       }
       else{
         return(
           <Button danger style={{width: '100%'}} full>
-            <Text>{lang.expiredMessage}</Text>
+            <Text adjustsFontSizeToFit numberOfLines={1} >{lang.expiredMessage}</Text>
           </Button>
         )
       }
@@ -85,7 +85,7 @@ export default class OfferPoster extends React.Component {
                 </CardItem>
                 <CardItem style={styles.offerPriceContainer} button onPress={() => _openOffer(offer, expired) } >  
                   <Left style={{ paddingLeft:0}} >
-                    <Text style={styles.offerPrice}>${post_meta.offer_price}</Text>  
+                    <Text adjustsFontSizeToFit numberOfLines={1} style={styles.offerPrice}>${post_meta.offer_price}</Text>  
                   </Left>
                   <Right>
                     { this._isExperiedIcon(expired) }

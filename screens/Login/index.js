@@ -79,22 +79,23 @@ class LoginScreen extends React.Component {
                       this.props.navigation.navigate('Register'); 
                     }}                  
                   >
-                  <Text style={{fontWeight:'bold', textAlign:'center', width:'100%'}}>{screenProps.lang.login.registerButton}</Text>
+                  <Text adjustsFontSizeToFit numberOfLines={1} style={{fontWeight:'bold', textAlign:'center', width:'100%'}}>{screenProps.lang.login.registerButton}</Text>
                 </Button>
 
 
                 <Item rounded  style={styles.inputContainer} >
-                  <Icon name='contact' style={{fontSize: 30, color: '#fff'}}/>
+                  <Icon name='md-contact' style={{fontSize: 30, color: '#fff'}}/>
                   <Input 
                     onChangeText={text => this.setState({ user: text, errormessage: '' })}
                     placeholder='User' 
-                    placeholderTextColor="#fff" 
+                    placeholderTextColor="#fff"
+                    autoCapitalize = 'none'
                     style={{color:'#fff'}}
                     />
 
                 </Item>
                 <Item rounded style={styles.inputContainer}>
-                  <Icon active name='lock' style={{fontSize: 30, color: '#fff'}}/>
+                  <Icon active name='md-lock' style={{fontSize: 30, color: '#fff'}}/>
                   <Input
                     secureTextEntry
                     onChangeText={text => this.setState({ password: text, errormessage: '' })}

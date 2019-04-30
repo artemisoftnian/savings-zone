@@ -60,7 +60,7 @@ class UserProfileScreen extends React.Component {
     //this.checkOrFetchData();
   }
 
-  fetchOfferData = async () => {};
+  fetchOfferData = async () => {}; 
 
   _handleLogOut = async () => {
     const isAuth = await this.props.logOutUser(); 
@@ -70,9 +70,9 @@ class UserProfileScreen extends React.Component {
   userInfo = () => {    
     const {screenProps} = this.props;
        return (
-            <Content> 
-              <Card style={{flex: 0}}>
-                <CardItem>
+            <Content style={{marginTop:0}}>
+              <Card style={{flex: 0, marginTop:0}}>
+                <CardItem style={{marginTop:0}}>
                   <Left>
                     <Thumbnail source={avatarImg} /> 
                     <Body>
@@ -190,7 +190,7 @@ class UserProfileScreen extends React.Component {
         ListHeaderComponent={  this.userInfo() }
         data={ ( screenProps.lang.myAccount.optionList == 'es' ) ? OptionsListEs : OptionsListEn }        
         extraData={this.state}
-        style={{ marginTop:30 }}
+        style={{ marginTop:2 }}
         keyExtractor={(item, index) => item.id}
         renderItem={({ item }) => {
           return (

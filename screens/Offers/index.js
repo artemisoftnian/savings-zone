@@ -373,7 +373,7 @@ class Offers extends React.Component {
           <View>
             <View style={{flexDirection:"row"}}>
                 <View style={{flex:2}}>
-                    <Text style={styles.offerListTitle}> 
+                    <Text adjustsFontSizeToFit numberOfLines={1} style={styles.offerListTitle}> 
                       <Icon name='md-pricetags' type='Ionicons'/> {screenProps.lang.offerScreen.offerListTitle}
                     </Text>
                 </View>

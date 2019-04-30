@@ -37,13 +37,13 @@ export default class MainWrapper extends React.Component {
               onPress={ () => this.props.nav.navigate('Offers') }
             >
               <Icon name="md-home" type="Ionicons" style={styles.iconColor} /> 
-              <Text style={styles.iconColor}>{this.props.lang.main.homeIconText}</Text>
+              <Text adjustsFontSizeToFit numberOfLines={1} style={styles.iconColor}>{this.props.lang.main.homeIconText}</Text>
             </Button>
             <Button vertical
               onPress={ () => this.props.nav.navigate('Map') }
             >
               <Icon name="md-map" style={styles.iconColor}/>
-              <Text style={styles.iconColor}>{this.props.lang.main.mapsIconText}</Text>
+              <Text adjustsFontSizeToFit numberOfLines={1} style={styles.iconColor}>{this.props.lang.main.mapsIconText}</Text>
             </Button>
             {/*
             <Button vertical
@@ -57,7 +57,7 @@ export default class MainWrapper extends React.Component {
               onPress={ () => this.props.nav.navigate('UserProfile') }
             >
               <Icon name="md-person" style={styles.iconColor}/>
-              <Text style={styles.iconColor} >{this.props.lang.main.accountIconText}</Text>
+              <Text adjustsFontSizeToFit numberOfLines={1} style={styles.iconColor} >{this.props.lang.main.accountIconText}</Text>
             </Button>
           </FooterTab>
         </Footer> 
