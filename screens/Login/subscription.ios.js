@@ -84,17 +84,26 @@ class SubscriptionScreen extends React.Component {
             }
         })            
 
-        var productIdentifier = 'com.xyz.abc';
-        InAppUtils.purchaseProduct(selectedProduct, (error, response) => {
+        InAppUtils.purchaseProduct(selectedProduct, async (error, response) => {
            // NOTE for v3.0: User can cancel the payment which will be available as error object here.
            if(response && response.productIdentifier) {
+              //console.log('responseData', response);
               //Update User Data on server here
-              const isAuth = this.props.updateSubscription(this.props.user.user.user_id, response, "ios");
-              //then if all went good!
-              this.props.navigation.navigate('Offers');            
-
               console.log('Purchase Successful', 'Your Transaction ID is ' + response.transactionIdentifier);
+              var test = await this.props.updateSubscription(this.props.user.user.user_id, response, "ios");
+              //then if all went good!
+              if(test && test.status){
                 //unlock store here.
+                this.props.navigation.navigate('Offers');
+              }
+              else{
+                Alert.alert('Error!', test);
+              }
+
+
+           }
+           else{
+            Alert.alert('Purchase Unsuccessful', 'An error ocurred during the subscription process! There will be no charge to your account');  
            }
         });
 
@@ -122,15 +131,16 @@ class SubscriptionScreen extends React.Component {
 
   }
 
-  _handleSubscriptionType = async () =>{
-    if(this.state.selectedPlan == 'free'){
-      await this.getSubscription(this.state.selectedPlanCode);
-      this.props.navigation.navigate('Offers');
-    }
-    else{
-        await this.getSubscription(this.state.selectedPlanCode);     
-    }
-}  
+  _handleSubscriptionType = async (selectedPlan) =>{
+      if(selectedPlan == 'free'){
+        await this.getSubscription(selectedPlan);
+        this.props.navigation.navigate('Offers');
+      }
+      else{
+        await this.getSubscription(selectedPlan);     
+      }
+  }  
+
   
   async checkSubscription() {
       try {
@@ -165,15 +175,6 @@ class SubscriptionScreen extends React.Component {
   
   }  
 
-
-  _handleSubscriptionType = async () =>{
-      if(this.state.selectedPlan == '0'){
-        this.props.navigation.navigate('Offers');
-      }
-      else{
-          await this.purchase(product.productId);
-      }
-  }
 
   onSelectedItem = (product)=>{
     console.log(product.identifier);
@@ -263,7 +264,7 @@ class SubscriptionScreen extends React.Component {
                     block
                     style={[ styles.selectBtn, {marginTop:15} ]}
                     onPress={() => {
-                      this._handleSubscriptionType();
+                      this._handleSubscriptionType(this.state.selectedPlan);
                     // this.props.navigation.navigate('App');
                     }}                      
                   >
