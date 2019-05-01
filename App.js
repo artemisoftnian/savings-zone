@@ -15,8 +15,6 @@ import offlineConfig from '@redux-offline/redux-offline/lib/defaults';
 import { Provider } from 'react-redux';
 import ConfigureStore from './screens/rootRedux';
 
-//import EventEmitter from 'EventEmitter';
-
 //SCREENS
 import LoginScreen from './screens/Login';
 import RegisterScreen from './screens/Login/register'; 
@@ -37,7 +35,8 @@ import { Lang } from './components/language';
 
 global.wpSite = "https://savingszonepr.com";
 //global.wpSite = "http://www.svz.com:8080"
-//global.offerEmitter = new EventEmitter(); 
+
+//(node:81872) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 change listeners added. Use emitter.setMaxListeners() to increase limit
 global.offerEmitter = DeviceEventEmitter;
 
 

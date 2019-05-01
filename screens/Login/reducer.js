@@ -63,7 +63,7 @@ export const updateSubscription = ( userId = null, detail = null, osType = null,
                 subscription_os_type: osType,
             }            
         }
-        else{
+        else{            
             if(osType === "android"){
                 toSendData = {
                     user_id: userId,
@@ -80,11 +80,13 @@ export const updateSubscription = ( userId = null, detail = null, osType = null,
                     subscription_type: detail.productIdentifier,
                     subscription_exp_date: detail.transactionDate,
                     subscription_receipt: detail.transactionReceipt,
-                    subscription_expired: null,
+                    subscription_expired: '',
                     subscription_os_type: osType,                
                 }
             }
         }
+
+        console.log('this',toSendData);
 
         let data = await fetch(pathService, {
             method: 'POST',
@@ -209,11 +211,10 @@ export default (state = INITIAL_STATE, action) => {
             return { ...INITIAL_STATE, registered: true, subscribed: true };
         }
         case FETCH_SUBSCRIPTION_UPDATE_SUCCESS: {
-            console.log('from reducer, returned',action.payload);
             return { ...INITIAL_STATE, registered: true, isAuth: true, subscribed: true, user: action.payload };
         }
         case FETCH_SUBSCRIPTION_UPDATE_FAILED: {
-            return { ...INITIAL_STATE, error: action.error };
+            return { ...INITIAL_STATE, error: action.error }; 
         }        
         default:
             return state;

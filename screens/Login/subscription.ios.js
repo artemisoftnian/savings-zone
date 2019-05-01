@@ -85,22 +85,15 @@ class SubscriptionScreen extends React.Component {
         })            
 
         InAppUtils.purchaseProduct(selectedProduct, async (error, response) => {
+
+          console.log('algun error',error);
            // NOTE for v3.0: User can cancel the payment which will be available as error object here.
            if(response && response.productIdentifier) {
               //console.log('responseData', response);
               //Update User Data on server here
               console.log('Purchase Successful', 'Your Transaction ID is ' + response.transactionIdentifier);
-              var test = await this.props.updateSubscription(this.props.user.user.user_id, response, "ios");
-              //then if all went good!
-              if(test && test.status){
-                //unlock store here.
-                this.props.navigation.navigate('Offers');
-              }
-              else{
-                Alert.alert('Error!', test);
-              }
-
-
+              console.log('Purchase Data', response);
+              this._gotit(response);
            }
            else{
             Alert.alert('Purchase Unsuccessful', 'An error ocurred during the subscription process! There will be no charge to your account');  
@@ -114,22 +107,33 @@ class SubscriptionScreen extends React.Component {
       } 
     }
     else{
-      const returned = await this.props.updateSubscription(this.props.user.user.user_id, 'free', "android");
+      var detail = await this.props.updateSubscription(this.props.user.user.user_id, 'free', "ios");
+      console.log("yyyyy retornooooo...",detail);
 
-      console.log("que retorno?",returned);
-
-      if(returned.status){
-        console.log(returned.message);
-        this.props.navigation.navigate('Offers');
+      if(detail){
+        this.props.navigation.navigate('Offers'); 
       }
       else{
-        console.log("que error retorno?",returned);
-        console.log("something went wrong", returned.message)
+        console.log("que error retorno?",detail); 
       }
       
     }
 
   }
+
+  _gotit = async (response) => {
+    var detail = await this.props.updateSubscription(this.props.user.user.user_id, response, "ios");
+    //then if all went good!
+    if(detail){
+      //unlock store here.
+      this.props.navigation.navigate('Offers');
+    }
+    else{
+      Alert.alert('Error!', 'Transaction Error');
+    }
+  }
+
+
 
   _handleSubscriptionType = async (selectedPlan) =>{
       if(selectedPlan == 'free'){
