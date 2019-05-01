@@ -263,8 +263,7 @@ getCoordinates = (data) => {
               zIndex: 10,
               textAlign:'center',
               backgroundColor:'#0000001a', backgroundColor:'transparent', color:'transparent',
-              borderRadius:10,
-              transform: [{ scale: 0 }]
+              borderRadius:10
         }}>{JSON.stringify(this.state.debugData)}</Text>        
 
         {this.renderMap()}      
@@ -289,7 +288,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     //paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#ecf0f1',   transform: [{ scale: 0 }]
+    backgroundColor: '#ecf0f1'
   },
   paragraph: {    
     
