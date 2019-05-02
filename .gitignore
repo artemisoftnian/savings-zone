@@ -1,4 +1,5 @@
 # ignore this files
+*.log
 yarn.lock
 package-lock.json
 
