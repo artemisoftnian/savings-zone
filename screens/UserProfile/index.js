@@ -10,6 +10,7 @@ import {
 
 import { ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import {Content,  Card,  CardItem,  Thumbnail,  Text, Icon,  Left,  Body, Button } from 'native-base';
 
@@ -67,8 +68,16 @@ class UserProfileScreen extends React.Component {
     this.props.navigation.navigate('Auth');
   };
 
+  getUserDates = (userDate) => {
+    userDate = userDate/1000;  //Fix for ms epoch from apple // Save on database as seconds next time
+    var start = moment.unix(userDate).format('DD-MM-YYYY hh:mm A');
+    var end   = moment.unix(userDate).add(1, 'M').format('DD-MM-YYYY hh:mm A');
+    return {'start':start, 'end':end }; 
+  }
+
   userInfo = () => {    
     const {screenProps} = this.props;
+    var dates = this.getUserDates(this.state.subscriptionExpDate);
        return (
             <Content style={{marginTop:0}}>
               <Card style={{flex: 0, marginTop:0}}>
@@ -80,8 +89,8 @@ class UserProfileScreen extends React.Component {
                       {
                         (this.state.subscribed == "true") ?
                         [
-                        <Text key="algo1" note>Subscrition From:  {this.state.subscriptionExpDate}</Text>,
-                        <Text  key="algo2" note>Subscrition Util:  {this.state.subscriptionExpDate}</Text>]
+                        <Text key="algo1" note>Subscrition From:  {dates.start}</Text>,
+                        <Text  key="algo2" note>Subscrition Util:  {dates.end}</Text>]
                         :
                         [
                         <Text  key="algo1" >{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.h2}</Text>, 

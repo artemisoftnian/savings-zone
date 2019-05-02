@@ -30,7 +30,7 @@ export default class OfferPoster extends React.Component {
 
       if(!expired){
         return(
-          <Button style={{width: '100%'}} full onPress={() => _openOffer(true, offer) }>
+          <Button style={{width: '100%'}} full onPress={() => _openOffer(offer) }> 
             <Text adjustsFontSizeToFit numberOfLines={1} >{ (days==1) ? lang.expiresToday : lang.expiresInDays.replace('$days',days) } </Text>
           </Button>
         )

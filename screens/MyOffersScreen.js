@@ -216,7 +216,7 @@ class MyOffersScreen extends React.Component {
         {/*REDEMTION MODAL*/}
         <Modal
           visible={this.state.modalVisible}
-          transparent={true}
+          transparent
           animationType="slide"
           style={{margin:15}}
           onRequestClose = {() => console.log("closing modal now!")} 
@@ -224,12 +224,11 @@ class MyOffersScreen extends React.Component {
 
             <View enabled style={{ flex:1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
               <View style={[styles.modalStyle]} >
+              
                 <TouchableHighlight
                   onPress={() => { this._toggleModal(!this.state.modalVisible, null) }} 
-                  style={{  alignItems:'center', justifyContent:'center', flexDirection:'row',
-                            height:30, backgroundColor: '#393863', overflow:'visible', marginBottom:20
-                        }}>
-                  <Icon name="chevron-down" type="FontAwesome"  style={{color:'white', backgroundColor:'purple', padding: 20, borderRadius:50}}/> 
+                  style={{ justifyContent:'center', flexDirection:'row',  zIndex:1  }}>
+                  <Icon name="md-close-circle"  style={{color:'black', padding:20}}/> 
                 </TouchableHighlight>
 
                 <Text style={{textAlign:'center'}}>{screenProps.lang.myOffers.redeemMessage}</Text>
@@ -271,9 +270,8 @@ const styles = StyleSheet.create({
     padding:5, 
     marginBottom:0, 
     borderBottomStartRadius:0, 
-    borderBottomEndRadius:0,
-    width:'100%'
-  },
+    borderBottomEndRadius:0
+    },
   emptyContainer: {    
     flex:1,
 		alignItems: 'center',
