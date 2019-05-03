@@ -1,3 +1,5 @@
+import helpers from '../../components/helpers';
+
 const FETCH_USER_LOGOUT = 'FETCH_USER_LOGOUT';
 
 const FETCH_OFFERS = 'FETCH_OFFERS';
@@ -28,8 +30,13 @@ const fetchOffers = async (dispatch) => {
 	try {
 		dispatch({ type: FETCH_OFFERS });
 		const pathService = `${global.wpSite}/wp-json/svapphelper/v2/offers`; 
-    //console.log(pathService);
-		let data = await fetch(pathService); 
+		let data = await fetch(pathService,{
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				'Content-Ads': helpers.getAvertisingID()
+			},
+		});
 		if (data.status === 200) {
 			data = await data.json();
 			dispatch({ type: FETCH_OFFERS_SUCCESS, payload: data });

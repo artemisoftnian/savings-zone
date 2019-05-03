@@ -1,3 +1,4 @@
+import helpers from '../../components/helpers';
 
 const FETCH_REDEEM_OFFER_SUCCESS = 'FETCH_REDEEM_OFFER_SUCCESS';
 const FETCH_REDEEM_OFFER         = 'FETCH_REDEEM_OFFER';
@@ -21,7 +22,8 @@ export const merchantRedeemOffer = (offer= null) => async dispatch => {
           method: 'POST',
           headers: {
             Accept: 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Content-Ads': helpers.getAvertisingID()
           },
           body: JSON.stringify(offer)
         });        

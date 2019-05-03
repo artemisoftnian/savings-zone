@@ -15,6 +15,7 @@ import { loginUser, logOutUser } from './reducer';
 import styles from './styles';
 import bgSrc from '../../assets/images/wallpaper.png';
 
+
 class LoginScreen extends React.Component {
 
 	constructor(props){
@@ -35,20 +36,25 @@ class LoginScreen extends React.Component {
     header: null,
   };
 
-  async validateUser() {      
-       const{user,  password } = this.state;      
-       const isAuth = await this.props.loginUser(user, password);
-       const { user_meta } = this.props.user.user;
-       const userType = user_meta.cupon_capabilities;
+  async validateUser() { 
+      try{
+          const{user,  password } = this.state;      
+          const isAuth = await this.props.loginUser(user, password);
+          const { user_meta } = this.props.user.user;
+          const userType = user_meta.cupon_capabilities;
+  
+        if(isAuth) {
+            if( userType.includes("merchant") ){
+              this.props.navigation.navigate('Merchant');           
+            }
+            else{
+              this.props.navigation.navigate('App');
+            }
+        }        
+       }catch(error){
+          console.log(error)
+      };    
 
-      if(isAuth) {
-         if( userType.includes("merchant") ){
-           this.props.navigation.navigate('Merchant');           
-         }
-         else{
-           this.props.navigation.navigate('App');
-         }
-      }
 	}
 
   async saveToStorage(userData) {

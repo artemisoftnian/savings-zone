@@ -1,3 +1,5 @@
+import helpers from '../../components/helpers';
+
 const FETCH_USER = 'FETCH_USER';
 const FETCH_USER_FAILED = 'FETCH_USER_FAILED';
 const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
@@ -32,27 +34,7 @@ export const updateSubscription = ( userId = null, detail = null, osType = null,
 
         console.log(pathService);
         var toSendData = null;
-        
-        /* 
-        ----------------    Android Details returns the following      -----------        
-        productId: String
-        orderId: String
-        purchaseToken: String
-        purchaseTime: String
-        purchaseState: String ("PurchasedSuccessfully", "Canceled", "Refunded", "SubscriptionExpired")
-        receiptSignature: String
-        receiptData: String
-        autoRenewing Boolean
-        developerPayload: String
 
-        ------------------------     IOS Return Details       --------------------
-        originalTransactionDate 	    number 	The original transaction date (ms since epoch)
-        originalTransactionIdentifier 	string 	The original transaction identifier
-        transactionDate 	            number 	The transaction date (ms since epoch)
-        transactionIdentifier 	        string 	The transaction identifier
-        productIdentifier 	            string 	The product identifier
-        transactionReceipt 	            string 	The transaction receipt as a base64 encoded string
-        */
         if(detail === 'free'){
             toSendData = {
                 user_id: userId,
@@ -93,7 +75,7 @@ export const updateSubscription = ( userId = null, detail = null, osType = null,
             headers: {
               'Content-Type': 'application/json',
               accept: 'application/json',
-              app_check: 'savings_zone_app',
+              'Content-Ads': helpers.getAvertisingID(),
             },
             body: JSON.stringify(toSendData)
         });
@@ -128,7 +110,7 @@ export const registerUser = (email = null, password = null, name = null, lastnam
             headers: {
               'Content-Type': 'application/json',
               accept: 'application/json',
-              app_check: 'savings_zone_app',
+              'Content-Ads': helpers.getAvertisingID(),
             },
             body: JSON.stringify({
               username: email,
@@ -161,12 +143,18 @@ export const registerUser = (email = null, password = null, name = null, lastnam
 
 
 export const loginUser = (username= null, password = null) => async dispatch => {
-
     try {
-        dispatch({type: FETCH_USER });
+        dispatch({type: FETCH_USER }); 
         const pathService = `${global.wpSite}/wp-json/svapphelper/v2/log?email=${username}&key=${password}`;
+
         //console.log(pathService);
-        let data = await fetch(pathService);
+        let data = await fetch(pathService,{
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Content-Ads': helpers.getAvertisingID()
+              },
+        });
         if (data.status === 200) {
             data = await data.json();
             if(data.status){
@@ -177,6 +165,7 @@ export const loginUser = (username= null, password = null) => async dispatch => 
         dispatch({type: FETCH_USER_FAILED, error: 'Invalid User Name or Password!'});
         return false;
     } catch (error) {
+        console.log('advertising ID:', advertId);
         dispatch({type: FETCH_USER_FAILED, error: 'A network error (such as timeout, interrupted connection or unreachable host) has occurred'});
         return false;
     }

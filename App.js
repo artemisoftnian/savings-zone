@@ -1,9 +1,9 @@
 //REACT / REACT NATIVE IMPORTS
 import * as React from 'react';
-import { AppLoading, Font } from 'expo'; 
+import { AppLoading, Font, Constants } from 'expo'; 
 import { persistStore } from 'redux-persist'
 import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
-import { Root } from "native-base"; 
+import { Root, Container } from "native-base"; 
 
 import { DeviceEventEmitter} from 'react-native';
 
@@ -38,11 +38,12 @@ global.wpSite = "https://savingszonepr.com";
 
 //(node:81872) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 change listeners added. Use emitter.setMaxListeners() to increase limit
 global.offerEmitter = DeviceEventEmitter;
+global.advert = Constants.manifest.extra.advertising;
 
 
 const store = ConfigureStore();
 
-const AppStack = createStackNavigator({
+const AppStack = createStackNavigator({ 
     Offers: OffersScreen, 
     Oferta: Oferta,   
     Scanner: ScannerScreen,
