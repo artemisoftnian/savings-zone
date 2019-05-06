@@ -2,7 +2,9 @@
 *.log
 yarn.lock
 package-lock.json
+.expo/packager-info.json
 
 # ignore this folders
 /node_modules/
 /.expo/
+
