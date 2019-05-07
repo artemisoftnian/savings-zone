@@ -23,9 +23,15 @@ class ScannerScreen extends React.Component {
       error: null,
       user: [],
       hasCameraPermission: null,
-      pause: false
+      pause: false,
+      destino: 'Offers'
     };
 
+  }
+
+  async componentWillMount(){
+     let destino = await this.props.navigation.getParam('destino','Offers'); 
+     this.setState({ destino });
   }
 
   componentDidMount() {
@@ -68,9 +74,9 @@ class ScannerScreen extends React.Component {
        this.setState({pause: true});
        var test = await this.props.merchantRedeemOffer(data);
        console.log(test);
-       alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+       //alert(`Bar code with type ${type} and data ${data} has been scanned!`);
        if(test){
-         this.props.nav.navigate('MyOffers', test);
+         this.props.nav.navigate(this.state.destino);
        }
     }
     

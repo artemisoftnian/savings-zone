@@ -4,7 +4,7 @@ import {
   ActivityIndicator,
   View,
   StyleSheet,
-  AsyncStorage,
+  Platform,
   Share, Linking
 } from 'react-native';
 
@@ -155,17 +155,11 @@ class UserProfileScreen extends React.Component {
         </View>
       );
     }
-    
+
+    const iosSubs = "https://apps.apple.com/account/subscriptions"; //itms-apps://apps.apple.com/account/subscriptions
+    const androidSubs = "https://play.google.com/store/account/subscriptions"; 
 
     const { navigate } = this.props.navigation;
-
-    const  ClientInfo = [
-          { 
-            name: '', 
-            savings: '$155.90', 
-            avatar: ''
-          }
-     ];
 
     const  OptionsListEn = [
       {id:'1', optIcon:"md-cart", optTitle: "My Offers", action: ()=>{ this.props.navigation.navigate('MyOffers') } },
@@ -173,6 +167,7 @@ class UserProfileScreen extends React.Component {
       {id:'3', optIcon:"md-help-circle", optTitle: "Help", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.helpUrl)  } },
       {id:'4', optIcon:"md-fingerprint", optTitle: "Privacy Policy", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.privacyPolicyUrl) } },
       {id:'5', optIcon:"md-clipboard", optTitle: "Terms and Conditions", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.termsConditionsUrl) } },
+      {id:'7', optIcon:"md-settings", optTitle:"Manage Subscription", action:()=>{this._openUrl(Platform.OS === 'ios' ? iosSubs : androidSubs) } }, 
       {id:'6', optIcon:"md-log-out", optTitle: "Log Out", action: ()=>{ this._handleLogOut() } },
     ]; 
      
@@ -181,7 +176,8 @@ class UserProfileScreen extends React.Component {
       {id:'2', optIcon:"md-share", optTitle: "Invita a tus amigos", action: ()=>{ this.onShare() } },
       {id:'3', optIcon:"md-help-circle", optTitle: "Ayuda", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.helpUrl)  } },
       {id:'4', optIcon:"md-finger-print", optTitle: "Políticas de Privacidad", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.privacyPolicyUrl) } },
-      {id:'5', optIcon:"md-clipboard", optTitle: "Terminos y Condiciones", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.termsConditionsUrl) } },      
+      {id:'5', optIcon:"md-clipboard", optTitle: "Terminos y Condiciones", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.termsConditionsUrl) } },
+      {id:'7', optIcon:"md-settings", optTitle:"Manage Subscription", action:()=>{this._openUrl(Platform.OS === 'ios' ? iosSubs : androidSubs) } }, 
       {id:'6', optIcon:"md-log-out", optTitle: "Cerrar Sesión", action: ()=>{ this._handleLogOut() } },
     ];         
 

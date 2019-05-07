@@ -75,6 +75,7 @@ export const Lang = {
             termsConditionsUrl: 'http://www.savingszonepr.com/terminos-y-condiciones',
             helpUrl: 'http://www.savingszonepr.com/preguntas-frecuentes',
             privatePolicyText: 'Politicas de Privacidad'
+            
         },
         myOffers:{
             emptyListMessage: "No tienes ninguna oferta en este momento.",

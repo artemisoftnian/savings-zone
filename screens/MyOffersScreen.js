@@ -109,6 +109,7 @@ class MyOffersScreen extends React.Component {
 
   testRedem = async (data) => {
     var test = await this.props.merchantRedeemOffer(data);
+    console.log(test);
     this.setState({returnMessage: this.props.merchant.message})
   }
 
@@ -141,12 +142,12 @@ class MyOffersScreen extends React.Component {
         ListEmptyComponent={
 
             (this.props.user.user.user_meta.app_subscribed === "true")?
-              <View key="emptyMessage" style={styles.emptyContainer}>
-                <Icon style={styles.emptyIcon} name='alert' type='Ionicons'/>
-                <Text style={styles.emptyText} >{screenProps.lang.myOffers.emptyListMessage}</Text>
+              <View style={styles.emptyContainer}>
+                <Icon  style={styles.emptyIcon} name='alert' type='Ionicons'/>
+                <Text  style={styles.emptyText} >{screenProps.lang.myOffers.emptyListMessage}</Text>
               </View>
             :
-              <View key="notSubscribedMessage" style={[styles.emptyContainer,{margin:20}]}>
+              <View style={[styles.emptyContainer,{margin:20}]}>
                 <Icon name='alert' style={{fontSize: 100, color: '#939393'}}/>
                 <View style={[{margin:20, borderWidth:1, borderColor:'purple', borderRadius:15, padding:5}]}>
                   <Text style={{textAlign:'center'}} >{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.h2}</Text>
@@ -160,35 +161,35 @@ class MyOffersScreen extends React.Component {
         }
         contentContainerStyle={[ { flexGrow: 1 } , this.state.myOffers.length ? null : { justifyContent: 'center'} ]}
         ListHeaderComponent={ () => {
-          if(!this.state.myOffers.lenght)
-            return null
-          else
-            return <Text key="listTitle" style={{fontSize: 20, fontWeight:'bold'}}> <Icon name='md-pricetags' type='Ionicons'/> My Offers</Text>
-        }
-          
-            
+            if(!this.state.myOffers.lenght)
+              return null
+            else
+              return <Text style={{fontSize: 20, fontWeight:'bold'}}> <Icon name='md-pricetags' type='Ionicons'/> My Offers</Text>
+          } 
         }
 
         data={this.state.myOffers}
         extraData={this.state}
         style={{ marginTop:30}}
         keyExtractor={(item, index) => item.id}
-        renderItem={({ item}) => {
-            var id = item.post_meta.ID;
+        renderItem={({item},index) => {
+            var id = item.post_data.ID;
+            console.log(id); 
+
             return (
 
-            <SwipeRow
-                key={"item_id_"+item.post_meta.ID}
+              <SwipeRow
+                key={"row_id_"+item.post_data.ID}
                 leftOpenValue={75}
                 rightOpenValue={-75}
                 style={{margin:0, padding:0}}
                 left={
-                  <Button key={"redeem_"+item.post_meta.ID} success onPress={() => this._toggleModal(true, item) }>
+                  <Button success onPress={() => this._toggleModal(true, item) }>
                     <Icon active name="cart" />
                   </Button>
                 }
                 body={
-                  <View key={"body_of_"+item.post_meta.ID} style={{flexDirection:"row", alignItems: 'stretch', justifyContent: 'center'}}>
+                  <View style={{flexDirection:"row", alignItems: 'stretch', justifyContent: 'center'}}>
                   
                     <View style={{flex:1}}>
                       <Thumbnail small style={{marginLeft:10}} source={{uri: item.post_meta.offer_image_1}} />  
@@ -201,13 +202,13 @@ class MyOffersScreen extends React.Component {
                   </View>
                 }
                 right={
-                  <Button danger key={"remove_"+item.post_meta.ID}
+                  <Button danger 
                   onPress={ () => this._removeLocalOfferHandler(item) }
                   >
-                    <Icon active name="trash" />
+                    <Icon active name="trash" /> 
                   </Button>
                 }
-             />
+              />
             );
           }}
       />
