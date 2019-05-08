@@ -171,13 +171,9 @@ class MyOffersScreen extends React.Component {
         data={this.state.myOffers}
         extraData={this.state}
         style={{ marginTop:30}}
-        keyExtractor={(item, index) => item.id}
-        renderItem={({item},index) => {
-            var id = item.post_data.ID;
-            console.log(id); 
-
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={ ( {item} ) => {
             return (
-
               <SwipeRow
                 key={"row_id_"+item.post_data.ID}
                 leftOpenValue={75}

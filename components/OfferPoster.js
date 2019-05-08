@@ -6,7 +6,6 @@ import {  Dimensions,  Image,  StyleSheet } from 'react-native';
 import { Card, CardItem, Text,  Button,  Icon, Left, Right } from 'native-base';
 
 
-
 // Get screen dimensions
 const { width, height } = Dimensions.get('window');
 // How many offers we want to have in each row and column 
@@ -71,12 +70,12 @@ export default class OfferPoster extends React.Component {
 
 
   render() { 
-    const { offer, offer: { post_meta, post_data }, _openOffer, _getDaysRemain, lang } = this.props;
+    const { offer, offer: { post_meta, post_data }, _openOffer, _getDaysRemain, lang, _isLast, _isEven } = this.props;
     const daysRemain = _getDaysRemain(post_meta.offer_exp_date);
     const expired = this.expiredCheck(daysRemain);
 
     return (
-              <Card style={[styles.container]} >
+              <Card style={[ styles.container, (!_isEven && _isLast)?{marginRight:30}:{} ]} >
                 <CardItem cardBody button onPress={() => _openOffer(offer, expired) } >                
                   <Image  source={ {uri:post_meta.offer_image_1 } }  style={styles.offerImage} resizeMode="cover" /> 
                 </CardItem>
@@ -94,9 +93,8 @@ export default class OfferPoster extends React.Component {
                 <CardItem footer style={ styles.noPadding }> 
                   { this._isExperied(expired, daysRemain) } 
                 </CardItem> 
-              </Card> 
-      
-    );
+              </Card>       
+      );
   }
 }
 

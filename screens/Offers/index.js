@@ -78,6 +78,7 @@ class Offers extends React.Component {
     this.props.fetchOffersDataSource();
     this.setState({ start: true, dataSource: this.props.offerList.dataSource });
     this.arrayholder = this.props.offerList.dataSource;
+    (getDataSourceFilter.length%2)==1 ?<Text>Even</Text>:<Text>Odd</Text>
   }
 
   _handleOfferClick = (navigation, item) => {
@@ -244,13 +245,12 @@ class Offers extends React.Component {
 
   getDataSourceFilter = () => {
     const { selected, filter } = this.state;
-		const { dataSource } = this.props.offerList;
+    const { dataSource } = this.props.offerList;
+
     if (!filter && selected === "*") return dataSource;    
 
 		if(selected && !filter){
-      //console.log("llego aqui");
       return dataSource.filter(item => {
-        //console.log(selected, item.taxonomy[0]['category_nicename']);
         const itemData = `${item.taxonomy[0]['category_nicename'].toUpperCase()}`;
         const textData = selected.toUpperCase();
         return itemData.indexOf(textData) > -1;
@@ -398,41 +398,26 @@ class Offers extends React.Component {
             </View>                
           </View>
         }
-
           
-        //data={ renderList } 
         data={getDataSourceFilter}
         numColumns={2}        
         extraData={this.state}
-        keyExtractor={(item, index) => item.id}     
-       
-        renderItem={({ item }) => {
-          return (
-                        
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item, index }) => {
+          //console.log( (getDataSourceFilter.length % 2 == 0 ))
+          return (                        
             <OfferPoster
               offer={item}
+              _isLast = {getDataSourceFilter.length-1 == index}
+              _isEven = {getDataSourceFilter.length%2 == 0}
               _handleAddToMyOffers={this._handleAddToMyOffers}
               _openOffer = {this._openOffer}
               _getDaysRemain={this._getDaysRemain}
               lang = { this.props.screenProps.lang.offerScreen }
             />
-
-          );
+          )
         }}
       />
-
-        {/*INFO BOX - MODAL
-        <Modal
-          visible={this.state.modalVisible}
-          transparent={true}
-          animationType="slide"
-          style={{}}
-          onRequestClose = {() => {this.renderModalContent()}} 
-          avoidKeyboard={true}
-          >
-          {this.renderModalContent()} 
-        </Modal>
-        */}
 
         <AwesomeAlert
           contentContainerStyle={{margin:0, width:'70%' }}

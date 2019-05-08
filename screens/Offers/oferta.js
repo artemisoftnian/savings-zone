@@ -79,7 +79,6 @@ class Oferta extends React.Component {
         title: this.state.title,
         getDirections: () => { this._handlePressDirections(data.offer.post_meta.offer_location) } , 
         shareFunction: () => { this.onShare() }
-
        });
 
   }
