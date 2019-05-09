@@ -109,8 +109,7 @@ class MyOffersScreen extends React.Component {
 
   testRedem = async (data) => {
     var test = await this.props.merchantRedeemOffer(data);
-    console.log(test);
-    this.setState({returnMessage: this.props.merchant.message})
+    this.setState({returnMessage: this.props.merchant.message})    
   }
 
 
@@ -245,7 +244,7 @@ class MyOffersScreen extends React.Component {
                   <Text>Test Redemption Here</Text>
                 </Button>  
 
-                <Text>{this.state.returnMessage}</Text>
+                <Text>{this.state.returnMessage.message}</Text>
 
               </View>
             </View>

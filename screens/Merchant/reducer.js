@@ -29,11 +29,11 @@ export const merchantRedeemOffer = (offer= null) => async dispatch => {
         });        
         if (data.status === 200) {            
             data = await data.json();
-            console.log(data.message);
+            console.log(data);
             
             if(data.message){
                 console.log(data.message);
-                dispatch({type: FETCH_REDEEM_OFFER_SUCCESS, payload: data.message}); 
+                dispatch({type: FETCH_REDEEM_OFFER_SUCCESS, payload: data}); 
                 return true;
             }
         }

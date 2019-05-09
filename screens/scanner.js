@@ -73,10 +73,9 @@ class ScannerScreen extends React.Component {
     if(data && !this.state.pause){
        this.setState({pause: true});
        var test = await this.props.merchantRedeemOffer(data);
-       console.log(test);
        //alert(`Bar code with type ${type} and data ${data} has been scanned!`);
        if(test){
-         this.props.nav.navigate(this.state.destino);
+         this.props.nav.navigate(this.state.destino, screenProps.lang.myOffers.redeemMessage);
        }
     }
     
