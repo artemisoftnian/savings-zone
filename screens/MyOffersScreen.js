@@ -10,7 +10,7 @@ import {
   Dimensions
 } from 'react-native'; 
 
-import {Constants} from 'expo';
+import {Permissions, Notifications , Constants} from 'expo';
 
 import QRCode from 'react-native-qrcode';
 import { Toast,  Thumbnail,  Text,  Button,  Icon,   SwipeRow } from 'native-base';
@@ -22,6 +22,8 @@ import { connect } from 'react-redux';
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
 import { merchantRedeemOffer } from './Merchant/reducer';
+
+const PUSH_ENDPOINT = 'https://exp.host/--/api/v2/push/send';
 
 
 class MyOffersScreen extends React.Component {
@@ -105,14 +107,9 @@ class MyOffersScreen extends React.Component {
       this.setState({  modalVisible: visible });      
     }
 
-  }  
-
-  testRedem = async (data) => {
-    var test = await this.props.merchantRedeemOffer(data);
-    this.setState({returnMessage: this.props.merchant.message})    
-  }
-
-
+  } 
+  
+  
   render() {
 
     const { navigate } = this.props.navigation;
@@ -239,12 +236,6 @@ class MyOffersScreen extends React.Component {
                   fgColor='white'
                 />
 
-                <Button full success 
-                  onPress = { () => this.testRedem(this.state.qrData) } >
-                  <Text>Test Redemption Here</Text>
-                </Button>  
-
-                <Text>{this.state.returnMessage.message}</Text>
 
               </View>
             </View>

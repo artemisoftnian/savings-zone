@@ -53,10 +53,9 @@ class MerchantHomeScreen extends React.Component {
    //await AsyncStorage.removeItem('user')
   async componentWillMount() {
     const { user_id } = this.props.user;
-    this.props.fetchOffersDataSource();
-    this.arrayholder = this.props.offerList.dataSource;
-    this.setState({ start: true, dataSource: this.props.offerList.dataSource });
-
+    //this.props.fetchOffersDataSource();
+    //this.arrayholder = this.props.offerList.dataSource;
+    //this.setState({ start: true, dataSource: this.props.offerList.dataSource });
   }
 
   async componentDidMount() {
@@ -106,7 +105,8 @@ class MerchantHomeScreen extends React.Component {
 
       <MainWrapper
         //title="Savings Zone"
-        onScanPress={() => this.props.navigation.navigate('Scanner')}
+        onScanPress={() => this.props.navigation.navigate('Scanner', {'destiny':'MerchantHome'} )}
+        rightIcon = 'md-qr-scanner'
         view='horizontal'
         searchFunction = {this.handleSearchFilter}
         nav = { this.props.navigation }     
@@ -123,7 +123,7 @@ class MerchantHomeScreen extends React.Component {
           <Button 
             iconLeft full bordered rounded success 
             style={{margin:10, flex:1}}
-            onPress={ () => {} }
+            onPress={() => this.props.navigation.navigate('Scanner', {'destiny':'MerchantHome'} )}
           >
             <Icon name='md-qr-scanner' />
             <Text>Redeem Offers</Text>

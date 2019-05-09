@@ -9,7 +9,7 @@ import {
 
 import { Constants, BarCodeScanner, Permissions } from 'expo';
 
-import { Text } from 'native-base';
+import { Text, Button } from 'native-base';
 
 import { connect } from 'react-redux';
 import { merchantRedeemOffer } from './Merchant/reducer';
@@ -24,13 +24,14 @@ class ScannerScreen extends React.Component {
       user: [],
       hasCameraPermission: null,
       pause: false,
-      destino: 'Offers'
+      destino: 'Offers', 
+      returnMessage: { message:''}
     };
 
   }
 
   async componentWillMount(){
-     let destino = await this.props.navigation.getParam('destino','Offers'); 
+     let destino = await this.props.navigation.getParam('destiny','Offers'); 
      this.setState({ destino });
   }
 
@@ -59,12 +60,26 @@ class ScannerScreen extends React.Component {
                 <Text style={styles.description}>{screenProps.lang.scannerScreen.message}</Text>
                 <View style={styles.middleScanbar}/>
                 <View style={styles.bottomScanBar}/>
-            </BarCodeScanner>
+            </BarCodeScanner>            
         }
+        
+        <Button full round success onPress = { () => this.testRedem(this.state.qrData) } >
+          <Text>Test Redemption Here</Text>
+        </Button>
+        <Text>{this.state.returnMessage.message}</Text>
+        
       </View>
     );
   }
 
+  testRedem = async (data) => {
+    // Get the token that uniquely identifies this device
+    //let token = await Notifications.getExpoPushTokenAsync();
+    console.log('pushToken', token);
+
+    var test = await this.props.merchantRedeemOffer(data);
+    this.setState({returnMessage: this.props.merchant.message})    
+  }
 
   _handleBarCodeRead = async ({ type, data }) => {
     const ENDPATTERN = [0, 200, 50, 200];
