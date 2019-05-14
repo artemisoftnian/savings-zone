@@ -141,7 +141,8 @@ class Offers extends React.Component {
           <View style= {styles.customMessage}>
             <Image
                 style={{width: 50, height: 50}}
-                source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}}
+                source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png', cache: 'force-cache' }}
+                
             />    
             <Text style={{ marginTop:20 }}>¡oooohh ohhh!</Text>
             <Text>Ya tienes esta oferta</Text>

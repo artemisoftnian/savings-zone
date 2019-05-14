@@ -96,7 +96,6 @@ class ScannerScreen extends React.Component {
     
   }
 
-
 }
 
 

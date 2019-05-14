@@ -77,7 +77,7 @@ export default class OfferPoster extends React.Component {
     return (
               <Card style={[ styles.container, (!_isEven && _isLast)?{marginRight:30}:{} ]} >
                 <CardItem cardBody button onPress={() => _openOffer(offer, expired) } >                
-                  <Image  source={ {uri:post_meta.offer_image_1 } }  style={styles.offerImage} resizeMode="cover" /> 
+                  <Image  source={ {uri:post_meta.offer_image_1 , cache: 'force-cache'} }  style={styles.offerImage} resizeMode="cover" /> 
                 </CardItem>
                 <CardItem style={ [styles.noPadding,{padding:10, marginTop:5}] } button onPress={() => _openOffer(offer) } > 
                     <Text numberOfLines={2} >{post_data.post_title}</Text> 

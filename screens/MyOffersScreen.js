@@ -184,7 +184,7 @@ class MyOffersScreen extends React.Component {
                   <View style={{flexDirection:"row", alignItems: 'stretch', justifyContent: 'center'}}>
                   
                     <View style={{flex:1}}>
-                      <Thumbnail small style={{marginLeft:10}} source={{uri: item.post_meta.offer_image_1}} />  
+                      <Thumbnail small style={{marginLeft:10}} source={{uri: item.post_meta.offer_image_1 , cache: 'force-cache'}} />  
                     </View>
 
                     <View style={{flex:8}} >

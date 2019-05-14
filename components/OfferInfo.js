@@ -48,7 +48,7 @@ export default class OfferInfo extends React.Component {
           {
             this.props.image.map(
               image => (
-                <Image key={image} source={ {uri:image } } style={{ height: 200, width:SCREEN_WIDTH }} />
+                <Image key={image} source={ {uri:image , cache: 'force-cache'} } style={{ height: 200, width:SCREEN_WIDTH }} />
               )
             )
           }              
@@ -64,19 +64,10 @@ export default class OfferInfo extends React.Component {
             <Text style={{fontSize:18, color:'#555', fontWeight:'bold'}}>{this.props.title}</Text>
           </CardItem>
 
-          {/*
-          <CardItem>
-            <Icon name="arrow-back" type="Ionicons" key='back-arrow' style={ [ styles.textWithShadow, styles.slideIcon, { left:30 }]} />
-            <Icon name="arrow-forward" type="Ionicons" key='forward-arrow' style={ [ styles.textWithShadow, styles.slideIcon, {right:10}]} />
-            <Image source={ {uri:this.props.image } } style={{ height: 200, flex: 1 }} /> 
-          </CardItem> 
-          */}
-
           <CardItem> 
               <MyWebView 
                 //sets the activity indicator before loading content
                 startInLoadingState={true}
-                //source={{uri: 'https://github.com/facebook/react-native'}}
                 originWhitelist={['*']}
                 source={{ baseUrl: '', html: this.props.desc }}
                 style={{ maxHeight:1000, width:SCREEN_WIDTH - 40, flex:1}}
