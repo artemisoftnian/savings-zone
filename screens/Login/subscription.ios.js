@@ -299,7 +299,7 @@ class SubscriptionScreen extends React.Component {
                         {this.state.selectedPeriod == 'free'?
                           screenProps.lang.subscriptionScreen.freeNoteMessage
                           :
-                          screenProps.lang.subscriptionScreen.noteMessage.replace('$price', this.state.selectedPlanPrice)
+                          screenProps.lang.subscriptionScreen.iosNote.replace('$price', this.state.selectedPlanPrice)
                         }                       
                       </Text>
                   </Text>
