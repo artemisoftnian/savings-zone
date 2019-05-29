@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { ActivityIndicator, View,  Image,  StyleSheet, Alert,  TouchableOpacity, Linking, ScrollView } from 'react-native';
 
-import {  Text,  Button, Body, Left,  Right,  ListItem, Radio } from 'native-base';
+import { ActivityIndicator, View,  Image,  Platform, StyleSheet, Alert,  
+         TouchableOpacity, Linking, ScrollView } from 'react-native';
 
-
-//import { NativeModules } from 'react-native'
-//const { InAppUtils } = NativeModules
+import { Text,  Button, Body, Left,  Right,  ListItem, Radio } from 'native-base';
 
 import * as RNIap from 'react-native-iap';
 
@@ -14,7 +12,23 @@ import {iosData} from '../../components/constants.js';
 import { connect } from 'react-redux';
 import { updateSubscription } from './reducer';
 
-const itemSubs = ['com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths'];
+const itemSubs = Platform.select({
+  ios: [
+    'savings.zone.sub.year', 'savings.zone.sub.monthly', 'savings.zone.sub.sixmonths'
+  ],
+  android: [
+    'com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths'
+  ],
+});
+
+const testItems = ['android.test.canceled', 'android.test.refunded', 'android.test.item_unavailable', 'android.test.purchased' ];
+
+const platformOs = Platform.select({
+  ios: 'ios',
+  android: 'android'
+});
+
+//const itemSubs = ['com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths'];
 
 class SubscriptionScreen extends React.Component {
 
@@ -58,6 +72,7 @@ class SubscriptionScreen extends React.Component {
   } 
 
   async componentDidMount(){
+
     try {
       const subscriptions = await RNIap.getSubscriptions(itemSubs, (error, products) => {
           console.log(products);
@@ -69,8 +84,15 @@ class SubscriptionScreen extends React.Component {
       console.log(error);
     } finally {
       console.log("acabo de traer los productos")
-    }    
+    }   
+     
   } 
+
+
+  componentWillUnmount() {
+    RNIap.endConnection();
+  }
+
 
   getSubscription = async ( selectedProduct ) =>{
     console.log('seleccionaaaddooo', selectedProduct);
@@ -109,7 +131,7 @@ class SubscriptionScreen extends React.Component {
       } 
     }
     else{
-      var detail = await this.props.updateSubscription(this.props.user.user.user_id, 'free', "ios");
+      var detail = await this.props.updateSubscription(this.props.user.user.user_id, 'free', platformOs);
       console.log("yyyyy retornooooo...",detail);
 
       if(detail){
@@ -124,7 +146,7 @@ class SubscriptionScreen extends React.Component {
   }
 
   _gotit = async (response) => {
-    var detail = await this.props.updateSubscription(this.props.user.user.user_id, response, "ios");
+    var detail = await this.props.updateSubscription(this.props.user.user.user_id, response, platformOs);
     //then if all went good!
     if(detail){
       //unlock store here.
@@ -159,27 +181,26 @@ class SubscriptionScreen extends React.Component {
 
 
   _handleRestorePurchases = async (productId) => {
-    try {
-      const purchases = await RNIap.getAvailablePurchases();
-      let restoredTitles = '';
-      let coins = CoinStore.getCount();
-      purchases.forEach(purchase => {
-        if (purchase.productId == 'com.example.premium') {
-          this.setState({ premium: true });
-          restoredTitles += 'Premium Version';
-        } else if (purchase.productId == 'com.example.no_ads') {
-          this.setState({ ads: false });
-          restoredTitles += restoredTitles.length > 0 ? 'No Ads' : ', No Ads';
-        } else if (purchase.productId == 'com.example.coins100') {
-          CoinStore.addCoins(100);
-          await RNIap.consumePurchase(purchase.purchaseToken);
+    /*
+      InAppUtils.restorePurchases((error, response) => {
+        if(error) {
+          Alert.alert('itunes Error', 'Could not connect to itunes store.');
+        } else {
+          Alert.alert('Restore Successful', 'Successfully restores all your purchases.');
+          
+          if (response.length === 0) {
+            Alert.alert('No Purchases', "We didn't find any purchases to restore.");
+            return;
+          }
+    
+          response.forEach((purchase) => {
+            if (purchase.productIdentifier === productId) {
+              // Handle purchased product.
+            }
+          });
         }
-      })
-      Alert.alert('Restore Successful', 'You successfully restored the following purchases: ' + restoredTitles);
-    } catch(err) {
-      console.warn(err); // standardized err.code and err.message available
-      Alert.alert(err.message);
-    }
+    });    
+  */
   }  
 
 
