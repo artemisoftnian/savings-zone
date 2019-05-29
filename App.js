@@ -33,8 +33,15 @@ import MerchantHomeScreen from './screens/Merchant';
 //LOCALIZATION
 import { Lang } from './components/language';
 
-global.wpSite = "https://savingszonepr.com";
-//global.wpSite = "http://www.svz.com:8080"
+//Dev Remote
+global.wpSite = "https://sv.artemisoftnian.com";
+
+//Dev Local
+//global.wpSite = "http://www.svz.com:8080"  
+
+//Production
+//global.wpSite = "https://savingszonepr.com";
+
 
 //(node:81872) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 change listeners added. Use emitter.setMaxListeners() to increase limit
 global.offerEmitter = DeviceEventEmitter;
