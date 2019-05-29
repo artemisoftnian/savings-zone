@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import { updateSubscription } from './reducer';
 
 import InAppBilling from "react-native-billing";
-import * as RNIap from 'react-native-iap';
 
 const testItems = ['android.test.canceled', 'android.test.refunded', 'android.test.item_unavailable', 'android.test.purchased' ];
 const itemSubs = ['com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths'];
@@ -56,23 +55,19 @@ class SubscriptionScreen extends React.Component {
     this.setState({ subscriptions: AndroidData })
   } 
 
-  componentWillUnmount() {
-    RNIap.endConnection();
-  }
-
   async componentDidMount(){
     try {
       //put loading here....
       // make sure the service is close before opening it
-      await RNIap.endConnection();
-      //await RNIap.initConnection()
+      await InAppBilling.close();
+      await InAppBilling.open();
       var subscriptions = null;
 
 
       if(!this.state.storeTest)
-        subscriptions = await RNIap.getSubscriptions(itemSubs)
+        subscriptions = await InAppBilling.getSubscriptionDetailsArray(itemSubs)
       else 
-        subscriptions =  await RNIap.getProducts(testItems) 
+        subscriptions =  await InAppBilling.getProductDetailsArray(testItems) 
 
       .then(
         async subscriptions => {
@@ -84,7 +79,7 @@ class SubscriptionScreen extends React.Component {
       // debug in device with the help of Alert component
       console.log(error);
     } finally {
-      await RNIap.endConnection(); 
+      await InAppBilling.close(); 
     }
   } 
 
@@ -107,13 +102,17 @@ class SubscriptionScreen extends React.Component {
 
     if( selectedProduct != 'free' ){
       try {
-        console.log("about to get:", selectedProduct );      
+        console.log("about to get:", selectedProduct );
+
+        await InAppBilling.open();
 
         if(this.state.storeTest)
-          response = await RNIap.buyProduct(selectedProduct).then( async details => { this.processReturnedPurchase(details) });
+          response = await InAppBilling.purchase(selectedProduct).then( async details => { this.processReturnedPurchase(details) });
         else
-          response = await RNIap.buySubscription(selectedProduct).then( async details => { this.processReturnedPurchase(details) });
-   
+          response = await InAppBilling.subscribe(selectedProduct).then( async details => { this.processReturnedPurchase(details) });
+          
+
+       //const details = await InAppBilling.purchase(this.state.selectedPlanCode);
       } catch (error) {
 
           console.log(error);
@@ -134,7 +133,7 @@ class SubscriptionScreen extends React.Component {
         
       } finally {
   
-        await RNIap.endConnection();
+        await InAppBilling.close();
       } 
     }
     else{

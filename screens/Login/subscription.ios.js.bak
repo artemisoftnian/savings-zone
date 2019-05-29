@@ -1,14 +1,11 @@
-import * as React from 'react';
+expoimport * as React from 'react';
 import { ActivityIndicator, View,  Image,  StyleSheet, Alert,  TouchableOpacity, Linking, ScrollView } from 'react-native';
 
 import {  Text,  Button, Body, Left,  Right,  ListItem, Radio } from 'native-base';
 
 
-//import { NativeModules } from 'react-native'
-//const { InAppUtils } = NativeModules
-
-import * as RNIap from 'react-native-iap';
-
+import { NativeModules } from 'react-native'
+const { InAppUtils } = NativeModules
 import {iosData} from '../../components/constants.js';
 
 import { connect } from 'react-redux';
@@ -59,7 +56,7 @@ class SubscriptionScreen extends React.Component {
 
   async componentDidMount(){
     try {
-      const subscriptions = await RNIap.getSubscriptions(itemSubs, (error, products) => {
+      const subscriptions = await InAppUtils.loadProducts(itemSubs, (error, products) => {
           console.log(products);
           //update store here.
           this.setState({subcriptions: products})
@@ -72,6 +69,7 @@ class SubscriptionScreen extends React.Component {
     }    
   } 
 
+
   getSubscription = async ( selectedProduct ) =>{
     console.log('seleccionaaaddooo', selectedProduct);
 
@@ -79,14 +77,14 @@ class SubscriptionScreen extends React.Component {
       try {
 
         //First check if purchases can be made
-        RNIap.initConnection((canMakePayments) => {
+        InAppUtils.canMakePayments((canMakePayments) => {
             if(!canMakePayments) {
               Alert.alert('Not Allowed', 'This device is not allowed to make purchases. Please check restrictions on device');
               return;
             }
         })            
 
-        RNIap.buySubscription(selectedProduct, async (error, response) => {
+        InAppUtils.purchaseProduct(selectedProduct, async (error, response) => {
 
           console.log('algun error',error);
            // NOTE for v3.0: User can cancel the payment which will be available as error object here.
@@ -159,27 +157,26 @@ class SubscriptionScreen extends React.Component {
 
 
   _handleRestorePurchases = async (productId) => {
-    try {
-      const purchases = await RNIap.getAvailablePurchases();
-      let restoredTitles = '';
-      let coins = CoinStore.getCount();
-      purchases.forEach(purchase => {
-        if (purchase.productId == 'com.example.premium') {
-          this.setState({ premium: true });
-          restoredTitles += 'Premium Version';
-        } else if (purchase.productId == 'com.example.no_ads') {
-          this.setState({ ads: false });
-          restoredTitles += restoredTitles.length > 0 ? 'No Ads' : ', No Ads';
-        } else if (purchase.productId == 'com.example.coins100') {
-          CoinStore.addCoins(100);
-          await RNIap.consumePurchase(purchase.purchaseToken);
+
+      InAppUtils.restorePurchases((error, response) => {
+        if(error) {
+          Alert.alert('itunes Error', 'Could not connect to itunes store.');
+        } else {
+          Alert.alert('Restore Successful', 'Successfully restores all your purchases.');
+          
+          if (response.length === 0) {
+            Alert.alert('No Purchases', "We didn't find any purchases to restore.");
+            return;
+          }
+    
+          response.forEach((purchase) => {
+            if (purchase.productIdentifier === productId) {
+              // Handle purchased product.
+            }
+          });
         }
-      })
-      Alert.alert('Restore Successful', 'You successfully restored the following purchases: ' + restoredTitles);
-    } catch(err) {
-      console.warn(err); // standardized err.code and err.message available
-      Alert.alert(err.message);
-    }
+    });    
+  
   }  
 
 
