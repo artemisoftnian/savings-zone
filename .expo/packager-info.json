@@ -1,10 +1,10 @@
 {
-  "expoServerNgrokUrl": "https://br-4xw.hackinc2000.savings-zone.exp.direct",
-  "packagerNgrokUrl": "https://packager.br-4xw.hackinc2000.savings-zone.exp.direct",
-  "ngrokPid": 30832,
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 17756,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
   "devToolsPort": 19002,
   "webpackServerPort": null
 }
