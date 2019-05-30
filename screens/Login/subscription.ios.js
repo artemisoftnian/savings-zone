@@ -14,7 +14,7 @@ import {iosData} from '../../components/constants.js';
 import { connect } from 'react-redux';
 import { updateSubscription } from './reducer';
 
-const itemSubs = ['com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths'];
+const itemSubs = ['savings.zone.sub.year', 'savings.zone.sub.monthly', 'savings.zone.sub.sixmonths'];
 
 class SubscriptionScreen extends React.Component {
 
@@ -58,18 +58,16 @@ class SubscriptionScreen extends React.Component {
   } 
 
   async componentDidMount(){
+
     try {
-      const subscriptions = await RNIap.getSubscriptions(itemSubs, (error, products) => {
-          console.log(products);
-          //update store here.
-          this.setState({subcriptions: products})
-      });
-    } catch (error) {
-      // debug in device with the help of Alert component
-      console.log(error);
+      const products = await RNIap.getSubscriptions(itemSubs);
+      this.setState({ subscriptions: products });
+    } catch(err) {
+      console.warn(err); // standardized err.code and err.message available
     } finally {
       console.log("acabo de traer los productos")
-    }    
+    } 
+
   } 
 
   getSubscription = async ( selectedProduct ) =>{
@@ -159,27 +157,7 @@ class SubscriptionScreen extends React.Component {
 
 
   _handleRestorePurchases = async (productId) => {
-    try {
-      const purchases = await RNIap.getAvailablePurchases();
-      let restoredTitles = '';
-      let coins = CoinStore.getCount();
-      purchases.forEach(purchase => {
-        if (purchase.productId == 'com.example.premium') {
-          this.setState({ premium: true });
-          restoredTitles += 'Premium Version';
-        } else if (purchase.productId == 'com.example.no_ads') {
-          this.setState({ ads: false });
-          restoredTitles += restoredTitles.length > 0 ? 'No Ads' : ', No Ads';
-        } else if (purchase.productId == 'com.example.coins100') {
-          CoinStore.addCoins(100);
-          await RNIap.consumePurchase(purchase.purchaseToken);
-        }
-      })
-      Alert.alert('Restore Successful', 'You successfully restored the following purchases: ' + restoredTitles);
-    } catch(err) {
-      console.warn(err); // standardized err.code and err.message available
-      Alert.alert(err.message);
-    }
+
   }  
 
 
@@ -248,7 +226,7 @@ class SubscriptionScreen extends React.Component {
                                   style={[styles.listItem,  this.state.selectedPlan == product.identifier ? styles.selectedItem : {}]}                 
                               >
                                 <Left style={{padding:0,margin:0}}>
-                                  <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.listItemPrice, this.state.selectedPlan == product.identifier ? styles.selectedText : {}]}  >{product.priceString}</Text>                                  
+                                  <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.listItemPrice, this.state.selectedPlan == product.identifier ? styles.selectedText : {}]}  >{product.localizedPrice}</Text>                                  
                                 </Left>
                                 <Body style={{padding:0,margin:0}}>
                                   <Text adjustsFontSizeToFit numberOfLines={3} style={[styles.listItemDescription, this.state.selectedPlan == product.identifier ? styles.selectedText : {}]}  >{product.description}</Text>
