@@ -3,7 +3,7 @@ import { ActivityIndicator, View,  Image,  StyleSheet, Alert,  TouchableOpacity,
 
 import {  Text,  Button, Body, Left,  Right,  ListItem, Radio } from 'native-base';
 
-import {AndroidData, gpbErrors} from '../../components/constants.js';
+import {AndroidDataNew, gpbErrors} from '../../components/constants.js';
 
 import { connect } from 'react-redux';
 import { updateSubscription } from './reducer';
@@ -53,12 +53,26 @@ class SubscriptionScreen extends React.Component {
  });
 
   async componentWillMount() {
-    this.setState({ subscriptions: AndroidData })
+    this.setState({ subscriptions: AndroidDataNew })
   } 
 
   componentWillUnmount() {
     RNIap.endConnection();
   }
+
+  async componentDidMount(){
+
+    try {
+      const products = await RNIap.getSubscriptions(itemSubs);
+      this.setState({ subscriptions: products });
+    } catch(err) {
+      console.warn(err); // standardized err.code and err.message available
+    } finally {
+      console.log("acabo de traer los productos");
+      await RNIap.endConnection(); 
+    } 
+
+  } 
 
   async componentDidMount(){
     try {
@@ -68,21 +82,17 @@ class SubscriptionScreen extends React.Component {
       //await RNIap.initConnection()
       var subscriptions = null;
 
-
       if(!this.state.storeTest)
-        subscriptions = await RNIap.getSubscriptions(itemSubs)
+        subscriptions = await RNIap.getSubscriptions(itemSubs);
       else 
-        subscriptions =  await RNIap.getProducts(testItems) 
+        subscriptions =  await RNIap.getProducts(testItems);
 
-      .then(
-        async subscriptions => {
-          await this.setState({subscriptions})
-        }
-      );
+      await this.setState({subscriptions});
 
     } catch (error) {
       // debug in device with the help of Alert component
       console.log(error);
+      await RNIap.endConnection(); 
     } finally {
       await RNIap.endConnection(); 
     }
@@ -273,7 +283,7 @@ class SubscriptionScreen extends React.Component {
                                   style={[styles.listItem, product.productId === this.state.selectedPlan ? styles.selectedItem : {}]}                 
                               >
                                 <Left style={{padding:0,margin:0}}>
-                                  <Text style={[styles.listItemPrice,product.productId === this.state.selectedPlan ? styles.selectedText : {}]}  >{product.priceText}</Text>                                  
+                                  <Text style={[styles.listItemPrice,product.productId === this.state.selectedPlan ? styles.selectedText : {}]}  >{product.localizedPrice}</Text>                                  
                                 </Left>
                                 <Body style={{padding:0,margin:0}}>
                                   <Text style={[styles.listItemDescription,product.productId === this.state.selectedPlan ? styles.selectedText : {}]}  >{product.description}</Text>

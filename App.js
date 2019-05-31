@@ -19,7 +19,7 @@ import ConfigureStore from './screens/rootRedux';
 import LoginScreen from './screens/Login';
 import RegisterScreen from './screens/Login/register'; 
 import SubscriptionScreen from './screens/Login/subscription'; 
-import ManageSubscription from './screens/Login/manageSubscription';
+//import ManageSubscription from './screens/Login/manageSubscription';
 import OffersScreen from './screens/Offers';
 import Oferta from './screens/Offers/oferta';
 import MapScreen from './screens/Offers/map';
@@ -57,7 +57,7 @@ const AppStack = createStackNavigator({
     MyOffers: MyOfferScreen,
     UserProfile: UserProfileScreen,
     Subscription: SubscriptionScreen,
-    ManageSubscription: ManageSubscription,
+    //ManageSubscription: ManageSubscription,
     Map: MapScreen
 })
 

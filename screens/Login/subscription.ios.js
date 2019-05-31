@@ -162,12 +162,12 @@ class SubscriptionScreen extends React.Component {
 
 
   onSelectedItem = (product)=>{
-    console.log(product.identifier);
+    console.log(product.productId);
     this.setState({ 
-      selectedPlan: product.identifier, 
+      selectedPlan: product.productId, 
       selectedPlanPrice: product.priceString, 
-      selectedPlanCode: product.identifier,
-      selectedPeriod: product.identifier
+      selectedPlanCode: product.productId,
+      selectedPeriod: product.productId
     })
   }
 
@@ -221,21 +221,21 @@ class SubscriptionScreen extends React.Component {
 
                               <ListItem
                                   onPress={() => this.onSelectedItem(product) }
-                                  selected={ this.state.selectedPlan == product.identifier } 
+                                  selected={ this.state.selectedPlan == product.productId } 
                                   key={i.toString()}   
-                                  style={[styles.listItem,  this.state.selectedPlan == product.identifier ? styles.selectedItem : {}]}                 
+                                  style={[styles.listItem,  this.state.selectedPlan == product.productId ? styles.selectedItem : {}]}                 
                               >
                                 <Left style={{padding:0,margin:0}}>
-                                  <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.listItemPrice, this.state.selectedPlan == product.identifier ? styles.selectedText : {}]}  >{product.localizedPrice}</Text>                                  
+                                  <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.listItemPrice, this.state.selectedPlan == product.productId ? styles.selectedText : {}]}  >{product.localizedPrice}</Text>                                  
                                 </Left>
                                 <Body style={{padding:0,margin:0}}>
-                                  <Text adjustsFontSizeToFit numberOfLines={3} style={[styles.listItemDescription, this.state.selectedPlan == product.identifier ? styles.selectedText : {}]}  >{product.description}</Text>
+                                  <Text adjustsFontSizeToFit numberOfLines={3} style={[styles.listItemDescription, this.state.selectedPlan == product.productId ? styles.selectedText : {}]}  >{product.description}</Text>
                                 </Body>                                
                                 <Right>
                                   <Radio 
                                     onPress={() => this.onSelectedItem(product)  }
                                     color={'#71839a'}  selectedColor={'#fff'}
-                                    selected={this.state.selectedPlan == product.identifier}
+                                    selected={this.state.selectedPlan == product.productId}
                                     style={[styles.listItemRadio,{}]}
                                   />
                                 </Right>
