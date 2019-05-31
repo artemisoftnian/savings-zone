@@ -157,8 +157,28 @@ class SubscriptionScreen extends React.Component {
 
 
   _handleRestorePurchases = async (productId) => {
-
-  }  
+    try {
+      const purchases = await RNIap.getAvailablePurchases();
+      let restoredTitles = '';
+      let coins = CoinStore.getCount();
+      purchases.forEach(purchase => {
+        if (purchase.productId == 'com.example.premium') {
+          this.setState({ premium: true });
+          restoredTitles += 'Premium Version';
+        } else if (purchase.productId == 'com.example.no_ads') {
+          this.setState({ ads: false });
+          restoredTitles += restoredTitles.length > 0 ? 'No Ads' : ', No Ads';
+        } else if (purchase.productId == 'com.example.coins100') {
+          //CoinStore.addCoins(100);
+          //await RNIap.consumePurchase(purchase.purchaseToken);
+        }
+      })
+      Alert.alert('Restore Successful', 'You successfully restored the following purchases: ' + restoredTitles);
+    } catch(err) {
+      console.warn(err); // standardized err.code and err.message available
+      Alert.alert(err.message);
+    }
+  }    
 
 
   onSelectedItem = (product)=>{
