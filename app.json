@@ -27,7 +27,7 @@
     },
     "android": {
       "package": "com.savings.zone",
-      "versionCode": 5,
+      "versionCode": 6,
       "permissions": [
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
@@ -38,7 +38,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.savings.zone",
-      "buildNumber": "5"
+      "buildNumber": "6"
     },
     "platforms": [
       "android",

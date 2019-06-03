@@ -2,7 +2,7 @@
   "name": "savings-zone",
   "version": "1.0.1",
   "description": "Guztazos Like App but by subscription",
-  "author": null,
+  "author": "Waldemar Medina",
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "dependencies": {
@@ -28,6 +28,7 @@
     "react-native-elements": "0.18.5",
     "react-native-iap": "^2.5.5",
     "react-native-in-app-utils": "^6.0.1",
+    "react-native-onesignal": "^3.2.14",
     "react-native-paper": "2.2.8",
     "react-native-qrcode": "0.2.7",
     "react-native-unimodules": "0.2.0",
