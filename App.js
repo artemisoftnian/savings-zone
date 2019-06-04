@@ -7,6 +7,7 @@ import { Root, Container } from "native-base";
 
 import { DeviceEventEmitter} from 'react-native';
 
+
 import { offline } from '@redux-offline/redux-offline';
 import offlineConfig from '@redux-offline/redux-offline/lib/defaults'; 
 
@@ -18,7 +19,7 @@ import ConfigureStore from './screens/rootRedux';
 import LoginScreen from './screens/Login';
 import RegisterScreen from './screens/Login/register'; 
 import SubscriptionScreen from './screens/Login/subscription'; 
-//import ManageSubscription from './screens/Login/manageSubscription';
+import ManageSubscription from './screens/Login/manageSubscription';
 import OffersScreen from './screens/Offers';
 import Oferta from './screens/Offers/oferta';
 import MapScreen from './screens/Offers/map';
@@ -28,8 +29,6 @@ import AppLoadingScreen from './screens/AppLoading';
 import MyOfferScreen from './screens/MyOffersScreen';
 import ScannerScreen from './screens/scanner';
 import MerchantHomeScreen from './screens/Merchant';
-
-import OneSignal from 'react-native-onesignal';
 
 //LOCALIZATION
 import { Lang } from './components/language';
@@ -58,7 +57,7 @@ const AppStack = createStackNavigator({
     MyOffers: MyOfferScreen,
     UserProfile: UserProfileScreen,
     Subscription: SubscriptionScreen,
-    //ManageSubscription: ManageSubscription,
+    ManageSubscription: ManageSubscription,
     Map: MapScreen
 })
 
@@ -94,37 +93,7 @@ export default class App extends React.Component {
       loadingAssets: false, 
 			persistLoaded: false,
 			rejected: false
-    };   
-    
-    OneSignal.init("d40ccaf4-8671-49c4-820e-a6d5e5a09d8c");
-      
-    OneSignal.addEventListener('received', this.onReceived);
-    OneSignal.addEventListener('opened', this.onOpened);
-    OneSignal.addEventListener('ids', this.onIds);
-    OneSignal.configure(); 
-
-  }
-
-  componentWillUnmount() {
-    OneSignal.removeEventListener('received', this.onReceived);
-    OneSignal.removeEventListener('opened', this.onOpened);
-    OneSignal.removeEventListener('ids', this.onIds);
-  }
-
-
-  onReceived(notification) {
-    console.log("Notification received: ", notification);
-  }
-
-  onOpened(openResult) {
-    console.log('Message: ', openResult.notification.payload.body);
-    console.log('Data: ', openResult.notification.payload.additionalData);
-    console.log('isActive: ', openResult.notification.isAppInFocus);
-    console.log('openResult: ', openResult);
-  }
-
-  onIds(device) {
-    console.log('Device info: ', device);
+		};     
   }
 
   async componentWillMount(){
