@@ -8,7 +8,7 @@ import {AndroidDataNew, gpbErrors} from '../../components/constants.js';
 import { connect } from 'react-redux';
 import { updateSubscription } from './reducer';
 
-import InAppBilling from "react-native-billing";
+//import InAppBilling from "react-native-billing";
 import * as RNIap from 'react-native-iap';
 
 const testItems = ['android.test.canceled', 'android.test.refunded', 'android.test.item_unavailable', 'android.test.purchased' ];
@@ -180,18 +180,7 @@ class SubscriptionScreen extends React.Component {
   }
   
   async checkSubscription() {
-      try {
-      await InAppBilling.open();
-      // If subscriptions/products are updated server-side you
-      // will have to update cache with loadOwnedPurchasesFromGoogle()
-      await InAppBilling.loadOwnedPurchasesFromGoogle();
-      const isSubscribed = await InAppBilling.isSubscribed("myapp.productId")
-      console.log("Customer subscribed: ", isSubscribed);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      await InAppBilling.close();
-    }
+ 
   }
 
   buyItem = async(sku) => {
