@@ -1,13 +1,11 @@
 import * as React from 'react';
 
 import { ActivityIndicator, View,  Image,  Platform, StyleSheet, Alert,  
-         TouchableOpacity, Linking, ScrollView } from 'react-native';
+         TouchableOpacity, Linking, ScrollView, ImageBackground} from 'react-native';
 
 import { Text,  Button, Body, Left,  Right,  ListItem, Radio } from 'native-base';
 
-import * as RNIap from 'react-native-iap';
-
-import {iosData} from '../../components/constants.js';
+import {AndroidData} from '../../components/constants.js';
 
 import { connect } from 'react-redux';
 import { updateSubscription } from './reducer';
@@ -68,7 +66,7 @@ class SubscriptionScreen extends React.Component {
  });
 
   async componentWillMount() {
-      this.setState({ subscriptions: iosData })
+      this.setState({ subscriptions: AndroidData })
   } 
 
   async componentDidMount(){
@@ -205,12 +203,12 @@ class SubscriptionScreen extends React.Component {
 
 
   onSelectedItem = (product)=>{
-    console.log(product.identifier);
+    console.log(product.productId);
     this.setState({ 
-      selectedPlan: product.identifier, 
+      selectedPlan: product.productId, 
       selectedPlanPrice: product.priceString, 
-      selectedPlanCode: product.identifier,
-      selectedPeriod: product.identifier
+      selectedPlanCode: product.productId,
+      selectedPeriod: product.productId
     })
   }
 
@@ -230,9 +228,21 @@ class SubscriptionScreen extends React.Component {
 
     return (
       <ScrollView style={[styles.mainView,{backgroundColor:'#fff'}]}  behavior="padding" enabled>
-          <View enabled style={{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20  }}>
 
-              <Text style={styles.areaTitle} >{ screenProps.lang.subscriptionScreen.title }</Text>
+          
+            <View enabled style={[styles.headBox, { flex:1, justifyContent: 'center', alignItems: 'center', padding:0 }]}>
+              <ImageBackground source={require('../../assets/images/wallpaper.png')} style={{width: '100%', height: '100%'}}>
+                <View enabled style={[{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20 }]}>
+                  <Text style={[styles.areaTitle,{color:'#fff'}]} >{ screenProps.lang.subscriptionScreen.title }</Text>
+                  <Text style={{color:'#fff'}} >esta te permite obtener y canjear ofertasafada d a dfafda f fd afafdas a dfa df afd af asd</Text>
+                </View>
+              </ImageBackground> 
+            </View>
+                 
+
+
+
+          <View enabled style={{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20  }}>
 
               <View style={{backgroundColor:'#fff', maxWidth:400}}>
 
@@ -242,52 +252,28 @@ class SubscriptionScreen extends React.Component {
                           key='freePlan'
                           style={[styles.listItem, this.state.selectedPlan == 'free' ? styles.selectedItem : {}] }                   
                       >
-                        <Left>
-                          <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.listItemPrice,'free'== this.state.selectedPlan ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeText}</Text>                          
-                        </Left>
                         <Body>
-                          <Text adjustsFontSizeToFit numberOfLines={3} style={[styles.listItemDescription,'free'== this.state.selectedPlan ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeDescription}</Text>
+                          <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.listItemPrice,'free'== this.state.selectedPlan ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeText}</Text>
                         </Body>                          
-                        <Right>
-                          <Radio
-                            onPress={() => this.setState({ selectedPlan: 'free', selectedPlanPrice:'Free', selectedPeriod:'free' })}
-                            color={'#71839a'}  selectedColor={'#fff'}
-                            selected={ this.state.selectedPlan == 'free' } 
-                            style={[styles.listItemRadio,{}]} 
-                          />
-                        </Right>
                       </ListItem>                 
-
+                      
                       {
                           this.state.subscriptions.map((product, i) => {
                             return (
-
                               <ListItem
                                   onPress={() => this.onSelectedItem(product) }
-                                  selected={ this.state.selectedPlan == product.identifier } 
+                                  selected={ this.state.selectedPlan == product.productId } 
                                   key={i.toString()}   
-                                  style={[styles.listItem,  this.state.selectedPlan == product.identifier ? styles.selectedItem : {}]}                 
+                                  style={[styles.listItem,  this.state.selectedPlan == product.productId ? styles.selectedItem : {}]}                 
                               >
-                                <Left style={{padding:0,margin:0}}>
-                                  <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.listItemPrice, this.state.selectedPlan == product.identifier ? styles.selectedText : {}]}  >{product.priceString}</Text>                                  
-                                </Left>
                                 <Body style={{padding:0,margin:0}}>
-                                  <Text adjustsFontSizeToFit numberOfLines={3} style={[styles.listItemDescription, this.state.selectedPlan == product.identifier ? styles.selectedText : {}]}  >{product.description}</Text>
-                                </Body>                                
-                                <Right>
-                                  <Radio 
-                                    onPress={() => this.onSelectedItem(product)  }
-                                    color={'#71839a'}  selectedColor={'#fff'}
-                                    selected={this.state.selectedPlan == product.identifier}
-                                    style={[styles.listItemRadio,{}]}
-                                  />
-                                </Right>
-                                
-                              </ListItem> 
-
+                                  <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.listItemPrice, this.state.selectedPlan == product.productId ? styles.selectedText : {}]}  >{product.priceText} / 6 Months</Text>                                  
+                                </Body>
+                              </ListItem>
                             );
                           })
                       }
+
                   <Button 
                     block
                     style={[ styles.selectBtn, {marginTop:15} ]}
@@ -296,26 +282,10 @@ class SubscriptionScreen extends React.Component {
                     // this.props.navigation.navigate('App');
                     }}                      
                   >
-                    <Text>{screenProps.lang.subscriptionScreen.planSelectBtnText}</Text> 
+                    <Text>Gratis</Text> 
                   </Button>
+                  <Text style={styles.areaTitle} >Podrás ver, pero no obtener ni canjear ofertas</Text>
 
-                  <Button small full transparent warning 
-                    style={{marginTop:5}} 
-                    onPress = { () => { 
-                      this.props.navigation.navigate('ManageSubscription')
-                      .catch((err) => console.error('An error occurred', err)) } 
-                    } >
-                    <Text style={{textDecorationLine:'underline', color:'purple'}}>{screenProps.lang.subscriptionScreen.subscribedAlreadyLink}</Text>               
-                  </Button>                   
-
-                  <Button small full transparent warning 
-                    style={{marginTop:5}} 
-                    onPress = { () => { 
-                      Linking.openURL(this.props.screenProps.lang.myAccount.privacyPolicyUrl)
-                      .catch((err) => console.error('An error occurred', err)) } 
-                    } >
-                    <Text style={{textDecorationLine:'underline', color:'blue'}}>{screenProps.lang.myAccount.privatePolicyText}</Text>               
-                  </Button> 
 
                   <Text style={{marginTop:10}} >                      
                       <Text  style={{textAlign: 'center', fontWeight:'bold'}}>{screenProps.lang.subscriptionScreen.noteTitle}</Text>
@@ -343,6 +313,11 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, { updateSubscription } )(SubscriptionScreen);
 
 const styles = StyleSheet.create({
+  headBox:{
+    backgroundColor:'purple',
+    color:'#fff',
+    padding:20
+  },
   mainView: {
     flex: 1,
   },
@@ -356,13 +331,11 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginLeft:0
   },
-  listItemPrice:{
-     width:140,
+  listItemPrice:{     
      fontSize:25, 
      fontWeight:'bold',
-     paddingLeft:10,
      color:'#71839a',
-     borderRightWidth:1,
+     borderRightWidth:0,
      borderRightColor:'#71839a',
      textAlign:'center'  
   },
