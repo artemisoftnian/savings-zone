@@ -31,6 +31,9 @@ import MerchantHomeScreen from './screens/Merchant';
 
 import OneSignal from 'react-native-onesignal';
 
+import screenDev from './screens/Login/screenDev';
+
+
 //LOCALIZATION
 import { Lang } from './components/language';
 
@@ -74,7 +77,7 @@ const MerchantStack = createStackNavigator({
 
 const MainNav = createSwitchNavigator(
   {
-    AppLoading: AppLoadingScreen,
+    AppLoading: screenDev,//AppLoadingScreen,
     App: AppStack,
     Auth: AuthStack,
     Merchant: MerchantStack

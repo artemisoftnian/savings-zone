@@ -3,7 +3,7 @@ import * as React from 'react';
 import { ActivityIndicator, View,  Image,  Platform, StyleSheet, Alert,  
          TouchableOpacity, Linking, ScrollView, ImageBackground} from 'react-native';
 
-import { Text,  Button, Body, Left,  Right,  ListItem, Radio } from 'native-base';
+import { Text,  Button, Body, Left,  Right,  ListItem, Radio, Container } from 'native-base';
 
 import {AndroidData} from '../../components/constants.js';
 
@@ -28,7 +28,7 @@ const platformOs = Platform.select({
 
 //const itemSubs = ['com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths'];
 
-class SubscriptionScreen extends React.Component {
+class screenDev extends React.Component {
 
   constructor(props) {
     super(props);
@@ -227,35 +227,21 @@ class SubscriptionScreen extends React.Component {
     const {screenProps} = this.props;
 
     return (
+
       <ScrollView style={[styles.mainView,{backgroundColor:'#fff'}]}  behavior="padding" enabled>
-
           
-            <View enabled style={[styles.headBox, { flex:1, justifyContent: 'center', alignItems: 'center', padding:0 }]}>
-              <ImageBackground source={require('../../assets/images/wallpaper.png')} style={{width: '100%', height: '100%'}}>
-                <View enabled style={[{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20 }]}>
-                  <Text style={[styles.areaTitle,{color:'#fff'}]} >{ screenProps.lang.subscriptionScreen.title }</Text>
-                  <Text style={{color:'#fff'}} >esta te permite obtener y canjear ofertasafada d a dfafda f fd afafdas a dfa df afd af asd</Text>
-                </View>
-              </ImageBackground> 
-            </View>
-                 
-
-
+          <View enabled style={[styles.headBox, { flex:1, justifyContent: 'center', alignItems: 'center', padding:0 }]}>
+            <ImageBackground source={require('../../assets/images/wallpaper.png')} style={{width: '100%', height: '100%'}}>
+              <View enabled style={[{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20 }]}>
+                <Text style={[styles.areaTitle,{color:'#fff'}]} >{ screenProps.lang.subscriptionScreen.title }</Text>
+                <Text style={{color:'#fff'}} >esta te permite obtener y canjear ofertasafada d a dfafda f fd afafdas a dfa df afd af asd</Text>
+              </View>
+            </ImageBackground> 
+          </View>
 
           <View enabled style={{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20  }}>
 
               <View style={{backgroundColor:'#fff', maxWidth:400}}>
-
-                      <ListItem
-                          onPress={() => this.setState({ selectedPlan: 'free', selectedPlanPrice: 'Free', selectedPlanCode: 'free', selectedPeriod: 'free' })}
-                          selected={this.state.selectedPlan == 'free'}
-                          key='freePlan'
-                          style={[styles.listItem, this.state.selectedPlan == 'free' ? styles.selectedItem : {}] }                   
-                      >
-                        <Body>
-                          <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.listItemPrice,'free'== this.state.selectedPlan ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeText}</Text>
-                        </Body>                          
-                      </ListItem>                 
                       
                       {
                           this.state.subscriptions.map((product, i) => {
@@ -276,16 +262,22 @@ class SubscriptionScreen extends React.Component {
 
                   <Button 
                     block
-                    style={[ styles.selectBtn, {marginTop:15} ]}
+                    style={[ styles.selectBtn, {marginTop:20} ]}
                     onPress={() => {
                       this._handleSubscriptionType(this.state.selectedPlan);
-                    // this.props.navigation.navigate('App');
                     }}                      
                   >
-                    <Text>Gratis</Text> 
+                    <Text>{screenProps.lang.subscriptionScreen.planSelectBtnText}</Text> 
                   </Button>
-                  <Text style={styles.areaTitle} >Podrás ver, pero no obtener ni canjear ofertas</Text>
 
+                  <Text style={{color: 'purple', fontWeight:'bold', textAlign:'center', marginTop:20}}
+                    onPress={ async () => {
+                      await this.setState({ selectedPlan: 'free', selectedPlanPrice: 'Free', selectedPlanCode: 'free', selectedPeriod: 'free' })
+                      this._handleSubscriptionType(this.state.selectedPlan);
+                    }}  
+                  >
+                    Stay on TestDrive (Only View Offers)
+                  </Text>
 
                   <Text style={{marginTop:10}} >                      
                       <Text  style={{textAlign: 'center', fontWeight:'bold'}}>{screenProps.lang.subscriptionScreen.noteTitle}</Text>
@@ -310,7 +302,7 @@ const mapStateToProps = state => {
   return { user };
 };
 
-export default connect(mapStateToProps, { updateSubscription } )(SubscriptionScreen);
+export default connect(mapStateToProps, { updateSubscription } )(screenDev);
 
 const styles = StyleSheet.create({
   headBox:{
