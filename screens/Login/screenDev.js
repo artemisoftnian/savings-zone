@@ -278,7 +278,7 @@ class screenDev extends React.Component {
                       this._handleSubscriptionType(this.state.selectedPlan);
                     }}  
                   >
-                    Stay on TestDrive (Only View Offers)
+                    Test Drive (Only View Offers)
                   </Text>
 
 
