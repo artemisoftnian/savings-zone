@@ -281,18 +281,20 @@ class screenDev extends React.Component {
                     Test Drive (Only View Offers)
                   </Text>
 
-
-
                   <ScrollView>
-                    <Text style={{marginTop:10}} >                      
-                        <Text  style={{textAlign: 'center', fontWeight:'bold'}}>{screenProps.lang.subscriptionScreen.noteTitle}</Text>
-                        <Text>
+                    <Text style={{marginTop:10, textAlign: 'center'}} >                      
+                        <Text  style={{textAlign: 'center', fontWeight:'bold'}}>{/*screenProps.lang.subscriptionScreen.noteTitle*/}</Text>
+                        <Text style={{ textAlign:'center' }}>
                           {this.state.selectedPeriod == 'free'?
                             screenProps.lang.subscriptionScreen.freeNoteMessage
                             :
-                            screenProps.lang.subscriptionScreen.iosNote.replace('$price', this.state.selectedPlanPrice)
+                            screenProps.lang.subscriptionScreen.iosNote.replace('$price', this.state.selectedPlanPrice )
                           }                       
                         </Text>
+                    </Text>
+                    <Text  style={{textAlign: 'center', fontWeight:'bold', marginTop:10}}>
+                      <Text style={{color:'gray'}} onPress={ async () => { this._handleSubscriptionType(this.state.selectedPlan) }}> Terminos de Uso </Text>|  
+                      <Text style={{color:'gray'}} onPress={ async () => { this._handleSubscriptionType(this.state.selectedPlan) }}> Politicas de Privavicad </Text>
                     </Text>
                   </ScrollView>
 

@@ -26,8 +26,8 @@ export const Lang = {
             planSelectBtnText: 'Seleccione este plan',
             freeText: 'GRATIS',
             freeDescription: 'Podrás ver, pero no obtener ni consumir ofertas.',
-            freeNoteMessage: "Mientras tengas este plan no habra costos de uso, sin embargo deberá obtener un plan si desea obtener y consumir ofertas.",
-            iosNote: "Cancele la suscripción en cualquier momento. La suscripción no se renovará automáticamente al final del período actual. El pago se cargará a la cuenta de iTunes. Cualquier porción no utilizada del período de prueba gratuito, si se ofrece, se perderá cuando compre una suscripción.",            
+            freeNoteMessage: "Puedes utilizar Savings Zone gratuitamente ('Test Drive') y no habra costos de uso, sin embargo deberá obtener un plan si desea obtener y consumir ofertas.",
+            iosNote: "El pago se cargará a la cuenta de iTunes en la confirmación de la compra.  Las suscripciones se renovarán automáticamente a menos que se cancelen dentro de las 24 horas antes del final del período actual. Las suscripciones pueden ser administradas por el usuario y la renovación automática puede desactivarse yendo a la configuración de la cuenta del usuario después de la compra. Puedes cancelar en cualquier momento con la configuración de tu cuenta de iTunes.  Cualquier porción no utilizada de un período de prueba gratuito, si se ofrece, se perderá cuando el usuario compre una suscripción a esa publicación, en su caso.",            
             subscribedAlreadyLink: "Recupere su Supcripcion Aquí",
             errorCancelledTitle:'Payment was cancelled',
             errorCancelledMessage:'An error is encountered with the order process, You are not going to be charged for this trasaction.',
@@ -113,7 +113,7 @@ export const Lang = {
             freeText: 'FREE',
             freeDescription: 'You can see, but not obtain or consume offers.',
             freeNoteMessage: "While you have this plan there will be no cost of use, however you must get a plan if you want to get and consume offers.",
-            iosNote: "Cancel subscription any time. Subscription automatically renews unless auto-renew is turned off at least 24-hours before the end of the current period by going to your iOS Account Settings after purchase. Payment will be charged to iTunes Account. Any unused portion of free trial period, if offered, will be forfeited when you purchase a subscription.",
+            iosNote: "Payment will be charged to iTunes Account at confirmation of purchase.  Subscriptions will automatically renew unless canceled within 24-hours before the end of the current period. Subscriptions may be managed by the user and auto-renewal may be turned off by going to the user's Account Settings after purchase. You can cancel anytime with your iTunes account settings.  Any unused portion of a free trial period, if offered, will be forfeited when the user purchases a subscription to that publication, where applicable.",
             subscribedAlreadyLink: "Recover a Subscription Here!"
         },        
         offerScreen:{            
