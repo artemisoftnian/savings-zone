@@ -230,14 +230,15 @@ class screenDev extends React.Component {
 
       <ScrollView style={[styles.mainView,{backgroundColor:'#fff'}]}  behavior="padding" enabled>
           
-          <View enabled style={[styles.headBox, { flex:1, justifyContent: 'center', alignItems: 'center', padding:0 }]}>
-            <ImageBackground source={require('../../assets/images/wallpaper.png')} style={{width: '100%', height: '100%'}}>
-              <View enabled style={[{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20 }]}>
-                
+          <View enabled style={[styles.headBox, { flex:1, justifyContent: 'center', alignItems: 'center', padding:0, backgroundColor:'#4e2e59' }]}>
+           
+              <View enabled style={[{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20 }]}>                
                 <Text style={[styles.areaTitle,{color:'#fff'}]} >{ screenProps.lang.subscriptionScreen.title }</Text>
-                <Text style={{color:'#fff'}} >esta te permite obtener y canjear ofertasafada d a dfafda f fd afafdas a dfa df afd af asd</Text>
+                <Text style={{color:'#fff'}} >
+                  Todas las subscripciones te permiten Obtener y Canjear ofertas durante el periodo seleccionado.
+                </Text>
               </View>
-            </ImageBackground> 
+            
           </View>
 
           <View enabled style={{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20  }}>
@@ -280,16 +281,20 @@ class screenDev extends React.Component {
                     Stay on TestDrive (Only View Offers)
                   </Text>
 
-                  <Text style={{marginTop:10}} >                      
-                      <Text  style={{textAlign: 'center', fontWeight:'bold'}}>{screenProps.lang.subscriptionScreen.noteTitle}</Text>
-                      <Text>
-                        {this.state.selectedPeriod == 'free'?
-                          screenProps.lang.subscriptionScreen.freeNoteMessage
-                          :
-                          screenProps.lang.subscriptionScreen.iosNote.replace('$price', this.state.selectedPlanPrice)
-                        }                       
-                      </Text>
-                  </Text>
+
+
+                  <ScrollView>
+                    <Text style={{marginTop:10}} >                      
+                        <Text  style={{textAlign: 'center', fontWeight:'bold'}}>{screenProps.lang.subscriptionScreen.noteTitle}</Text>
+                        <Text>
+                          {this.state.selectedPeriod == 'free'?
+                            screenProps.lang.subscriptionScreen.freeNoteMessage
+                            :
+                            screenProps.lang.subscriptionScreen.iosNote.replace('$price', this.state.selectedPlanPrice)
+                          }                       
+                        </Text>
+                    </Text>
+                  </ScrollView>
 
               </View>
           </View>
