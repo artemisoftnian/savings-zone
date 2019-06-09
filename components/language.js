@@ -24,7 +24,7 @@ export const Lang = {
             noteTitle: "NOTA IMPORTANTE:",
             noteMessage: "Los planes se renuevan automáticamente al final del período del plan aplicable, al final de ese período se le cobrará la tarifa estándar de $price hasta que cancele.",
             planSelectBtnText: 'Seleccione este plan',
-            freeText: 'GRATIS',
+            freeText: 'Continuar Gratis (Solo Ver Ofertas)',
             freeDescription: 'Podrás ver, pero no obtener ni consumir ofertas.',
             freeNoteMessage: "Puedes utilizar Savings Zone gratuitamente ('Test Drive') y no habra costos de uso, sin embargo deberá obtener un plan si desea obtener y consumir ofertas.",
             iosNote: "El pago se cargará a la cuenta de iTunes en la confirmación de la compra.  Las suscripciones se renovarán automáticamente a menos que se cancelen dentro de las 24 horas antes del final del período actual. Las suscripciones pueden ser administradas por el usuario y la renovación automática puede desactivarse yendo a la configuración de la cuenta del usuario después de la compra. Puedes cancelar en cualquier momento con la configuración de tu cuenta de iTunes.  Cualquier porción no utilizada de un período de prueba gratuito, si se ofrece, se perderá cuando el usuario compre una suscripción a esa publicación, en su caso.",            
@@ -68,14 +68,20 @@ export const Lang = {
         myAccount:{
             optionList:'es',
             shareMessage: 'Savings Zone: Subscribete a la nueva manera de ahorar en Puerto Rico',
-            shareTitle: 'Ya supiste sobre Savings Zone?',
-            shareUrl: 'http://www.savingszonepr.com',
+            shareTitle: 'Ya supiste sobre Savings Zone?',            
             shareDialogAndroidOnlyTitle: 'Comparte la dicha de Ahorrar!',
+            privacyPolicyText: 'Politicas de Privacidad',
+            termsConditionsText: 'Terminos y Condiciones',
+            manageSuscriptionText: 'Maneja tus subscripciónes',
+            restoreText: 'Restaurar Compra',
+
+            shareUrl: 'http://www.savingszonepr.com',
+            iosManageSusbsriptionUrl: 'itmss://finance-app.itunes.apple.com/account/subscriptions',
+            androidManageSusbsriptionUrl: 'https://play.google.com/store/account/subscriptions',
             privacyPolicyUrl: 'http://www.savingszonepr.com/politicas-de-privacidad',
             termsConditionsUrl: 'http://www.savingszonepr.com/terminos-y-condiciones',
             helpUrl: 'http://www.savingszonepr.com/preguntas-frecuentes',
-            privatePolicyText: 'Politicas de Privacidad'
-            
+
         },
         myOffers:{
             emptyListMessage: "No tienes ninguna oferta en este momento.",
@@ -155,7 +161,7 @@ export const Lang = {
             shareDialogAndroidOnlyTitle: 'Comparte la dicha de Ahorrar!',
             privacyPolicyUrl: 'http://www.savingszonepr.com/privacy-policy',
             termsConditionsUrl: 'http://www.savingszonepr.com/terms-and-conditions',
-            helpUrl: 'http://www.savingszonepr.com/frequent-ask-questions'
+            helpUrl: 'http://www.savingszonepr.com/frequent-ask-questions',
         },
         myOffers:{
             emptyListMessage: "You don't have any offers right now."

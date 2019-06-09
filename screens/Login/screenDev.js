@@ -12,7 +12,7 @@ import { updateSubscription } from './reducer';
 
 const itemSubs = Platform.select({
   ios: [
-    'savings.zone.sub.year', 'savings.zone.sub.monthly', 'savings.zone.sub.sixmonths'
+    'com.savings.zone.sub.year.ar', 'com.savings.zone.sub.monthly.ar', 'com.savings.zone.sub.sixmonths.ar'
   ],
   android: [
     'com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths'
@@ -212,6 +212,10 @@ class screenDev extends React.Component {
     })
   }
 
+  _openUrl = (url)=> {
+    Linking.openURL(url).catch((err) => console.error('An error occurred', err));
+  }
+
   render() {
 
     if (this.state.isLoading) {
@@ -228,7 +232,7 @@ class screenDev extends React.Component {
 
     return (
 
-      <ScrollView style={[styles.mainView,{backgroundColor:'#fff'}]}  behavior="padding" enabled>
+      <ScrollView style={[styles.mainView,{backgroundColor:'#efeff4'}]}  behavior="padding" enabled>
           
           <View enabled style={[styles.headBox, { flex:1, justifyContent: 'center', alignItems: 'center', padding:0, backgroundColor:'#4e2e59' }]}>
            
@@ -243,7 +247,7 @@ class screenDev extends React.Component {
 
           <View enabled style={{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20  }}>
 
-              <View style={{backgroundColor:'#fff', maxWidth:400}}>
+              <View style={{backgroundColor:'#efeff4', maxWidth:400}}>
                       
                       {
                           this.state.subscriptions.map((product, i) => {
@@ -272,30 +276,42 @@ class screenDev extends React.Component {
                     <Text>{screenProps.lang.subscriptionScreen.planSelectBtnText}</Text> 
                   </Button>
 
-                  <Text style={{color: 'purple', fontWeight:'bold', textAlign:'center', marginTop:20}}
+                  <Text style={{color: 'gray', fontWeight:'bold', textAlign:'center', marginTop:20}}
                     onPress={ async () => {
                       await this.setState({ selectedPlan: 'free', selectedPlanPrice: 'Free', selectedPlanCode: 'free', selectedPeriod: 'free' })
                       this._handleSubscriptionType(this.state.selectedPlan);
                     }}  
                   >
-                    Test Drive (Only View Offers)
+                    {this.props.screenProps.lang.subscriptionScreen.freeText}
                   </Text>
 
-                  <ScrollView>
-                    <Text style={{marginTop:10, textAlign: 'center'}} >                      
-                        <Text  style={{textAlign: 'center', fontWeight:'bold'}}>{/*screenProps.lang.subscriptionScreen.noteTitle*/}</Text>
-                        <Text style={{ textAlign:'center' }}>
-                          {this.state.selectedPeriod == 'free'?
+                  <ScrollView style={{}}>
+
+                    <Text style={{marginTop:10}} >                      
+                        
+                        <Text style={{ color: '#4F4F4F', fontSize:11 }}>
+                          
+                          {/*this.state.selectedPeriod == 'free'?
                             screenProps.lang.subscriptionScreen.freeNoteMessage
                             :
                             screenProps.lang.subscriptionScreen.iosNote.replace('$price', this.state.selectedPlanPrice )
-                          }                       
+                          */} 
+
+                          {screenProps.lang.subscriptionScreen.iosNote.replace('$price', this.state.selectedPlanPrice )}                      
                         </Text>
+
                     </Text>
-                    <Text  style={{textAlign: 'center', fontWeight:'bold', marginTop:10}}>
-                      <Text style={{color:'gray'}} onPress={ async () => { this._handleSubscriptionType(this.state.selectedPlan) }}> Terminos de Uso </Text>|  
-                      <Text style={{color:'gray'}} onPress={ async () => { this._handleSubscriptionType(this.state.selectedPlan) }}> Politicas de Privavicad </Text>
+
+                    <Text style={styles.termsStyle} 
+                          onPress={ async ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.termsConditionsUrl) } }>
+                        {this.props.screenProps.lang.myAccount.termsConditionsText}
                     </Text>
+
+                    <Text style={styles.termsStyle}
+                          onPress={ async ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.privacyPolicyUrl) } }> 
+                      {this.props.screenProps.lang.myAccount.privacyPolicyText} 
+                    </Text>
+
                   </ScrollView>
 
               </View>
@@ -313,6 +329,15 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, { updateSubscription } )(screenDev);
 
 const styles = StyleSheet.create({
+  termsStyle:{
+    textAlign: 'center', 
+    width:'100%', 
+    color:'#4F4F4F', 
+    padding:3, 
+    fontSize:12,
+    marginTop:5,
+    marginBottom:5
+  },
   headBox:{
     backgroundColor:'purple',
     color:'#fff',

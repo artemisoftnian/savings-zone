@@ -156,8 +156,8 @@ class UserProfileScreen extends React.Component {
       );
     }
 
-    const iosSubs = "https://apps.apple.com/account/subscriptions"; //itms-apps://apps.apple.com/account/subscriptions
-    const androidSubs = "https://play.google.com/store/account/subscriptions"; 
+    const iosSubs = this.props.screenProps.lang.myAccount.iosManageSusbsriptionUrl; 
+    const androidSubs = this.props.screenProps.lang.myAccount.androidManageSusbsriptionUrl;
 
     const { navigate } = this.props.navigation;
 
