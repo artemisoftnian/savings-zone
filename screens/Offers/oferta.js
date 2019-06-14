@@ -45,6 +45,14 @@ class Oferta extends React.Component {
     headerTitleStyle : {width : '90%', textAlign: 'center'} ,  
     headerRight: (
         [
+          global.testing == true?
+          <Button transparent
+            title="Go back"
+            testID = "backBtn"
+            onPress={() => navigation.goBack()}
+          ><Text> </Text>
+          </Button>
+        : null , 
           <TouchableHighlight style={{backgroundColor:'transparent', height:35, width:35,  marginRight:20, padding:4, borderRadius:100}} 
             key="shareBtn" onPress={navigation.getParam('shareFunction')} > 
               <Icon name="md-share" type="Ionicons" style={[{ color:'#00be50'}]} />

@@ -34,12 +34,14 @@ export default class MainWrapper extends React.Component {
         <Footer> 
           <FooterTab  style={{backgroundColor:"#4e2e59"}}> 
             <Button vertical 
+              testID="toOffers"
               onPress={ () => this.props.nav.navigate('Offers') }
             >
               <Icon name="md-home" type="Ionicons" style={styles.iconColor} /> 
               <Text adjustsFontSizeToFit numberOfLines={1} style={styles.iconColor}>{this.props.lang.main.homeIconText}</Text>
             </Button>
             <Button vertical
+              testID="toMap"
               onPress={ () => this.props.nav.navigate('Map') }
             >
               <Icon name="md-map" style={styles.iconColor}/>
@@ -53,7 +55,8 @@ export default class MainWrapper extends React.Component {
               <Text>offers</Text>
             </Button>
             */}            
-            <Button vertical 
+            <Button vertical
+              testID="toProfile"
               onPress={ () => this.props.nav.navigate('UserProfile') }
             >
               <Icon name="md-person" style={styles.iconColor}/>

@@ -120,6 +120,7 @@ class RegisterScreen extends React.Component {
 
     return (
       <View
+        testID="registerView"
         style={{ backgroundColor: '#fff', flex: 1, borderRadius: 10  }}>
         <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: 'bold' }}> { screenProps.lang.register.welcomeMessage }  </Text>
         <Text style={{ textAlign: 'center' }}> { screenProps.lang.register.signUpMessage } </Text> 
@@ -136,15 +137,16 @@ class RegisterScreen extends React.Component {
                             <Input placeholder={ screenProps.lang.register.emailPH } autoCapitalize='none' autoComplete='email' keyboardType='email-address'  
                               onChangeText={(text) => this.validateEmail(text)} 
                               value={this.state.email}
+                              testID="emailField"
                             />
-                            { this.state.validEmail ? <Icon name='checkmark-circle' /> : null }
-                            
+                            { this.state.validEmail ? <Icon name='checkmark-circle' /> : null }                            
                           </Item>  
                       
                           <Item>
                             <Icon name='unlock' />
                             <Input placeholder={ screenProps.lang.register.passwordPH } secureTextEntry={true} 
                               onChangeText={text =>  this.setState({ password: text, errormessage: '' }) }
+                              testID="passwordField"
                             />                          
                           </Item>
 
@@ -156,18 +158,19 @@ class RegisterScreen extends React.Component {
                             <Input placeholder={ screenProps.lang.register.verifyPasswordPH } secureTextEntry={true}
                               onChangeText={(text) => this.validatePassword(text)}
                               value={this.state.passwordCheck}
+                              testID="passwordCheckField"
                             />
                             <Icon name={ this.state.passwordMatch ? 'checkmark-circle' : 'close-circle' } />
                           </Item>                        
                       
                           <Item>
                             <Icon name='person' />
-                            <Input placeholder={ screenProps.lang.register.namePH } autoComplete='name'  onChangeText={text =>  this.setState({ name: text , errormessage: ''}) } />                          
+                            <Input testID="nameField" placeholder={ screenProps.lang.register.namePH } autoComplete='name'  onChangeText={text =>  this.setState({ name: text , errormessage: ''}) } />                          
                           </Item>
                       
                           <Item> 
                               <Icon name='person' />                            
-                              <Input  placeholder={ screenProps.lang.register.lastNamePH } autoComplete='lastname' onChangeText={text =>  this.setState({ lastname: text , errormessage: ''}) } />
+                              <Input testID="lastNameField" placeholder={ screenProps.lang.register.lastNamePH } autoComplete='lastname' onChangeText={text =>  this.setState({ lastname: text , errormessage: ''}) } />
                           </Item>
                         </Content> 
 
@@ -183,6 +186,7 @@ class RegisterScreen extends React.Component {
         </Text>
 
         <Button
+          testID="registerBtn"
           block
           disabled={this.state.validating}
           style={{ margin: 20 }}

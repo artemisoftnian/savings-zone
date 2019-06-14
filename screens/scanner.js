@@ -50,7 +50,7 @@ class ScannerScreen extends React.Component {
     const { screenProps } = this.props;
 
     return (
-      <View style={styles.container}>
+      <View style={styles.container} testID="scanView">
         {this.state.hasCameraPermission === null ?
           <Text>Requesting for camera permission</Text> :
           this.state.hasCameraPermission === false ?

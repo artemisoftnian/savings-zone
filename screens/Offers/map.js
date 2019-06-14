@@ -33,11 +33,21 @@ class MapScreen extends React.Component {
 
   }
 
-  static navigationOptions = {
+  static navigationOptions = ({ navigation }) => ({
     title: 'Caza Ofertas',
     headerBackTitle : null,
-    headerTitleStyle : {width : '70%', textAlign: 'center'},    
-  };  
+    headerTitleStyle : {width : '70%', textAlign: 'center'},
+    headerRight:(
+      global.testing == true?
+        <Button transparent
+          title="Go back"
+          testID = "backBtn"
+          onPress={() => navigation.goBack()}
+        ><Text> </Text>
+        </Button>
+      : null  
+    ),        
+  });  
 
   componentDidMount() {
     this._getLocationAsync();

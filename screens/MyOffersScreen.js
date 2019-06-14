@@ -135,6 +135,7 @@ class MyOffersScreen extends React.Component {
       >       
 
       <FlatList 
+        testID="myOffersView"
         ListEmptyComponent={
 
             (this.props.user.user.user_meta.app_subscribed === "true")?
@@ -145,12 +146,13 @@ class MyOffersScreen extends React.Component {
             :
               <View style={[styles.emptyContainer,{margin:20}]}>
                 <Icon name='alert' style={{fontSize: 100, color: '#939393'}}/>
-                <View style={[{margin:20, borderWidth:1, borderColor:'purple', borderRadius:15, padding:5}]}>
-                  <Text style={{textAlign:'center'}} >{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.h2}</Text>
-                  <Button small full transparent warning 
-                    style={{marginTop:1}} 
+                <View style={[{margin:20, borderWidth:1, borderColor:'purple', borderRadius:15, padding:10}]}>
+                  <Text style={{textAlign:'center'}} >{'\u2022'}{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.h2}</Text>
+                  <Button small block dark 
+                    testID="gotoSubscription"
+                    style={{marginTop:10, marginBottom:5}} 
                     onPress = { ()=>{ this.props.navigation.navigate('Subscription') }  } >                           
-                    <Text style={{textDecorationLine:'underline', color:'purple'}}>{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.confirm}</Text>               
+                    <Text style={{}}>{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.confirm}</Text>               
                   </Button>
                 </View>
               </View>

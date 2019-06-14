@@ -1,3 +1,9 @@
 {
-  "expoServerPort": null
+  "expoServerPort": 19000,
+  "devToolsPort": 19002,
+  "packagerPort": 19001,
+  "packagerPid": 3224,
+  "expoServerNgrokUrl": "https://br-4xw.hackinc2000.final-exam.exp.direct",
+  "packagerNgrokUrl": "https://packager.br-4xw.hackinc2000.final-exam.exp.direct",
+  "ngrokPid": 21560
 }

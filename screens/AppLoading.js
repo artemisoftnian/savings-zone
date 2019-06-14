@@ -36,7 +36,7 @@ class AppLoading extends React.Component {
   // Render any loading content that you like here
   render() {
     return (
-      <View style={{flex:1}}>
+      <View style={{flex:1}} testID="appLoadingView">
         <ActivityIndicator style={{flex:1}} />
         <Text textAlign='center'> Loading... </Text>
         <StatusBar barStyle="default" />

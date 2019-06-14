@@ -93,11 +93,11 @@ class UserProfileScreen extends React.Component {
                         <Text  key="algo2" note>Subscrition Util:  {dates.end}</Text>]
                         :
                         [
-                        <Text  key="algo1" >{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.h2}</Text>, 
-                        <Button  key="algo2" small full transparent warning 
+                        <Text key="algo1" >{'\u2022'}{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.h2}</Text>, 
+                        <Button testID="gotoSubscription"  key="algo2" small block dark 
                           style={{marginTop:1}} 
                           onPress = { ()=>{ this.props.navigation.navigate('Subscription') }  } >                           
-                          <Text style={{textDecorationLine:'underline', color:'blue'}}>{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.confirm}</Text>               
+                          <Text style={{}}>{this.props.screenProps.lang.offerScreen.noSubscriptionMsg.confirm}</Text>               
                         </Button>
                         ]
                       }
@@ -200,6 +200,7 @@ class UserProfileScreen extends React.Component {
         renderItem={({ item }) => {
           return (
               <ListItem
+                testID={'#'+item.id.toString()}
                 roundAvatar
                 title={item.optTitle}
                 key={item.id} 

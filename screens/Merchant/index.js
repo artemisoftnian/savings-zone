@@ -119,8 +119,9 @@ class MerchantHomeScreen extends React.Component {
         showFooter={false}         
       > 
       <Text style={{margin:20, flex:1, textAlign:'center', fontSize:20}} >Merchant Tools</Text> 
-      <View style={{margin:20, flex:1}}>
+      <View testID="merchantView" style={{margin:20, flex:1}}>
           <Button 
+            testID="btnScan"          
             iconLeft full bordered rounded success 
             style={{margin:10, flex:1}}
             onPress={() => this.props.navigation.navigate('Scanner', {'destiny':'MerchantHome'} )}
@@ -128,7 +129,8 @@ class MerchantHomeScreen extends React.Component {
             <Icon name='md-qr-scanner' />
             <Text>Redeem Offers</Text>
           </Button>
-          <Button 
+          <Button
+            testID="btnStats"
             iconLeft full bordered rounded primary
             style={{margin:10, flex:1}} 
             onPress={ () => {} }
@@ -138,6 +140,7 @@ class MerchantHomeScreen extends React.Component {
           </Button>
 
           <Button 
+            testID="btnExit"
             iconLeft full bordered rounded warning
             style={{margin:10, flex:1}} 
             onPress={ ()=>{ this._handleLogOut() } }

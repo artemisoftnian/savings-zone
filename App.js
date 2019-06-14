@@ -46,6 +46,9 @@ global.wpSite = "https://sv.artemisoftnian.com";
 //Production
 //global.wpSite = "https://savingszonepr.com";
 
+//Set to true for Automation Tests purposes
+global.testing = false;
+
 
 //(node:81872) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 change listeners added. Use emitter.setMaxListeners() to increase limit
 global.offerEmitter = DeviceEventEmitter;
@@ -55,7 +58,7 @@ global.advert = Constants.manifest.extra.advertising;
 const store = ConfigureStore();
 
 const AppStack = createStackNavigator({ 
-    Offers: screenDev,//OffersScreen, 
+    Offers: OffersScreen, //screenDev,//
     Oferta: Oferta,   
     Scanner: ScannerScreen,
     MyOffers: MyOfferScreen,

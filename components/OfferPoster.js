@@ -70,7 +70,7 @@ export default class OfferPoster extends React.Component {
 
 
   render() { 
-    const { offer, offer: { post_meta, post_data }, _openOffer, _getDaysRemain, lang, _isLast, _isEven } = this.props;
+    const { offer, offer: { post_meta, post_data }, _openOffer, _getDaysRemain, lang, _isLast, _isEven, testID } = this.props;
     const daysRemain = _getDaysRemain(post_meta.offer_exp_date);
     const expired = this.expiredCheck(daysRemain);
 
@@ -82,7 +82,7 @@ export default class OfferPoster extends React.Component {
                 <CardItem style={ [styles.noPadding,{padding:10, marginTop:5}] } button onPress={() => _openOffer(offer) } > 
                     <Text numberOfLines={2} >{post_data.post_title}</Text> 
                 </CardItem>
-                <CardItem style={styles.offerPriceContainer} button onPress={() => _openOffer(offer, expired) } >  
+                <CardItem testID={testID} style={styles.offerPriceContainer} button onPress={() => _openOffer(offer, expired) } >  
                   <Left style={{ paddingLeft:0}} >
                     <Text adjustsFontSizeToFit numberOfLines={1} style={styles.offerPrice}>${post_meta.offer_price}</Text>  
                   </Left>

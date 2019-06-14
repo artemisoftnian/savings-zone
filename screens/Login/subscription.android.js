@@ -326,7 +326,7 @@ class SubscriptionScreen extends React.Component {
                     <Text>{screenProps.lang.subscriptionScreen.planSelectBtnText}</Text> 
                   </Button>
 
-                  <Button small full transparent warning 
+                  <Button small full warning 
                     style={{marginTop:20}} 
                     onPress = { () => { 
                       this.props.navigation.navigate('ManageSubscription')
@@ -335,13 +335,13 @@ class SubscriptionScreen extends React.Component {
                     <Text style={{textDecorationLine:'underline', color:'purple'}}>{screenProps.lang.subscriptionScreen.subscribedAlreadyLink}</Text>               
                   </Button>                   
 
-                  <Button small full transparent warning 
+                  <Button small full warning 
                     style={{marginTop:20}} 
                     onPress = { () => { 
                       Linking.openURL(this.props.screenProps.lang.myAccount.privacyPolicyUrl)
                       .catch((err) => console.error('An error occurred', err)) } 
                     } >
-                    <Text style={{textDecorationLine:'underline', color:'blue'}}>{screenProps.lang.myAccount.privatePolicyText}</Text>               
+                    <Text style={{}}>{screenProps.lang.myAccount.privatePolicyText}</Text>               
                   </Button> 
 
                   <Text style={{marginTop:30}} >                      

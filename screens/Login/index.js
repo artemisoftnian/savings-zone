@@ -22,8 +22,8 @@ class LoginScreen extends React.Component {
 		super(props);
 		this.state = {
       validating: false,
-      user:'',
-			password: ''
+      user: global.testing==true?'test@test.com':'' ,
+			password: global.testing==true?'test':'' ,
 		};
   }
 
@@ -71,7 +71,7 @@ class LoginScreen extends React.Component {
 
     return (      
 
-      <Container>
+      <Container testID="logInView">
         <ImageBackground source={bgSrc} style={{width: '100%', height: '100%'}}>
             <View style={styles.logoContainer}>
               <ImageBackground source={require('../../assets/logo-full.png')} style={styles.logo} />
@@ -89,7 +89,7 @@ class LoginScreen extends React.Component {
                 </Button>
 
 
-                <Item rounded  style={styles.inputContainer} >
+                <Item rounded  style={styles.inputContainer} accessible={global.testing==true?false:true} >
                   <Icon name='md-contact' style={{fontSize: 30, color: '#fff'}}/>
                   <Input 
                     onChangeText={text => this.setState({ user: text, errormessage: '' })}
@@ -97,10 +97,11 @@ class LoginScreen extends React.Component {
                     placeholderTextColor="#fff"
                     autoCapitalize = 'none'
                     style={{color:'#fff'}}
+                    testID="userField"
                     />
 
                 </Item>
-                <Item rounded style={styles.inputContainer}>
+                <Item rounded style={styles.inputContainer} accessible={global.testing==true?false:true} >
                   <Icon active name='md-lock' style={{fontSize: 30, color: '#fff'}}/>
                   <Input
                     secureTextEntry
@@ -108,10 +109,12 @@ class LoginScreen extends React.Component {
                     placeholder='Password'
                     placeholderTextColor="#fff" 
                     style={{color:'#fff'}}
+                    testID="passwordField"
                     />                
                 </Item>               
                               
-                <Button 
+                <Button
+                  testID="logInButton" 
                   block 
                   rounded
                   disabled={this.props.user.loading}
@@ -124,7 +127,15 @@ class LoginScreen extends React.Component {
 
                   }}                  
                 >
-                  { this.props.user.loading ? <ActivityIndicator style={{alignSelf: 'center'}} color="#fff" size="small"  /> : <Text style={{color:'#fff'}}>Login</Text> } 
+
+                  {
+                    global.testing==false?
+                      this.props.user.loading ? <ActivityIndicator style={{alignSelf: 'center'}} color="#fff" size="small"  /> : <Text style={{color:'#fff'}}>Login</Text>
+                    :
+                      <Text style={{color:'#fff'}}>Login</Text>
+                  }
+
+                {  } 
                   
                 </Button>
 

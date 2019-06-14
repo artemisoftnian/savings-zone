@@ -370,6 +370,7 @@ class Offers extends React.Component {
         lang={screenProps.lang}        
       > 
       <FlatList
+        testID="offersView"
         ListHeaderComponent={  
           <View>
             <View style={{flexDirection:"row"}}>
@@ -409,6 +410,7 @@ class Offers extends React.Component {
           return (                        
             <OfferPoster
               offer={item}
+              testID={"offer_"+index.toString()}
               _isLast = {getDataSourceFilter.length-1 == index}
               _isEven = {getDataSourceFilter.length%2 == 0}
               _handleAddToMyOffers={this._handleAddToMyOffers}

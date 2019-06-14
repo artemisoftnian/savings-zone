@@ -234,15 +234,13 @@ class screenDev extends React.Component {
 
       <ScrollView style={[styles.mainView,{backgroundColor:'#efeff4'}]}  behavior="padding" enabled>
           
-          <View enabled style={[styles.headBox, { flex:1, justifyContent: 'center', alignItems: 'center', padding:0, backgroundColor:'#4e2e59' }]}>
-           
+          <View enabled style={[styles.headBox, { flex:1, justifyContent: 'center', alignItems: 'center', padding:0, backgroundColor:'#4e2e59' }]}>           
               <View enabled style={[{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20 }]}>                
                 <Text style={[styles.areaTitle,{color:'#fff'}]} >{ screenProps.lang.subscriptionScreen.title }</Text>
                 <Text style={{color:'#fff'}} >
-                  Todas las subscripciones te permiten Obtener y Canjear ofertas durante el periodo seleccionado.
+                  {'\u2022'} {screenProps.lang.subscriptionScreen.whatYouGetText}
                 </Text>
-              </View>
-            
+              </View>            
           </View>
 
           <View enabled style={{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20  }}>

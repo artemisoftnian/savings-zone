@@ -20,8 +20,9 @@ export const Lang = {
             lastNamePH: "APELLIDO"
         },
         subscriptionScreen:{
-            title: "Elija un plan de suscripción",
+            title: "Suscripciones Savings Zone",
             noteTitle: "NOTA IMPORTANTE:",
+            whatYouGetText: "Todas las subscripciones te permiten Obtener y Canjear ofertas durante el periodo seleccionado.",
             noteMessage: "Los planes se renuevan automáticamente al final del período del plan aplicable, al final de ese período se le cobrará la tarifa estándar de $price hasta que cancele.",
             planSelectBtnText: 'Seleccione este plan',
             freeText: 'Continuar Gratis (Solo Ver Ofertas)',
@@ -112,7 +113,7 @@ export const Lang = {
             lastNamePH: "LAST NAME"
         }, 
         subscriptionScreen:{
-            title: "Choose a subscription plan",
+            title: "Savings Zone Subscriptions",
             noteTitle: "IMPORTANT:",
             noteMessage: "Plans automatically renew at the end of the applicable plan period, at the end of that period you will be charged the standard fee of $price until you cancel.",
             planSelectBtnText: 'Select This Plan',
