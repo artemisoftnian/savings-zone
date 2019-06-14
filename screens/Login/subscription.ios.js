@@ -1,34 +1,22 @@
 import * as React from 'react';
+import { ActivityIndicator, View,  Image,  StyleSheet, Alert,  TouchableOpacity, Linking, ScrollView } from 'react-native';
 
-import { ActivityIndicator, View,  Image,  Platform, StyleSheet, Alert,  
-         TouchableOpacity, Linking, ScrollView, ImageBackground} from 'react-native';
+import {  Text,  Button, Body, Left,  Right,  ListItem, Radio } from 'native-base';
 
-import { Text,  Button, Body, Left,  Right,  ListItem, Radio, Container } from 'native-base';
 
-import {AndroidData} from '../../components/constants.js';
+//import { NativeModules } from 'react-native'
+//const { InAppUtils } = NativeModules
+
+import * as RNIap from 'react-native-iap';
+
+import {iosData} from '../../components/constants.js';
 
 import { connect } from 'react-redux';
 import { updateSubscription } from './reducer';
 
-const itemSubs = Platform.select({
-  ios: [
-    'com.savings.zone.sub.year.ar', 'com.savings.zone.sub.monthly.ar', 'com.savings.zone.sub.sixmonths.ar'
-  ],
-  android: [
-    'com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths'
-  ],
-});
+const itemSubs = ['savings.zone.sub.monthly.ar', 'com.savings.zone.sub.sixmonths.ar', 'com.savings.zone.sub.year.ar'];
 
-const testItems = ['android.test.canceled', 'android.test.refunded', 'android.test.item_unavailable', 'android.test.purchased' ];
-
-const platformOs = Platform.select({
-  ios: 'ios',
-  android: 'android'
-});
-
-//const itemSubs = ['com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths'];
-
-class screenDev extends React.Component {
+class SubscriptionScreen extends React.Component {
 
   constructor(props) {
     super(props);
@@ -50,47 +38,35 @@ class screenDev extends React.Component {
         source={require('../../assets/logo-text.png')}
       />
     ),
+    headerRight:(
+      <Button transparent
+      title="Go back"
+      testID = "backBtn"
+      onPress={() => navigation.goBack()}
+    ><Text> </Text></Button>   
+    ),
     headerTitleStyle: { flex: 1, textAlign: 'center' },
     title: 'Step 2: Select a plan',
-    
-    headerRight: (
-      <TouchableOpacity
-        //icon={{ name: 'refresh' }}
-        style={{ marginRight: 20 }}
-        //onPress={ navigation.getParam('refreshClients')} 
-        >
-        {/*<Icon name="refresh" /> */}
-      </TouchableOpacity>
-    ),
     
  });
 
   async componentWillMount() {
-      this.setState({ subscriptions: AndroidData })
+      this.setState({ subscriptions: iosData })
   } 
 
   async componentDidMount(){
 
     try {
-      const subscriptions = await RNIap.getSubscriptions(itemSubs, (error, products) => {
-          console.log(products);
-          //update store here.
-          this.setState({subcriptions: products})
-      });
-    } catch (error) {
-      // debug in device with the help of Alert component
-      console.log(error);
+      const products = await RNIap.getSubscriptions(itemSubs);
+      console.log(products);
+      this.setState({ subscriptions: products });
+    } catch(err) {
+      console.warn(err); // standardized err.code and err.message available
     } finally {
       console.log("acabo de traer los productos")
-    }   
-     
+    } 
+
   } 
-
-
-  componentWillUnmount() {
-    RNIap.endConnection();
-  }
-
 
   getSubscription = async ( selectedProduct ) =>{
     console.log('seleccionaaaddooo', selectedProduct);
@@ -129,7 +105,7 @@ class screenDev extends React.Component {
       } 
     }
     else{
-      var detail = await this.props.updateSubscription(this.props.user.user.user_id, 'free', platformOs);
+      var detail = await this.props.updateSubscription(this.props.user.user.user_id, 'free', "ios");
       console.log("yyyyy retornooooo...",detail);
 
       if(detail){
@@ -144,7 +120,7 @@ class screenDev extends React.Component {
   }
 
   _gotit = async (response) => {
-    var detail = await this.props.updateSubscription(this.props.user.user.user_id, response, platformOs);
+    var detail = await this.props.updateSubscription(this.props.user.user.user_id, response, "ios");
     //then if all went good!
     if(detail){
       //unlock store here.
@@ -179,27 +155,28 @@ class screenDev extends React.Component {
 
 
   _handleRestorePurchases = async (productId) => {
-    /*
-      InAppUtils.restorePurchases((error, response) => {
-        if(error) {
-          Alert.alert('itunes Error', 'Could not connect to itunes store.');
-        } else {
-          Alert.alert('Restore Successful', 'Successfully restores all your purchases.');
-          
-          if (response.length === 0) {
-            Alert.alert('No Purchases', "We didn't find any purchases to restore.");
-            return;
-          }
-    
-          response.forEach((purchase) => {
-            if (purchase.productIdentifier === productId) {
-              // Handle purchased product.
-            }
-          });
+    try {
+      const purchases = await RNIap.getAvailablePurchases();
+      let restoredTitles = '';
+      let coins = CoinStore.getCount();
+      purchases.forEach(purchase => {
+        if (purchase.productId == 'com.example.premium') {
+          this.setState({ premium: true });
+          restoredTitles += 'Premium Version';
+        } else if (purchase.productId == 'com.example.no_ads') {
+          this.setState({ ads: false });
+          restoredTitles += restoredTitles.length > 0 ? 'No Ads' : ', No Ads';
+        } else if (purchase.productId == 'com.example.coins100') {
+          //CoinStore.addCoins(100);
+          //await RNIap.consumePurchase(purchase.purchaseToken);
         }
-    });    
-  */
-  }  
+      })
+      Alert.alert('Restore Successful', 'You successfully restored the following purchases: ' + restoredTitles);
+    } catch(err) {
+      console.warn(err); // standardized err.code and err.message available
+      Alert.alert(err.message);
+    }
+  }    
 
 
   onSelectedItem = (product)=>{
@@ -231,7 +208,6 @@ class screenDev extends React.Component {
     const {screenProps} = this.props;
 
     return (
-
       <ScrollView style={[styles.mainView,{backgroundColor:'#efeff4'}]}  behavior="padding" enabled>
           
           <View enabled style={[styles.headBox, { flex:1, justifyContent: 'center', alignItems: 'center', padding:0, backgroundColor:'#4e2e59' }]}>
@@ -256,10 +232,13 @@ class screenDev extends React.Component {
                                   onPress={() => this.onSelectedItem(product) }
                                   selected={ this.state.selectedPlan == product.productId } 
                                   key={i.toString()}   
-                                  style={[styles.listItem,  this.state.selectedPlan == product.productId ? styles.selectedItem : {}]}                 
+                                  style={[styles.listItem,  this.state.selectedPlan == product.productId ? styles.selectedItem : {}]}  
+                                  testID={"test_"+i.toString()}               
                               >
                                 <Body style={{padding:0,margin:0}}>
-                                  <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.listItemPrice, this.state.selectedPlan == product.productId ? styles.selectedText : {}]}  >{product.priceText} / 6 Months</Text>                                  
+                                  <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.listItemPrice, this.state.selectedPlan == product.productId ? styles.selectedText : {}]}  >
+                                    {product.localizedPrice} / {product.subscriptionPeriodNumberIOS} {product.subscriptionPeriodUnitIOS}{product.subscriptionPeriodNumberIOS>1?"S":""}
+                                  </Text>                                  
                                 </Body>
                               </ListItem>
                             );
@@ -316,6 +295,7 @@ class screenDev extends React.Component {
 
               </View>
           </View>
+
       </ScrollView>
     );
   }
@@ -326,7 +306,7 @@ const mapStateToProps = state => {
   return { user };
 };
 
-export default connect(mapStateToProps, { updateSubscription } )(screenDev);
+export default connect(mapStateToProps, { updateSubscription } )(SubscriptionScreen);
 
 const styles = StyleSheet.create({
   termsStyle:{
