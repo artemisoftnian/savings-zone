@@ -47,6 +47,7 @@ class Oferta extends React.Component {
         [
           global.testing == true?
           <Button transparent
+            key="backBtn"
             title="Go back"
             testID = "backBtn"
             onPress={() => navigation.goBack()}

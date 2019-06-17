@@ -100,14 +100,20 @@ export default class App extends React.Component {
       loadingAssets: false, 
 			persistLoaded: false,
 			rejected: false
-    };   
+    }; 
     
-    OneSignal.init("d40ccaf4-8671-49c4-820e-a6d5e5a09d8c");
-      
-    OneSignal.addEventListener('received', this.onReceived);
-    OneSignal.addEventListener('opened', this.onOpened);
-    OneSignal.addEventListener('ids', this.onIds);
-    OneSignal.configure(); 
+    if(!global.testing){
+
+        OneSignal.init("d40ccaf4-8671-49c4-820e-a6d5e5a09d8c");
+        
+        OneSignal.addEventListener('received', this.onReceived);
+        OneSignal.addEventListener('opened', this.onOpened);
+        OneSignal.addEventListener('ids', this.onIds);
+        OneSignal.configure();
+        
+    }
+    
+
 
   }
 
