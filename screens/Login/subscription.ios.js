@@ -3,11 +3,7 @@ import { ActivityIndicator, View,  Image,  StyleSheet, Alert,  TouchableOpacity,
 
 import {  Text,  Button, Body, Left,  Right,  ListItem, Radio } from 'native-base';
 
-
-//import { NativeModules } from 'react-native'
-//const { InAppUtils } = NativeModules
-
-import * as RNIap from 'react-native-iap';
+import RNIap,  { PRoductPurchase, purchseUpdatedListener, purchseErrorListener } from 'react-native-iap';
 
 import {iosData} from '../../components/constants.js';
 
@@ -15,6 +11,7 @@ import { connect } from 'react-redux';
 import { updateSubscription } from './reducer';
 
 const itemSubs = ['savings.zone.sub.monthly.ar', 'com.savings.zone.sub.sixmonths.ar', 'com.savings.zone.sub.year.ar'];
+//const itemSubs = ['savings.zone.sub.monthly']; 
 
 class SubscriptionScreen extends React.Component {
 
@@ -26,7 +23,8 @@ class SubscriptionScreen extends React.Component {
       selectedPlan: 'free',
       selectedPlanPrice: 'Free',
       selectedPlanCode: 'free',
-      selectedPeriod: 'free'
+      selectedPeriod: 'free',
+      inProgress:false
     };
   }
 
@@ -75,6 +73,32 @@ class SubscriptionScreen extends React.Component {
     console.log('seleccionaaaddooo', selectedProduct);
 
     if(selectedProduct != 'free'){
+      this.setState({ inProgress: true });
+      try {
+        if(this.subscription) {
+          this.subscription.remove();
+        }
+        // Will return a purchase object with a receipt which can be used to validate on your server.
+        const purchase = await RNIap.buyProduct(selectedProduct);
+        console.log('purchase Info:', purchase);
+        this.setState({
+          receipt: purchase.transactionReceipt, // save the receipt if you need it, whether locally, or to your server.
+        });
+        this._gotit(purchase);
+      } catch(err) {
+        // standardized err.code and err.message available
+        console.warn(err.code, err.message);
+        this.subscription = RNIap.addAdditionalSuccessPurchaseListenerIOS(async (purchase) => {
+          this.setState({ receipt: purchase.transactionReceipt }, () => this.goToNext());
+          this.subscription.remove();
+        });
+      }finally{
+        this.setState({ inProgress: false });
+      }
+
+
+/*
+
       try {
 
         //First check if purchases can be made
@@ -106,6 +130,8 @@ class SubscriptionScreen extends React.Component {
       } finally {  
         console.log("Purchase Compleated")
       } 
+
+      */
     }
     else{
       var detail = await this.props.updateSubscription(this.props.user.user.user_id, 'free', "ios");
@@ -124,6 +150,8 @@ class SubscriptionScreen extends React.Component {
 
   _gotit = async (response) => {
     var detail = await this.props.updateSubscription(this.props.user.user.user_id, response, "ios");
+    console.log("EN DETALLE:", detail)
+
     //then if all went good!
     if(detail){
       //unlock store here.
@@ -159,20 +187,19 @@ class SubscriptionScreen extends React.Component {
 
   _handleRestorePurchases = async (productId) => {
     try {
+      this.setState({ inProgress: true });
       const purchases = await RNIap.getAvailablePurchases();
       let restoredTitles = '';
       let coins = CoinStore.getCount();
       purchases.forEach(purchase => {
-        if (purchase.productId == 'com.example.premium') {
-          this.setState({ premium: true });
-          restoredTitles += 'Premium Version';
-        } else if (purchase.productId == 'com.example.no_ads') {
-          this.setState({ ads: false });
-          restoredTitles += restoredTitles.length > 0 ? 'No Ads' : ', No Ads';
-        } else if (purchase.productId == 'com.example.coins100') {
-          //CoinStore.addCoins(100);
-          //await RNIap.consumePurchase(purchase.purchaseToken);
+
+        for (let i = 0; i < purchases.length; i++) {
+          if ( itemSubs.includes( purchases[i].productId) ) {
+            return true;
+          }
         }
+
+
       })
       Alert.alert('Restore Successful', 'You successfully restored the following purchases: ' + restoredTitles);
     } catch(err) {
@@ -214,11 +241,12 @@ class SubscriptionScreen extends React.Component {
       <ScrollView style={[styles.mainView,{backgroundColor:'#efeff4'}]}  behavior="padding" enabled>
           
           <View enabled style={[styles.headBox, { flex:1, justifyContent: 'center', alignItems: 'center', padding:0, backgroundColor:'#4e2e59' }]}>           
-              <View enabled style={[{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20 }]}>                
-                <Text style={[styles.areaTitle,{color:'#fff'}]} >{ screenProps.lang.subscriptionScreen.title }</Text>
+              <View enabled style={[{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20 }]}>   
+                {this.state.inProgress?<ActivityIndicator style={{flex:1}} />:null}               
+                <Text style={[styles.areaTitle,{color:'#fff'}]} >{ screenProps.lang.subscriptionScreen.title }</Text>                             
                 <Text style={{color:'#fff'}} >
-                  {'\u2022'} {screenProps.lang.subscriptionScreen.whatYouGetText}
-                </Text>
+                  {'\u2022'} {screenProps.lang.subscriptionScreen.whatYouGetText}                  
+                </Text>                
               </View>            
           </View>
 
