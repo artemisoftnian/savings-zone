@@ -168,6 +168,7 @@ class UserProfileScreen extends React.Component {
       {id:'4', optIcon:"md-fingerprint", optTitle: "Privacy Policy", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.privacyPolicyUrl) } },
       {id:'5', optIcon:"md-clipboard", optTitle: "Terms and Conditions", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.termsConditionsUrl) } },
       {id:'7', optIcon:"md-settings", optTitle:"Manage Subscription", action:()=>{this._openUrl(Platform.OS === 'ios' ? iosSubs : androidSubs) } }, 
+      {id:'8', optIcon:"md-pulse", optTitle:"Restore Subscription", action:()=>{this._openUrl(Platform.OS === 'ios' ? iosSubs : androidSubs) } },
       {id:'6', optIcon:"md-log-out", optTitle: "Log Out", action: ()=>{ this._handleLogOut() } },
     ]; 
      
@@ -177,7 +178,8 @@ class UserProfileScreen extends React.Component {
       {id:'3', optIcon:"md-help-circle", optTitle: "Ayuda", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.helpUrl)  } },
       {id:'4', optIcon:"md-finger-print", optTitle: "Políticas de Privacidad", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.privacyPolicyUrl) } },
       {id:'5', optIcon:"md-clipboard", optTitle: "Terminos y Condiciones", action: ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.termsConditionsUrl) } },
-      {id:'7', optIcon:"md-settings", optTitle:"Manage Subscription", action:()=>{this._openUrl(Platform.OS === 'ios' ? iosSubs : androidSubs) } }, 
+      {id:'7', optIcon:"md-settings", optTitle:"Administrar Suscripción", action:()=>{this._openUrl(Platform.OS === 'ios' ? iosSubs : androidSubs) } }, 
+      {id:'8', optIcon:"md-pulse", optTitle:"Restaurar Suscripción", action:()=>{this._openUrl(Platform.OS === 'ios' ? iosSubs : androidSubs) } },
       {id:'6', optIcon:"md-log-out", optTitle: "Cerrar Sesión", action: ()=>{ this._handleLogOut() } },
     ];         
 

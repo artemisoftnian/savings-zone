@@ -28,6 +28,7 @@ import AppLoadingScreen from './screens/AppLoading';
 import MyOfferScreen from './screens/MyOffersScreen';
 import ScannerScreen from './screens/scanner';
 import MerchantHomeScreen from './screens/Merchant';
+import MerchantStats from './screens/Merchant/stats';
 
 import OneSignal from 'react-native-onesignal';
 
@@ -75,6 +76,7 @@ const AuthStack = createStackNavigator({
 
 const MerchantStack = createStackNavigator({
     MerchantHome: MerchantHomeScreen,
+    MerchantStats: MerchantStats,
     Scanner: ScannerScreen
 })
 

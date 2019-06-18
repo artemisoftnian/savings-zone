@@ -14,7 +14,7 @@ import { Text,  Button,  Icon } from 'native-base';
 import MainWrapper from '../../components/MainWrapper';  
 
 
-class MerchantHomeScreen extends React.Component {
+class MerchantStats extends React.Component {
 
   constructor(props) {
     super(props);
@@ -133,7 +133,7 @@ class MerchantHomeScreen extends React.Component {
             testID="btnStats"
             iconLeft full bordered rounded primary
             style={{margin:10, flex:1}} 
-            onPress={() => this.props.navigation.navigate('MerchantStats')}
+            onPress={ () => {} }
           >
             <Icon name='md-stats' />
             <Text>Stats</Text>
