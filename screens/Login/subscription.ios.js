@@ -10,8 +10,10 @@ import {iosData} from '../../components/constants.js';
 import { connect } from 'react-redux';
 import { updateSubscription } from './reducer';
 
-const itemSubs = ['savings.zone.sub.year', 'savings.zone.sub.sixmonths', 'savings.zone.sub.monthly' ];
-//const itemSubs = ['savings.zone.sub.monthly']; 
+import helpers from '../../components/helpers';
+
+const itemSubs = helpers.itemSubs.ios;
+
 
 class SubscriptionScreen extends React.Component {
 
@@ -24,7 +26,8 @@ class SubscriptionScreen extends React.Component {
       selectedPlanPrice: 'Free',
       selectedPlanCode: 'free',
       selectedPeriod: 'free',
-      inProgress:false
+      inProgress:false,
+      loadingAssets:false
     };
   }
 
@@ -186,26 +189,8 @@ class SubscriptionScreen extends React.Component {
 
 
   _handleRestorePurchases = async (productId) => {
-    try {
-      this.setState({ inProgress: true });
-      const purchases = await RNIap.getAvailablePurchases();
-      let restoredTitles = '';
-      let coins = CoinStore.getCount();
-      purchases.forEach(purchase => {
-
-        for (let i = 0; i < purchases.length; i++) {
-          if ( itemSubs.includes( purchases[i].productId) ) {
-            return true;
-          }
-        }
-
-
-      })
-      Alert.alert('Restore Successful', 'You successfully restored the following purchases: ' + restoredTitles);
-    } catch(err) {
-      console.warn(err); // standardized err.code and err.message available
-      Alert.alert(err.message);
-    }
+      var test = helpers.restoreSubscription();
+      console.log(test);
   }    
 
 
@@ -253,26 +238,26 @@ class SubscriptionScreen extends React.Component {
           <View enabled style={{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20  }}>
 
               <View style={{backgroundColor:'#efeff4', maxWidth:400}}>
-                      
-                      {
-                          this.state.subscriptions.map((product, i) => {
-                            return (
-                              <ListItem
-                                  onPress={() => this.onSelectedItem(product) }
-                                  selected={ this.state.selectedPlan == product.productId } 
-                                  key={i.toString()}   
-                                  style={[styles.listItem,  this.state.selectedPlan == product.productId ? styles.selectedItem : {}]}  
-                                  testID={"test_"+i.toString()}               
-                              >
-                                <Body style={{padding:0,margin:0}}>
-                                  <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.listItemPrice, this.state.selectedPlan == product.productId ? styles.selectedText : {}]}  >
-                                    {product.localizedPrice} / {product.subscriptionPeriodNumberIOS} {product.subscriptionPeriodUnitIOS}{product.subscriptionPeriodNumberIOS>1?"S":""}
-                                  </Text>                                  
-                                </Body>
-                              </ListItem>
-                            );
-                          })
-                      }
+                  {this.state.loadingAssets?<ActivityIndicator style={{flex:1}} />:null}    
+                  {
+                      this.state.subscriptions.map((product, i) => {
+                        return (
+                          <ListItem
+                              onPress={() => this.onSelectedItem(product) }
+                              selected={ this.state.selectedPlan == product.productId } 
+                              key={i.toString()}   
+                              style={[styles.listItem,  this.state.selectedPlan == product.productId ? styles.selectedItem : {}]}  
+                              testID={"test_"+i.toString()}               
+                          >
+                            <Body style={{padding:0,margin:0}}>
+                              <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.listItemPrice, this.state.selectedPlan == product.productId ? styles.selectedText : {}]}  >
+                                {product.localizedPrice} / {product.subscriptionPeriodNumberIOS} {product.subscriptionPeriodUnitIOS}{product.subscriptionPeriodNumberIOS>1?"S":""}
+                              </Text>                                  
+                            </Body>
+                          </ListItem>
+                        );
+                      })
+                  }
 
                   <Button 
                     block

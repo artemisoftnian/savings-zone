@@ -221,7 +221,6 @@ export const AndroidDataNew= [
     "type": "Do not use this. It returned sub only before",
   },
 ]
-
 export const gpbErrors = {
   'PAYMENT_OK':'Suecess',
   'PAYMENT_CANCELLED':'Purchase or subscribe failed with error: 1',
@@ -229,7 +228,3 @@ export const gpbErrors = {
   'PAYMENT_BUG':'Purchase or subscribe failed with error: 102',
   'ITEM_UNAVAILABLE':'Purchase or subscribe failed with error: 4'
 }
-
-
-
-

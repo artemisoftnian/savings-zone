@@ -8,11 +8,12 @@ import {AndroidDataNew, gpbErrors} from '../../components/constants.js';
 import { connect } from 'react-redux';
 import { updateSubscription } from './reducer';
 
-//import InAppBilling from "react-native-billing";
+import helpers from '../../components/helpers';
+
 import * as RNIap from 'react-native-iap';
 
-const testItems = ['android.test.canceled', 'android.test.refunded', 'android.test.item_unavailable', 'android.test.purchased' ];
-const itemSubs = ['com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths'];
+const testItems = helpers.itemSubs.androidTest;
+const itemSubs = helpers.itemSubs.android;
 
 class SubscriptionScreen extends React.Component {
 
@@ -26,6 +27,8 @@ class SubscriptionScreen extends React.Component {
       selectedPlanCode: 'free',
       selectedPeriod: 'free',
       storeTest: false,
+      inProgress:false,
+      loadingAssets:false
     };
   }
 
@@ -82,12 +85,13 @@ class SubscriptionScreen extends React.Component {
       //await RNIap.initConnection()
       var subscriptions = null;
 
+      this.setState({loadingAssets:true})
       if(!this.state.storeTest)
         subscriptions = await RNIap.getSubscriptions(itemSubs);
       else 
         subscriptions =  await RNIap.getProducts(testItems);
 
-      await this.setState({subscriptions});
+      await this.setState({subscriptions, loadingAssets:false});
 
     } catch (error) {
       // debug in device with the help of Alert component
@@ -208,27 +212,7 @@ class SubscriptionScreen extends React.Component {
   }
 
   _handleRestorePurchases = async (productId) => {
-    try {
-      const purchases = await RNIap.getAvailablePurchases();
-      let restoredTitles = '';
-      let coins = CoinStore.getCount();
-      purchases.forEach(purchase => {
-        if (purchase.productId == 'com.example.premium') {
-          this.setState({ premium: true });
-          restoredTitles += 'Premium Version';
-        } else if (purchase.productId == 'com.example.no_ads') {
-          this.setState({ ads: false });
-          restoredTitles += restoredTitles.length > 0 ? 'No Ads' : ', No Ads';
-        } else if (purchase.productId == 'com.example.coins100') {
-          //CoinStore.addCoins(100);
-          //await RNIap.consumePurchase(purchase.purchaseToken);
-        }
-      })
-      Alert.alert('Restore Successful', 'You successfully restored the following purchases: ' + restoredTitles);
-    } catch(err) {
-      console.warn(err); // standardized err.code and err.message available
-      Alert.alert(err.message);
-    }
+    helpers.restoreSubscription();
   }    
 
   onSelectedItem = (product)=>{
@@ -256,105 +240,90 @@ class SubscriptionScreen extends React.Component {
     const {screenProps} = this.props;
 
     return (
-      <ScrollView style={[styles.mainView,{backgroundColor:'#fff'}]}  behavior="padding" enabled>
+      <ScrollView style={[styles.mainView,{backgroundColor:'#efeff4'}]}  behavior="padding" enabled>
+
+          <View enabled style={[styles.headBox, { flex:1, justifyContent: 'center', alignItems: 'center', padding:0, backgroundColor:'#4e2e59' }]}>           
+              <View enabled style={[{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20 }]}>   
+                {this.state.inProgress?<ActivityIndicator style={{flex:1}} />:null}               
+                <Text style={[styles.areaTitle,{color:'#fff'}]} >{ screenProps.lang.subscriptionScreen.title }</Text>                             
+                <Text style={{color:'#fff'}} >
+                  {'\u2022'} {screenProps.lang.subscriptionScreen.whatYouGetText}                  
+                </Text>                
+              </View>            
+          </View>
+
           <View enabled style={{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20  }}>
 
-              <Text style={styles.areaTitle} >{ screenProps.lang.subscriptionScreen.title }</Text>
+              <View style={{backgroundColor:'#efeff4', maxWidth:400}}>
+                  {this.state.loadingAssets?<ActivityIndicator style={{flex:1}} />:null} 
+                  {
+                      this.state.subscriptions.map((product, i) => {
+                        return (
+                          <ListItem
+                              onPress={() => this.onSelectedItem(product) }
+                              selected={ this.state.selectedPlan == product.productId } 
+                              key={i.toString()}   
+                              style={[styles.listItem,  this.state.selectedPlan == product.productId ? styles.selectedItem : {}]}  
+                              testID={"test_"+i.toString()}               
+                          >
+                            <Body style={{padding:0,margin:0}}>
+                              <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.listItemPrice, this.state.selectedPlan == product.productId ? styles.selectedText : {}]}  >
+                                {product.localizedPrice} / {product.subscriptionPeriodAndroid}
+                              </Text>                                  
+                            </Body>
+                          </ListItem>
+                        );
+                      })
+                  }  
 
-              <View style={{backgroundColor:'#fff', maxWidth:400}}>
-
-                      <ListItem
-                          onPress={() => this.setState({ selectedPlan: 'free', selectedPlanPrice: 'Free', selectedPlanCode: 'free', selectedPeriod: 'free' })}
-                          selected={this.state.selectedPlan == 'free'}
-                          key='freePlan'
-                          style={[styles.listItem,'free' == this.state.selectedPlan ? styles.selectedItem : {}]}                   
-                      >
-                        <Left>
-                          <Text  style={[styles.listItemPrice,'free'== this.state.selectedPlan ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeText}</Text>                          
-                        </Left>
-                        <Body>
-                          <Text  style={[styles.listItemDescription,'free'=== this.state.selectedPlan ? styles.selectedText : {}]}  >{screenProps.lang.subscriptionScreen.freeDescription}</Text>
-                        </Body>                          
-                        <Right>
-                          <Radio
-                            onPress={() => this.setState({ selectedPlan: 'free', selectedPlanPrice:'Free', selectedPeriod:'free' })}
-                            color={'#71839a'}  selectedColor={'#fff'}
-                            selected={this.state.selectedPlan == 'free'} 
-                            style={[styles.listItemRadio,{}]} 
-                          />
-                        </Right>
-                      </ListItem>                 
-
-                      {
-                          this.state.subscriptions.map((product, i) => {
-                            return (
-
-                              <ListItem
-                                  onPress={() => this.onSelectedItem(product) }
-                                  selected={this.state.selectedPlan == product.productId} 
-                                  key={i.toString()}   
-                                  style={[styles.listItem, product.productId === this.state.selectedPlan ? styles.selectedItem : {}]}                 
-                              >
-                                <Left style={{padding:0,margin:0}}>
-                                  <Text style={[styles.listItemPrice,product.productId === this.state.selectedPlan ? styles.selectedText : {}]}  >{product.localizedPrice}</Text>                                  
-                                </Left>
-                                <Body style={{padding:0,margin:0}}>
-                                  <Text style={[styles.listItemDescription,product.productId === this.state.selectedPlan ? styles.selectedText : {}]}  >{product.description}</Text>
-                                </Body>                                
-                                <Right>
-                                  <Radio
-                                    onPress={() => this.onSelectedItem(product)  }
-                                    color={'#71839a'}  selectedColor={'#fff'}
-                                    selected={this.state.selectedPlan == product.productId}
-                                    style={[styles.listItemRadio,{}]}
-                                  />
-                                </Right>
-                                
-                              </ListItem> 
-
-                            );
-                          })
-                      }
                   <Button 
                     block
-                    style={[ styles.selectBtn, {marginTop:30} ]}
+                    style={[ styles.selectBtn, {marginTop:20} ]}
                     onPress={() => {
-                      this._handleSubscriptionType();
-                    // this.props.navigation.navigate('App');
+                      this._handleSubscriptionType(this.state.selectedPlan);
                     }}                      
                   >
                     <Text>{screenProps.lang.subscriptionScreen.planSelectBtnText}</Text> 
                   </Button>
 
-                  <Button small full warning 
-                    style={{marginTop:20}} 
-                    onPress = { () => { 
-                      this.props.navigation.navigate('ManageSubscription')
-                      .catch((err) => console.error('An error occurred', err)) } 
-                    } >
-                    <Text style={{textDecorationLine:'underline', color:'purple'}}>{screenProps.lang.subscriptionScreen.subscribedAlreadyLink}</Text>               
-                  </Button>                   
+                  <Text style={{color: 'gray', fontWeight:'bold', textAlign:'center', marginTop:20}}
+                    onPress={ async () => {
+                      await this.setState({ selectedPlan: 'free', selectedPlanPrice: 'Free', selectedPlanCode: 'free', selectedPeriod: 'free' })
+                      this._handleSubscriptionType(this.state.selectedPlan);
+                    }}  
+                  >
+                    {this.props.screenProps.lang.subscriptionScreen.freeText}
+                  </Text>                  
 
-                  <Button small full warning 
-                    style={{marginTop:20}} 
-                    onPress = { () => { 
-                      Linking.openURL(this.props.screenProps.lang.myAccount.privacyPolicyUrl)
-                      .catch((err) => console.error('An error occurred', err)) } 
-                    } >
-                    <Text style={{}}>{screenProps.lang.myAccount.privatePolicyText}</Text>               
-                  </Button> 
+                  <ScrollView style={{}}>
 
-                  <Text style={{marginTop:30}} >                      
-                      <Text  style={{textAlign: 'center', fontWeight:'bold'}}>{screenProps.lang.subscriptionScreen.noteTitle}</Text>
-                      <Text>
-                        {this.state.selectedPeriod == 'free'?
-                          screenProps.lang.subscriptionScreen.freeNoteMessage
-                          :
-                          screenProps.lang.subscriptionScreen.noteMessage.replace('$price', this.state.selectedPlanPrice)
-                        }
-                       
-                      </Text>
-                  </Text>
+                    <Text style={{marginTop:10}} >                      
+                        
+                        <Text style={{ color: '#4F4F4F', fontSize:11 }}>
+                          
+                          {/*this.state.selectedPeriod == 'free'?
+                            screenProps.lang.subscriptionScreen.freeNoteMessage
+                            :
+                            screenProps.lang.subscriptionScreen.iosNote.replace('$price', this.state.selectedPlanPrice )
+                          */} 
+
+                          {screenProps.lang.subscriptionScreen.noteMessage.replace('$price', this.state.selectedPlanPrice )}                      
+                        </Text>
+
+                    </Text>
+
+                    <Text style={styles.termsStyle} 
+                          onPress={ async ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.termsConditionsUrl) } }>
+                        {this.props.screenProps.lang.myAccount.termsConditionsText}
+                    </Text>
+
+                    <Text style={styles.termsStyle}
+                          onPress={ async ()=>{ this._openUrl(this.props.screenProps.lang.myAccount.privacyPolicyUrl) } }> 
+                      {this.props.screenProps.lang.myAccount.privacyPolicyText} 
+                    </Text>
+
+                  </ScrollView> 
+
 
               </View>
           </View>
@@ -371,6 +340,20 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, { updateSubscription } )(SubscriptionScreen);
 
 const styles = StyleSheet.create({
+  termsStyle:{
+    textAlign: 'center', 
+    width:'100%', 
+    color:'#4F4F4F', 
+    padding:3, 
+    fontSize:12,
+    marginTop:5,
+    marginBottom:5
+  },
+  headBox:{
+    backgroundColor:'purple',
+    color:'#fff',
+    padding:20
+  },
   mainView: {
     flex: 1,
   },
@@ -384,26 +367,21 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginLeft:0
   },
-  listItemPrice:{
-     width:120,
-     fontSize:21, 
+  listItemPrice:{     
+     fontSize:25, 
      fontWeight:'bold',
-     paddingLeft:10,
      color:'#71839a',
-     borderRightWidth:1,
+     borderRightWidth:0,
      borderRightColor:'#71839a',
      textAlign:'center'  
   },
   listItemDescription:{
-    color:'#71839a',
-    width:"100%",
-    fontSize:15,     
+    color:'#71839a'
   },
   listItemRadio:{
   },
   selectedItem:{    
-    backgroundColor:'#4e2e59',
-    elevation:5
+    backgroundColor:'#4e2e59'
   },
   selectedText:{
     color:'#ffffff',

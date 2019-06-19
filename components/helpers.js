@@ -2,13 +2,14 @@ import * as React from 'react';
 import RNIap,  { PRoductPurchase, purchseUpdatedListener, purchseErrorListener } from 'react-native-iap';
 import { Platform, Alert } from 'react-native';
 
-const itemSubs = Platform.select({
-  ios: ['savings.zone.sub.year', 'savings.zone.sub.sixmonths', 'savings.zone.sub.monthly' ],
-  android: ['com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths']
-});
-
 
 const helpers = {
+
+  itemSubs: {
+    ios: ['savings.zone.sub.year', 'savings.zone.sub.sixmonths', 'savings.zone.sub.monthly' ],
+    android: ['com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths'],
+    androidTest: ['android.test.canceled', 'android.test.refunded', 'android.test.item_unavailable', 'android.test.purchased' ];
+  },
 
   getAvertisingID: function(){
     var adverts = global.advert.split(" ");
@@ -18,6 +19,11 @@ const helpers = {
   },
 
   restoreSubscription: async function (){  
+    subscriptions = Platform.select({
+      ios: this.itemSubs.ios,
+      android: this.itemSubs.android
+    });
+
     try {
       this.setState({ inProgress: true });
       const purchases = await RNIap.getAvailablePurchases();
@@ -25,7 +31,7 @@ const helpers = {
       purchases.forEach(purchase => { 
 
         for (let i = 0; i < purchases.length; i++) {
-          if ( itemSubs.includes( purchases[i].productId) ) {
+          if ( subscriptions.includes( purchases[i].productId) ) {
             return {restored:true,error:null};
           }
         }
