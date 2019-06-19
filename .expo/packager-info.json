@@ -2,9 +2,9 @@
   "expoServerPort": 19000,
   "devToolsPort": 19002,
   "packagerPort": 19001,
-  "packagerPid": 34288,
-  "expoServerNgrokUrl": "https://br-4xw.hackinc2000.final-exam.exp.direct",
-  "packagerNgrokUrl": "https://packager.br-4xw.hackinc2000.final-exam.exp.direct",
-  "ngrokPid": 26088,
+  "packagerPid": 25268,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "webpackServerPort": null
 }

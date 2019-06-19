@@ -166,4 +166,4 @@ const mapStateToProps = state => {
 	return { user: { ...user, ...user.user }, offerList };
 };
 
-export default connect(mapStateToProps, { fetchOffersDataSource, saveOffer })(MerchantHomeScreen);
+export default connect(mapStateToProps, { fetchOffersDataSource, saveOffer })(MerchantStats);
