@@ -10,7 +10,7 @@ import {iosData} from '../../components/constants.js';
 import { connect } from 'react-redux';
 import { updateSubscription } from './reducer';
 
-const itemSubs = ['savings.zone.sub.monthly.ar', 'com.savings.zone.sub.sixmonths.ar', 'com.savings.zone.sub.year.ar'];
+const itemSubs = ['savings.zone.sub.year', 'savings.zone.sub.sixmonths', 'savings.zone.sub.monthly' ];
 //const itemSubs = ['savings.zone.sub.monthly']; 
 
 class SubscriptionScreen extends React.Component {

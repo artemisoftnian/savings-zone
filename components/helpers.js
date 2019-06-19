@@ -3,7 +3,7 @@ import RNIap,  { PRoductPurchase, purchseUpdatedListener, purchseErrorListener }
 import { Platform, Alert } from 'react-native';
 
 const itemSubs = Platform.select({
-  ios: ['savings.zone.sub.monthly.ar', 'com.savings.zone.sub.sixmonths.ar', 'com.savings.zone.sub.year.ar'],
+  ios: ['savings.zone.sub.year', 'savings.zone.sub.sixmonths', 'savings.zone.sub.monthly' ],
   android: ['com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths']
 });
 
