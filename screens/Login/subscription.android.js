@@ -68,6 +68,7 @@ class SubscriptionScreen extends React.Component {
     try {
       this.setState({loadingAssets:true})
       const products = await RNIap.getSubscriptions(itemSubs);
+      console.log(products);
       this.setState({ subscriptions: products, loadingAssets:false });
     } catch(err) {
       console.warn(err); // standardized err.code and err.message available
@@ -221,7 +222,7 @@ class SubscriptionScreen extends React.Component {
   }    
 
   onSelectedItem = (product)=>{
-    //console.log(product.productId);
+    console.log(product.productId);
     this.setState({ 
       selectedPlan: product.productId, 
       selectedPlanPrice: product.priceText, 
@@ -267,6 +268,20 @@ class SubscriptionScreen extends React.Component {
                   {this.state.loadingAssets?<ActivityIndicator style={{flex:1}} />:null} 
                   {
                       this.state.subscriptions.map((product, i) => {
+                        var periodo = null;
+
+                        switch(product.subscriptionPeriodAndroid) {
+                          case "P1M":
+                            periodo = "1 mes";
+                            break;
+                          case "P6M":
+                            periodo = "6 meses";
+                            break;
+                          case "P1Y":
+                            periodo = "1 año";
+                            break;
+                        } 
+
                         return (
                           <ListItem
                               onPress={() => this.onSelectedItem(product) }
@@ -277,8 +292,9 @@ class SubscriptionScreen extends React.Component {
                           >
                             <Body style={{padding:0,margin:0}}>
                               <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.listItemPrice, this.state.selectedPlan == product.productId ? styles.selectedText : {}]}  >
-                                {product.localizedPrice} / {product.subscriptionPeriodAndroid}
-                              </Text>                                  
+                                {product.localizedPrice} / {periodo}
+                              </Text>  
+                              <Text style={[{textAlign:"center", marginTop:2, fontSize:12}, this.state.selectedPlan == product.productId ? styles.selectedText : {} ]}>{product.description}</Text>                                 
                             </Body>
                           </ListItem>
                         );
@@ -394,7 +410,7 @@ const styles = StyleSheet.create({
   },
   selectedText:{
     color:'#ffffff',
-    borderRightColor:'#ffffff',
+    //borderRightColor:'#ffffff',
   },
   selectBtn:{
     backgroundColor:'#2e3159',
