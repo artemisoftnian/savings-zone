@@ -66,17 +66,21 @@ class SubscriptionScreen extends React.Component {
   async componentDidMount(){
 
     try {
+      this.setState({loadingAssets:true})
       const products = await RNIap.getSubscriptions(itemSubs);
-      this.setState({ subscriptions: products });
+      this.setState({ subscriptions: products, loadingAssets:false });
     } catch(err) {
       console.warn(err); // standardized err.code and err.message available
+      this.setState({loadingAssets:false})
     } finally {
+      
       console.log("acabo de traer los productos");
       await RNIap.endConnection(); 
     } 
 
   } 
 
+  /*
   async componentDidMount(){
     try {
       //put loading here....
@@ -84,8 +88,7 @@ class SubscriptionScreen extends React.Component {
       await RNIap.endConnection();
       //await RNIap.initConnection()
       var subscriptions = null;
-
-      this.setState({loadingAssets:true})
+      
       if(!this.state.storeTest)
         subscriptions = await RNIap.getSubscriptions(itemSubs);
       else 
@@ -101,6 +104,8 @@ class SubscriptionScreen extends React.Component {
       await RNIap.endConnection(); 
     }
   } 
+
+  */
 
   processReturnedPurchase = async (details) => { 
     await console.log('a ver que retorno', details);  
@@ -201,15 +206,15 @@ class SubscriptionScreen extends React.Component {
     }
   }  
 
-  _handleSubscriptionType = async () =>{      
-      if(this.state.selectedPlan == 'free'){
-        await this.getSubscription(this.state.selectedPlan);
-        this.props.navigation.navigate('Offers');
-      }
-      else{
-          await this.getSubscription(this.state.selectedPlan);      
-      }
-  }
+  _handleSubscriptionType = async (selectedPlan) =>{
+    if(selectedPlan == 'free'){
+      await this.getSubscription(selectedPlan);
+      this.props.navigation.navigate('Offers');
+    }
+    else{
+      await this.getSubscription(selectedPlan);     
+    }
+  }  
 
   _handleRestorePurchases = async (productId) => {
     helpers.restoreSubscription();
@@ -223,6 +228,10 @@ class SubscriptionScreen extends React.Component {
       selectedPlanCode: product.productId,
       selectedPeriod: product.productId
     })
+  }
+
+  _openUrl = (url)=> {
+    Linking.openURL(url).catch((err) => console.error('An error occurred', err));
   }
 
   render() {
