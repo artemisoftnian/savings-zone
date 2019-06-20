@@ -66,17 +66,22 @@ class SubscriptionScreen extends React.Component {
   async componentDidMount(){
 
     try {
+      this.setState({loadingAssets:true})
       const products = await RNIap.getSubscriptions(itemSubs);
-      this.setState({ subscriptions: products });
+      console.log(products);
+      this.setState({ subscriptions: products, loadingAssets:false });
     } catch(err) {
       console.warn(err); // standardized err.code and err.message available
+      this.setState({loadingAssets:false})
     } finally {
+      
       console.log("acabo de traer los productos");
       await RNIap.endConnection(); 
     } 
 
   } 
 
+  /*
   async componentDidMount(){
     try {
       //put loading here....
@@ -84,8 +89,7 @@ class SubscriptionScreen extends React.Component {
       await RNIap.endConnection();
       //await RNIap.initConnection()
       var subscriptions = null;
-
-      this.setState({loadingAssets:true})
+      
       if(!this.state.storeTest)
         subscriptions = await RNIap.getSubscriptions(itemSubs);
       else 
@@ -101,6 +105,8 @@ class SubscriptionScreen extends React.Component {
       await RNIap.endConnection(); 
     }
   } 
+
+  */
 
   processReturnedPurchase = async (details) => { 
     await console.log('a ver que retorno', details);  
@@ -201,28 +207,32 @@ class SubscriptionScreen extends React.Component {
     }
   }  
 
-  _handleSubscriptionType = async () =>{      
-      if(this.state.selectedPlan == 'free'){
-        await this.getSubscription(this.state.selectedPlan);
-        this.props.navigation.navigate('Offers');
-      }
-      else{
-          await this.getSubscription(this.state.selectedPlan);      
-      }
-  }
+  _handleSubscriptionType = async (selectedPlan) =>{
+    if(selectedPlan == 'free'){
+      await this.getSubscription(selectedPlan);
+      this.props.navigation.navigate('Offers');
+    }
+    else{
+      await this.getSubscription(selectedPlan);     
+    }
+  }  
 
   _handleRestorePurchases = async (productId) => {
     helpers.restoreSubscription();
   }    
 
   onSelectedItem = (product)=>{
-    //console.log(product.productId);
+    console.log(product.productId);
     this.setState({ 
       selectedPlan: product.productId, 
       selectedPlanPrice: product.priceText, 
       selectedPlanCode: product.productId,
       selectedPeriod: product.productId
     })
+  }
+
+  _openUrl = (url)=> {
+    Linking.openURL(url).catch((err) => console.error('An error occurred', err));
   }
 
   render() {
@@ -258,6 +268,20 @@ class SubscriptionScreen extends React.Component {
                   {this.state.loadingAssets?<ActivityIndicator style={{flex:1}} />:null} 
                   {
                       this.state.subscriptions.map((product, i) => {
+                        var periodo = null;
+
+                        switch(product.subscriptionPeriodAndroid) {
+                          case "P1M":
+                            periodo = "1 mes";
+                            break;
+                          case "P6M":
+                            periodo = "6 meses";
+                            break;
+                          case "P1Y":
+                            periodo = "1 año";
+                            break;
+                        } 
+
                         return (
                           <ListItem
                               onPress={() => this.onSelectedItem(product) }
@@ -268,8 +292,9 @@ class SubscriptionScreen extends React.Component {
                           >
                             <Body style={{padding:0,margin:0}}>
                               <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.listItemPrice, this.state.selectedPlan == product.productId ? styles.selectedText : {}]}  >
-                                {product.localizedPrice} / {product.subscriptionPeriodAndroid}
-                              </Text>                                  
+                                {product.localizedPrice} / {periodo}
+                              </Text>  
+                              <Text style={[{textAlign:"center", marginTop:2, fontSize:12}, this.state.selectedPlan == product.productId ? styles.selectedText : {} ]}>{product.description}</Text>                                 
                             </Body>
                           </ListItem>
                         );
@@ -385,7 +410,7 @@ const styles = StyleSheet.create({
   },
   selectedText:{
     color:'#ffffff',
-    borderRightColor:'#ffffff',
+    //borderRightColor:'#ffffff',
   },
   selectBtn:{
     backgroundColor:'#2e3159',

@@ -5,7 +5,7 @@ import {  Text,  Button, Body, Left,  Right,  ListItem, Radio } from 'native-bas
 
 import RNIap,  { PRoductPurchase, purchseUpdatedListener, purchseErrorListener } from 'react-native-iap';
 
-import {iosData} from '../../components/constants.js';
+import {iosData, iosNonAutoData} from '../../components/constants.js';
 
 import { connect } from 'react-redux';
 import { updateSubscription } from './reducer';
@@ -55,18 +55,21 @@ class SubscriptionScreen extends React.Component {
  });
 
   async componentWillMount() {
-      this.setState({ subscriptions: iosData })
+      
   } 
 
   async componentDidMount(){
 
     try {
+      this.setState({ loadingAssets:true })
       const products = await RNIap.getSubscriptions(itemSubs);
       console.log(products);
       this.setState({ subscriptions: products });
     } catch(err) {
       console.warn(err); // standardized err.code and err.message available
+      this.setState({ subscriptions: iosNonAutoData })
     } finally {
+      this.setState({ loadingAssets:false })
       console.log("acabo de traer los productos")
     } 
 
@@ -96,45 +99,9 @@ class SubscriptionScreen extends React.Component {
           this.subscription.remove();
         });
       }finally{
-        this.setState({ inProgress: false });
+        this.setState({ inProgress: false, loadingAssets:false  });
       }
 
-
-/*
-
-      try {
-
-        //First check if purchases can be made
-        RNIap.initConnection((canMakePayments) => {
-            if(!canMakePayments) {
-              Alert.alert('Not Allowed', 'This device is not allowed to make purchases. Please check restrictions on device');
-              return;
-            }
-        })            
-
-        RNIap.buySubscription(selectedProduct, async (error, response) => {
-
-          console.log('algun error',error);
-           // NOTE for v3.0: User can cancel the payment which will be available as error object here.
-           if(response && response.productIdentifier) {
-              //console.log('responseData', response);
-              //Update User Data on server here
-              console.log('Purchase Successful', 'Your Transaction ID is ' + response.transactionIdentifier);
-              console.log('Purchase Data', response);
-              this._gotit(response);
-           }
-           else{
-            Alert.alert('Purchase Unsuccessful', 'An error ocurred during the subscription process! There will be no charge to your account');  
-           }
-        });
-
-      } catch (err) {
-        console.log(err)        
-      } finally {  
-        console.log("Purchase Compleated")
-      } 
-
-      */
     }
     else{
       var detail = await this.props.updateSubscription(this.props.user.user.user_id, 'free', "ios");
@@ -168,12 +135,13 @@ class SubscriptionScreen extends React.Component {
 
 
   _handleSubscriptionType = async (selectedPlan) =>{
+      this.setState({ loadingAssets:true })     
       if(selectedPlan == 'free'){
         await this.getSubscription(selectedPlan);
         this.props.navigation.navigate('Offers');
       }
       else{
-        await this.getSubscription(selectedPlan);     
+        await this.getSubscription(selectedPlan);
       }
   }  
 
@@ -238,7 +206,7 @@ class SubscriptionScreen extends React.Component {
           <View enabled style={{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20  }}>
 
               <View style={{backgroundColor:'#efeff4', maxWidth:400}}>
-                  {this.state.loadingAssets?<ActivityIndicator style={{flex:1}} />:null}    
+                  {this.state.loadingAssets?<ActivityIndicator size="large" style={{flex:1}} />:null}    
                   {
                       this.state.subscriptions.map((product, i) => {
                         return (
@@ -251,8 +219,10 @@ class SubscriptionScreen extends React.Component {
                           >
                             <Body style={{padding:0,margin:0}}>
                               <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.listItemPrice, this.state.selectedPlan == product.productId ? styles.selectedText : {}]}  >
-                                {product.localizedPrice} / {product.subscriptionPeriodNumberIOS} {product.subscriptionPeriodUnitIOS}{product.subscriptionPeriodNumberIOS>1?"S":""}
-                              </Text>                                  
+                                {/*product.localizedPrice} | {product.title} {product.subscriptionPeriodUnitIOS}{product.subscriptionPeriodNumberIOS>1?"S":""*/}
+                                {product.localizedPrice} | {product.title}
+                              </Text>
+                              <Text style={[{textAlign:"center", marginTop:2}, this.state.selectedPlan == product.productId ? styles.selectedText : {} ]}>{product.description}</Text>                               
                             </Body>
                           </ListItem>
                         );
@@ -368,7 +338,7 @@ const styles = StyleSheet.create({
   },
   selectedText:{
     color:'#ffffff',
-    borderRightColor:'#ffffff',
+    //borderRightColor:'#ffffff',
   },
   selectBtn:{
     backgroundColor:'#2e3159',
