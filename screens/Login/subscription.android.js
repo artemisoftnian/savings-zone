@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ActivityIndicator, View,  Image,  StyleSheet, Alert,  TouchableOpacity, Linking, ScrollView } from 'react-native';
+import { ActivityIndicator, View,  Image,  StyleSheet, Alert,  TouchableOpacity, Linking, ScrollView, TouchableNativeFeedback } from 'react-native';
 
 import {  Text,  Button, Body, Left,  Right,  ListItem, Radio } from 'native-base';
 
@@ -311,14 +311,18 @@ class SubscriptionScreen extends React.Component {
                     <Text>{screenProps.lang.subscriptionScreen.planSelectBtnText}</Text> 
                   </Button>
 
-                  <Text style={{color: 'gray', fontWeight:'bold', textAlign:'center', marginTop:20}}
-                    onPress={ async () => {
-                      await this.setState({ selectedPlan: 'free', selectedPlanPrice: 'Free', selectedPlanCode: 'free', selectedPeriod: 'free' })
-                      this._handleSubscriptionType(this.state.selectedPlan);
-                    }}  
-                  >
-                    {this.props.screenProps.lang.subscriptionScreen.freeText}
-                  </Text>                  
+                  <TouchableNativeFeedback
+                    onPress={this._onPressButton}
+                    background={TouchableNativeFeedback.Ripple('#000000')} >    
+                    <Text style={{color: 'gray', fontWeight:'bold', textAlign:'center', marginTop:20, paddingTop:20, paddingBottom:20}}
+                      onPress={ async () => {
+                        await this.setState({ selectedPlan: 'free', selectedPlanPrice: 'Free', selectedPlanCode: 'free', selectedPeriod: 'free' })
+                        this._handleSubscriptionType(this.state.selectedPlan);
+                      }}  
+                    >
+                      {this.props.screenProps.lang.subscriptionScreen.freeText}
+                    </Text> 
+                  </TouchableNativeFeedback>                 
 
                   <ScrollView style={{}}>
 
