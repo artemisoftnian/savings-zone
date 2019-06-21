@@ -6,7 +6,7 @@ import { Platform, Alert } from 'react-native';
 const helpers = {
 
   itemSubs: {
-    ios: ['savings.zone.sub.sixmonths', 'savings.zone.sub.monthly','savings.zone.sub.year' ],
+    ios: ['com.savings.zone.sub.semestral.v2', 'com.savings.zone.sub.monthly.v1','com.savings.zone.sub.annual.v1' ],
     android: ['com.savings.zone.sub.year', 'com.savings.zone.sub.monthly', 'com.savings.zone.sub.sixmonths'],
     androidTest: ['android.test.canceled', 'android.test.refunded', 'android.test.item_unavailable', 'android.test.purchased' ],
   },
