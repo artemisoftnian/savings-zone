@@ -10,10 +10,17 @@ import { updateSubscription } from './reducer';
 
 import helpers from '../../components/helpers';
 
-import * as RNIap from 'react-native-iap';
+import RNIap, {
+  ProductPurchase,
+  purchaseUpdatedListener,
+  purchaseErrorListener,
+} from 'react-native-iap';
 
 const testItems = helpers.itemSubs.androidTest;
 const itemSubs = helpers.itemSubs.android;
+
+let purchaseUpdateSubscription;
+let purchaseErrorSubscription;
 
 class SubscriptionScreen extends React.Component {
 
@@ -56,57 +63,59 @@ class SubscriptionScreen extends React.Component {
  });
 
   async componentWillMount() {
-    this.setState({ subscriptions: AndroidDataNew })
+
+    if (purchaseUpdateSubscription) {
+      purchaseUpdateSubscription.remove();
+      purchaseUpdateSubscription = null;
+    }
+   if (purchaseErrorSubscription) {
+      purchaseErrorSubscription.remove();
+      purchaseErrorSubscription = null;
+    }
   } 
 
-  componentWillUnmount() {
-    RNIap.endConnection();
+  async componentWillUnmount() {
+    if (RNIap.endConnectionAndroid === "function") { 
+      RNIap.endConnectionAndroid();
+    }
   }
 
   async componentDidMount(){
 
     try {
-      this.setState({loadingAssets:true})
+      const result = await RNIap.initConnection();
+      console.log('result', result);
+    } catch (err) {
+      console.warn(err.code, err.message);
+    }
+
+    try {
+      this.setState({ loadingAssets:true })
       const products = await RNIap.getSubscriptions(itemSubs);
       console.log(products);
-      this.setState({ subscriptions: products, loadingAssets:false });
+      this.setState({ subscriptions: products });
     } catch(err) {
       console.warn(err); // standardized err.code and err.message available
-      this.setState({loadingAssets:false})
+      this.setState({ subscriptions: AndroidDataNew })
     } finally {
-      
-      console.log("acabo de traer los productos");
-      await RNIap.endConnection(); 
-    } 
+      this.setState({ loadingAssets:false }) 
+      console.log("Getting Products Done!")
+    }  
+
+    purchaseUpdateSubscription = purchaseUpdatedListener((purchase: ProductPurchase) => {
+      console.log('purchaseUpdatedListener', purchase);
+      this.setState({ receipt: purchase.transactionReceipt }, () => this.goNext());
+    });
+
+    purchaseErrorSubscription = purchaseErrorListener((error: PurchaseError) => {
+      console.log('purchaseErrorListener', error);
+      Alert.alert('purchase error', JSON.stringify(error));
+    });
+
 
   } 
 
-  /*
-  async componentDidMount(){
-    try {
-      //put loading here....
-      // make sure the service is close before opening it
-      await RNIap.endConnection();
-      //await RNIap.initConnection()
-      var subscriptions = null;
-      
-      if(!this.state.storeTest)
-        subscriptions = await RNIap.getSubscriptions(itemSubs);
-      else 
-        subscriptions =  await RNIap.getProducts(testItems);
 
-      await this.setState({subscriptions, loadingAssets:false});
-
-    } catch (error) {
-      // debug in device with the help of Alert component
-      console.log(error);
-      await RNIap.endConnection(); 
-    } finally {
-      await RNIap.endConnection(); 
-    }
-  } 
-
-  */
 
   processReturnedPurchase = async (details) => { 
     await console.log('a ver que retorno', details);  
@@ -132,19 +141,14 @@ class SubscriptionScreen extends React.Component {
         if(this.state.storeTest)
           response = await RNIap.buyProduct(selectedProduct).then( async details => { this.processReturnedPurchase(details) });
         else
-          response = await RNIap.buySubscription(selectedProduct).then( async details => { this.processReturnedPurchase(details) });
+          response = await RNIap.requestSubscription(selectedProduct).then( async details => { this.processReturnedPurchase(details) });
    
       } catch (error) {
 
           console.log(error);
         
           if (error.message === gpbErrors.PAYMENT_BUG) {
-            //if (repurchaseTries >= maxRepurchaseTries) {
-            //  reject(new Error(`Failed to purchase ${id} after ${maxRepurchaseTries} retries.`));
-            //} else {
-            //  repurchaseTries += 1;
-            //  buyInAppProduct();
-            //}
+
           } else if ( error.message === gpbErrors.PAYMENT_DECLINED ) {
             // Communicate to the user that the payment was declined
             Alert.alert(screenProps.lang.subscriptionScreen.errorDeclinedTitle, screenProps.lang.subscriptionScreen.errorDeclinedMessage);
@@ -189,24 +193,6 @@ class SubscriptionScreen extends React.Component {
 
   }
   
-  async checkSubscription() {
- 
-  }
-
-  buyItem = async(sku) => {
-    try {
-      console.info('buyItem: ' + sku);
-      //const purchase = await RNIap.buyProduct(sku);
-      //const products = await RNIap.buySubscription(sku);
-      const purchase = "test";//await RNIap.buyProductWithoutFinishTransaction(sku);
-      console.info(purchase);
-      this.setState({ receipt: purchase.transactionReceipt }, () => this.goToNext());
-    } catch (err) {
-      console.warn(err.code, err.message);
-      Alert.alert(err.message);
-    }
-  }  
-
   _handleSubscriptionType = async (selectedPlan) =>{
     if(selectedPlan == 'free'){
       await this.getSubscription(selectedPlan);
@@ -217,9 +203,10 @@ class SubscriptionScreen extends React.Component {
     }
   }  
 
-  _handleRestorePurchases = async (productId) => {
-    helpers.restoreSubscription();
-  }    
+  _handleRestoreSubscription = async () => {
+    var test = await helpers.restoreSubscription();
+    console.log(test);
+}  
 
   onSelectedItem = (product)=>{
     console.log(product.productId);
@@ -322,7 +309,20 @@ class SubscriptionScreen extends React.Component {
                     >
                       {this.props.screenProps.lang.subscriptionScreen.freeText}
                     </Text> 
-                  </TouchableNativeFeedback>                 
+                  </TouchableNativeFeedback>     
+
+                 <TouchableNativeFeedback
+                    onPress={this._onPressButton}
+                    background={TouchableNativeFeedback.Ripple('#000000')} >    
+                    <Text style={{color: 'gray', fontWeight:'bold', textAlign:'center', paddingTop:20, paddingBottom:20}}
+                      onPress={ async () => {
+                        await this.setState({ selectedPlan: 'free', selectedPlanPrice: 'Free', selectedPlanCode: 'free', selectedPeriod: 'free' })
+                        this._handleRestoreSubscription();
+                      }}  
+                    >
+                      {this.props.screenProps.lang.subscriptionScreen.subscribedAlreadyLink}
+                    </Text> 
+                  </TouchableNativeFeedback>                               
 
                   <ScrollView style={{}}>
 

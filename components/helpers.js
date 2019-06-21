@@ -1,5 +1,5 @@
 import * as React from 'react';
-import RNIap,  { PRoductPurchase, purchseUpdatedListener, purchseErrorListener } from 'react-native-iap';
+import RNIap from 'react-native-iap';
 import { Platform, Alert } from 'react-native';
 
 
@@ -19,29 +19,43 @@ const helpers = {
   },
 
   restoreSubscription: async function (){  
+
+    console.log("restoring product...")
+    message = {};
+
     subscriptions = Platform.select({
       ios: this.itemSubs.ios,
       android: this.itemSubs.android
     });
 
     try {
-      this.setState({ inProgress: true });
-      const purchases = await RNIap.getAvailablePurchases();
-      let restoredTitles = '';
-      purchases.forEach(purchase => { 
 
-        for (let i = 0; i < purchases.length; i++) {
-          if ( subscriptions.includes( purchases[i].productId) ) {
-            return {restored:true,error:null};
-          }
+        if (RNIap.getAvailablePurchases === "function") { 
+
+          const purchases = await RNIap.getAvailablePurchases();
+    
+          purchases.forEach(purchase => { 
+  
+            for (let i = 0; i < purchases.length; i++) {
+              if ( subscriptions.includes( purchases[i].productId) ) {
+                message = {restored:true, restoredItem:purchases[i].productId, error:null};
+              }
+            }                  
+            message = {restored:false,restoredItem:"none", error:null};
+          })
+
         }
-                
-        return {restored:false,error:null};
-      })
+        else{
+          message = {restored:false, restoredItem:"none", error:"Sorry Running From Expo not ExpoKit!"};
+        }
 
     } catch(err) {
-      return {restored:false,error:err.message}; //Alert.alert(err.message);
-    }    
+      console.log(err.message);
+      message = {restored:false, restoredItem:"none", error:err.message}; 
+      
+    } finally{
+      return message;
+    }  
   }
 
 

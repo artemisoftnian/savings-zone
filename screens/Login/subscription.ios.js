@@ -3,7 +3,11 @@ import { ActivityIndicator, View,  Image,  StyleSheet, Alert,  TouchableOpacity,
 
 import {  Text,  Button, Body, Left,  Right,  ListItem, Radio } from 'native-base';
 
-import RNIap,  { PRoductPurchase, purchseUpdatedListener, purchseErrorListener } from 'react-native-iap';
+import RNIap, {
+  ProductPurchase,
+  purchaseUpdatedListener,
+  purchaseErrorListener,
+} from 'react-native-iap';
 
 import {iosData, iosNonAutoData} from '../../components/constants.js';
 
@@ -15,7 +19,7 @@ import helpers from '../../components/helpers';
 const itemSubs = helpers.itemSubs.ios;
 
 let purchaseUpdateSubscription;
-
+let purchaseErrorSubscription;
 
 class SubscriptionScreen extends React.Component {
 
@@ -63,27 +67,36 @@ class SubscriptionScreen extends React.Component {
   async componentDidMount(){
 
     try {
+      const result = await RNIap.initConnection();
+      console.log('result', result);
+    } catch (err) {
+      console.warn(err.code, err.message);
+    }
+
+    try {
       this.setState({ loadingAssets:true })
       const products = await RNIap.getSubscriptions(itemSubs);
       console.log(products);
       this.setState({ subscriptions: products });
     } catch(err) {
       console.warn(err); // standardized err.code and err.message available
-      this.setState({ subscriptions: iosNonAutoData })
+      this.setState({ subscriptions: AndroidDataNew })
     } finally {
       this.setState({ loadingAssets:false })
-      console.log("acabo de traer los productos")
-    } 
-
-    purchaseUpdateSubscription = purchaseUpdatedListener((ProductPurchase) => {
+      console.log("Getting Products Done!")
+    }     
+  
+    purchaseUpdateSubscription = purchaseUpdatedListener((purchase: ProductPurchase) => {
       console.log('purchaseUpdatedListener', purchase);
       this.setState({ receipt: purchase.transactionReceipt }, () => this.goNext());
     });
-    
-    purchaseErrorSubscription = purchaseErrorListener((PurchaseError) => {
+
+    purchaseErrorSubscription = purchaseErrorListener((error: PurchaseError) => {
       console.log('purchaseErrorListener', error);
       Alert.alert('purchase error', JSON.stringify(error));
-    });
+    }); 
+  
+
   } 
 
   async componentWillMount() {
@@ -92,10 +105,12 @@ class SubscriptionScreen extends React.Component {
       purchaseUpdateSubscription.remove();
       purchaseUpdateSubscription = null;
     }
-   if (purchaseErrorSubscription) {
+
+    if (purchaseErrorSubscription) {
       purchaseErrorSubscription.remove();
       purchaseErrorSubscription = null;
     }
+
   } 
 
   getSubscription = async ( selectedProduct ) =>{
@@ -108,7 +123,7 @@ class SubscriptionScreen extends React.Component {
           this.subscription.remove();
         }
         // Will return a purchase object with a receipt which can be used to validate on your server.
-        const purchase = await RNIap.buyProduct(selectedProduct);
+        const purchase = await RNIap.requestSubscription(selectedProduct);
         console.log('purchase Info:', purchase);
         this.setState({
           receipt: purchase.transactionReceipt, // save the receipt if you need it, whether locally, or to your server.
@@ -179,7 +194,7 @@ class SubscriptionScreen extends React.Component {
   }
 
 
-  _handleRestorePurchases = async (productId) => {
+  _handleRestoreSubscription = async () => {
       var test = helpers.restoreSubscription();
       console.log(test);
   }    

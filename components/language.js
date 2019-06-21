@@ -29,7 +29,7 @@ export const Lang = {
             freeDescription: 'Podrás ver, pero no obtener ni consumir ofertas.',
             freeNoteMessage: "Puedes utilizar Savings Zone gratuitamente ('Test Drive') y no habra costos de uso, sin embargo deberá obtener un plan si desea obtener y consumir ofertas.",
             iosNote: "El pago se cargará a la cuenta de iTunes en la confirmación de la compra.  Las suscripciones se renovarán automáticamente a menos que se cancelen dentro de las 24 horas antes del final del período actual. Las suscripciones pueden ser administradas por el usuario y la renovación automática puede desactivarse yendo a la configuración de la cuenta del usuario después de la compra. Puedes cancelar en cualquier momento con la configuración de tu cuenta de iTunes.  Cualquier porción no utilizada de un período de prueba gratuito, si se ofrece, se perderá cuando el usuario compre una suscripción a esa publicación, en su caso.",            
-            subscribedAlreadyLink: "Recupere su Supcripcion Aquí",
+            subscribedAlreadyLink: "Recupere su Supcripcion Aquí",            
             errorCancelledTitle:'Payment was cancelled',
             errorCancelledMessage:'An error is encountered with the order process, You are not going to be charged for this trasaction.',
             errorDeclinedTitle:'Payment was Declined',
