@@ -4,13 +4,28 @@ const FETCH_REDEEM_OFFER_SUCCESS = 'FETCH_REDEEM_OFFER_SUCCESS';
 const FETCH_REDEEM_OFFER         = 'FETCH_REDEEM_OFFER';
 const FETCH_REDEEM_OFFER_FAILED  = 'FETCH_REDEEM_OFFER_FAILED';
 
+const FETCH_STATS_SUCCESS = 'FETCH_STATS_SUCCESS';
+const FETCH_STATS         = 'FETCH_STATS';
+const FETCH_STATS_FAILED  = 'FETCH_STATS_FAILED';
+
 const INITIAL_STATE = {
 	loading: false,
 	isSync: false,
-	offlineDataSource: [],
+  offlineDataSource: [],
+  merchantStats: [],
 	error: null,
   message:''
 };
+
+export const getMerchantStats = (merchant_id = null) => async dispatch => {
+  try{
+    dispatch({ type: FETCH_STATS });
+    const pathService = `${global.wpSite}/wp-json/svapphelper/v2/redeem`;
+  }
+  catch{
+
+  }
+}
 
 export const merchantRedeemOffer = (offer= null) => async dispatch => {
 

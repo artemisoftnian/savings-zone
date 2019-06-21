@@ -112,10 +112,7 @@ class SubscriptionScreen extends React.Component {
       Alert.alert('purchase error', JSON.stringify(error));
     });
 
-
   } 
-
-
 
   processReturnedPurchase = async (details) => { 
     await console.log('a ver que retorno', details);  
@@ -136,7 +133,11 @@ class SubscriptionScreen extends React.Component {
 
     if( selectedProduct != 'free' ){
       try {
-        console.log("about to get:", selectedProduct );      
+        console.log("about to get:", selectedProduct );  
+        
+        if(this.subscription) {
+          this.subscription.remove();
+        }
 
         if(this.state.storeTest)
           response = await RNIap.buyProduct(selectedProduct).then( async details => { this.processReturnedPurchase(details) });
@@ -146,6 +147,11 @@ class SubscriptionScreen extends React.Component {
       } catch (error) {
 
           console.log(error);
+
+          this.subscription = RNIap.addAdditionalSuccessPurchaseListenerIOS(async (purchase) => {
+            this.setState({ receipt: purchase.transactionReceipt }, () => this.goToNext());
+            this.subscription.remove();
+          });
         
           if (error.message === gpbErrors.PAYMENT_BUG) {
 

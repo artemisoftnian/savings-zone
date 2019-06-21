@@ -118,7 +118,7 @@ class MerchantStats extends React.Component {
         }
         showFooter={false}         
       > 
-      <Text style={{margin:20, flex:1, textAlign:'center', fontSize:20}} >Merchant Tools</Text> 
+      <Text style={{margin:20, flex:1, textAlign:'center', fontSize:20}} >Merchant Stats</Text> 
       <View testID="merchantView" style={{margin:20, flex:1}}>
           <Button 
             testID="btnScan"          

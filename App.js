@@ -59,7 +59,7 @@ global.advert = Constants.manifest.extra.advertising;
 const store = ConfigureStore();
 
 const AppStack = createStackNavigator({ 
-    Offers: SubscriptionScreen,//OffersScreen, //screenDev,//
+    Offers: OffersScreen, //screenDev,// SubscriptionScreen,//
     Oferta: Oferta,   
     Scanner: ScannerScreen,
     MyOffers: MyOfferScreen,
