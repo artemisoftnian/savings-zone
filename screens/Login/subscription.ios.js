@@ -14,6 +14,8 @@ import helpers from '../../components/helpers';
 
 const itemSubs = helpers.itemSubs.ios;
 
+let purchaseUpdateSubscription;
+
 
 class SubscriptionScreen extends React.Component {
 
@@ -54,9 +56,9 @@ class SubscriptionScreen extends React.Component {
     
  });
 
-  async componentWillMount() {
-      
-  } 
+
+
+
 
   async componentDidMount(){
 
@@ -73,6 +75,27 @@ class SubscriptionScreen extends React.Component {
       console.log("acabo de traer los productos")
     } 
 
+    purchaseUpdateSubscription = purchaseUpdatedListener((ProductPurchase) => {
+      console.log('purchaseUpdatedListener', purchase);
+      this.setState({ receipt: purchase.transactionReceipt }, () => this.goNext());
+    });
+    
+    purchaseErrorSubscription = purchaseErrorListener((PurchaseError) => {
+      console.log('purchaseErrorListener', error);
+      Alert.alert('purchase error', JSON.stringify(error));
+    });
+  } 
+
+  async componentWillMount() {
+
+    if (purchaseUpdateSubscription) {
+      purchaseUpdateSubscription.remove();
+      purchaseUpdateSubscription = null;
+    }
+   if (purchaseErrorSubscription) {
+      purchaseErrorSubscription.remove();
+      purchaseErrorSubscription = null;
+    }
   } 
 
   getSubscription = async ( selectedProduct ) =>{
