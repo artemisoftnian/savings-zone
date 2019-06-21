@@ -60,10 +60,6 @@ class SubscriptionScreen extends React.Component {
     
  });
 
-
-
-
-
   async componentDidMount(){
 
     try {
@@ -88,7 +84,7 @@ class SubscriptionScreen extends React.Component {
   
     purchaseUpdateSubscription = purchaseUpdatedListener((purchase: ProductPurchase) => {
       console.log('purchaseUpdatedListener', purchase);
-      this.setState({ receipt: purchase.transactionReceipt }, () => this.goNext());
+      this.setState({ receipt: purchase.transactionReceipt }, () => this._gotit(purchase));
     });
 
     purchaseErrorSubscription = purchaseErrorListener((error: PurchaseError) => {
@@ -125,15 +121,15 @@ class SubscriptionScreen extends React.Component {
         // Will return a purchase object with a receipt which can be used to validate on your server.
         const purchase = await RNIap.requestSubscription(selectedProduct);
         console.log('purchase Info:', purchase);
-        this.setState({
-          receipt: purchase.transactionReceipt, // save the receipt if you need it, whether locally, or to your server.
-        });
-        this._gotit(purchase);
+        //this.setState({
+        //  receipt: purchase.transactionReceipt, // save the receipt if you need it, whether locally, or to your server.
+        //});
+        //this._gotit(purchase);
       } catch(err) {
         // standardized err.code and err.message available
         console.warn(err.code, err.message);
         this.subscription = RNIap.addAdditionalSuccessPurchaseListenerIOS(async (purchase) => {
-          this.setState({ receipt: purchase.transactionReceipt }, () => this.goToNext());
+          this.setState({ receipt: purchase.transactionReceipt }, () => this._gotit(purchase) );
           this.subscription.remove();
         });
       }finally{
@@ -244,7 +240,9 @@ class SubscriptionScreen extends React.Component {
           <View enabled style={{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20  }}>
 
               <View style={{backgroundColor:'#efeff4', maxWidth:400}}>
-                  {this.state.loadingAssets?<ActivityIndicator size="large" style={{flex:1}} />:null}    
+                {this.state.loadingAssets?[<ActivityIndicator key="loading-indicator" size="large" style={{flex:1}} />,<Text style={{textAlign:"center"}} key="loading-text">Loading Subscriptions...</Text>] :null} 
+                  
+                    
                   {
                       this.state.subscriptions.map((product, i) => {
                         return (
