@@ -30,24 +30,24 @@ const helpers = {
 
     try {
 
-        if (RNIap.getAvailablePurchases === "function") { 
+      const purchases = await RNIap.getAvailablePurchases();
 
-          const purchases = await RNIap.getAvailablePurchases();
-    
-          purchases.forEach(purchase => { 
+      if(purchases.length > 0 ){
+
+        purchases.forEach(purchase => { 
   
-            for (let i = 0; i < purchases.length; i++) {
-              if ( subscriptions.includes( purchases[i].productId) ) {
-                message = {restored:true, restoredItem:purchases[i].productId, error:null};
-              }
-            }                  
-            message = {restored:false,restoredItem:"none", error:null};
-          })
-
-        }
-        else{
-          message = {restored:false, restoredItem:"none", error:"Sorry Running From Expo not ExpoKit!"};
-        }
+          for (let i = 0; i < purchases.length; i++) {
+            if ( subscriptions.includes( purchases[i].productId) ) {
+              message = {restored:true, restoredItem:purchases[i].productId, error:null};
+            }
+          }                  
+          message = {restored:false,restoredItem:"none", error:null};
+        })        
+            
+      }
+      else{
+        message = {restored:false,restoredItem:"none", error:"Nothing to restore"};
+      }  
 
     } catch(err) {
       console.log(err.message);

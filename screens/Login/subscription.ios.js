@@ -32,6 +32,7 @@ class SubscriptionScreen extends React.Component {
       selectedPlanPrice: 'Free',
       selectedPlanCode: 'free',
       selectedPeriod: 'free',
+      currentPlan: null,
       inProgress:false,
       loadingAssets:false
     };
@@ -63,6 +64,7 @@ class SubscriptionScreen extends React.Component {
   async componentDidMount(){
 
     try {
+      this.setState({ subscriptions: iosData, currentPlan: this.props.user.user.user_meta.subscription_type });
       const result = await RNIap.initConnection();
       console.log('result', result);
     } catch (err) {
@@ -76,7 +78,7 @@ class SubscriptionScreen extends React.Component {
       this.setState({ subscriptions: products });
     } catch(err) {
       console.warn(err); // standardized err.code and err.message available
-      this.setState({ subscriptions: AndroidDataNew })
+      this.setState({ subscriptions: iosData })
     } finally {
       this.setState({ loadingAssets:false })
       console.log("Getting Products Done!")
@@ -92,6 +94,8 @@ class SubscriptionScreen extends React.Component {
       Alert.alert('purchase error', JSON.stringify(error));
     }); 
   
+    
+
 
   } 
 
@@ -110,7 +114,7 @@ class SubscriptionScreen extends React.Component {
   } 
 
   getSubscription = async ( selectedProduct ) =>{
-    console.log('seleccionaaaddooo', selectedProduct);
+    console.log('seleccionaaaddooo', selectedProduct);   
 
     if(selectedProduct != 'free'){
       this.setState({ inProgress: true });
@@ -138,16 +142,22 @@ class SubscriptionScreen extends React.Component {
 
     }
     else{
-      var detail = await this.props.updateSubscription(this.props.user.user.user_id, 'free', "ios");
-      console.log("yyyyy retornooooo...",detail);
+      if(this.state.currentPlan != 'free'){
 
-      if(detail){
-        this.props.navigation.navigate('Offers'); 
+        var detail = await this.props.updateSubscription(this.props.user.user.user_id, 'free', "ios");
+        console.log("yyyyy retornooooo...",detail);
+  
+        if(detail){
+          this.props.navigation.navigate('Offers'); 
+        }else{
+          console.log("que error retorno?",detail); 
+        }
+
       }
       else{
-        console.log("que error retorno?",detail); 
+        this.props.navigation.navigate('Offers'); 
       }
-      
+            
     }
 
   }
@@ -169,6 +179,7 @@ class SubscriptionScreen extends React.Component {
 
 
   _handleSubscriptionType = async (selectedPlan) =>{
+    
       this.setState({ loadingAssets:true })     
       if(selectedPlan == 'free'){
         await this.getSubscription(selectedPlan);
@@ -240,7 +251,7 @@ class SubscriptionScreen extends React.Component {
           <View enabled style={{ flex:1, justifyContent: 'center', alignItems: 'center', padding:20  }}>
 
               <View style={{backgroundColor:'#efeff4', maxWidth:400}}>
-                {this.state.loadingAssets?[<ActivityIndicator key="loading-indicator" size="large" style={{flex:1}} />,<Text style={{textAlign:"center"}} key="loading-text">Loading Subscriptions...</Text>] :null} 
+                {this.state.loadingAssets?[<ActivityIndicator key="loading-indicator" size="large" style={{flex:1}} />,<Text style={{textAlign:"center"}} key="loading-text">loading Subscriptions...</Text>] :null} 
                   
                     
                   {

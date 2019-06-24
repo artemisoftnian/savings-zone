@@ -3,16 +3,14 @@ import * as React from 'react';
 import {
   View,
   StyleSheet,
-  RefreshControl, AsyncStorage
+  AsyncStorage, FlatList, ListItem
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { fetchOffersDataSource, saveOffer } from './reducer'; 
+import { fetchOffersDataSource, saveOffer, getMerchantStats } from './reducer'; 
 
 import { Text,  Button,  Icon } from 'native-base';
-
-import MainWrapper from '../../components/MainWrapper';  
-
+import reducer from '../Offers/reducer';
 
 class MerchantStats extends React.Component {
 
@@ -38,33 +36,75 @@ class MerchantStats extends React.Component {
 			refreshing: false,
 			isConnected: true,
 			start: false,
-      selected: "key1"
+      selected: "key1",
+      myOffers: [
+        {
+          "offer_id": 12,
+          "offer_title": "Hotel San Walde, San Juan: Estadía de 2 noches para 2 personas que incluye cama full, wifi y desayuno continental",
+          "reddemend": "38",
+          "remain": "-17",
+        },
+        {
+          "offer_id": 11,
+          "offer_title": "Pesca Fresca Beer Garden, Fajardo: 2 Platos a escoger: Chillo Entero, El Volcán o Chuleta Can Can + Sangría + Flan",
+          "reddemend": "5",
+          "remain": "5",
+        },
+        {
+          "offer_id": 9,
+          "offer_title": "¡Road Trip por Utuado con Spotin! Visita a la Piedra Sofá + Ruta del Río Cañon Blanco y más",
+          "reddemend": "7",
+          "remain": "93",
+        },
+      ]
     };
 
   }
 
   arrayholder = [];
   
-  static navigationOptions = {
-    title: 'Offer List',
-    header: null,
+  static navigationOptions = ({ navigation }) => {
+    return {
+    headerTransparent: false,
+    title: 'Merchant Stats',
+    headerBackTitle : null,
+    headerTitleStyle : {width : '90%', textAlign: 'center'} ,  
+    headerRight: (
+        [
+          global.testing == true?
+          <Button transparent
+            key="backBtn"
+            title="Go back"
+            testID = "backBtn"
+            onPress={() => navigation.goBack()}
+          ><Text> </Text>
+          </Button>
+        : null ,        
+        ]
+      ),
+    }    
   };  
 
    //await AsyncStorage.removeItem('user')
   async componentWillMount() {
     const { user_id } = this.props.user;
+    var test = await this.props.getMerchantStats( user_id );
+
     //this.props.fetchOffersDataSource();
     //this.arrayholder = this.props.offerList.dataSource;
     //this.setState({ start: true, dataSource: this.props.offerList.dataSource });
   }
 
   async componentDidMount() {
-    //this.setState({ start: true });
+    const { user_id } = this.props.user;
+    console.log("diMount", this.props.merchant.merchantStats.myOffers);
+    this.setState({ myOffers: this.props.merchant.merchantStats.myOffers})
   }
 
 	refreshOffers = async () => {
 		this.setState({ isLoading: false, dataSource: null }); 
-		this.fetchOfferData();
+    this.fetchOfferData();
+    
 	};
 
   fetchOfferData = async () => {
@@ -90,6 +130,7 @@ class MerchantStats extends React.Component {
 
 
     const { navigate } = this.props.navigation; 
+    const {screenProps} = this.props;
 
     let renderList = null;
     
@@ -99,71 +140,58 @@ class MerchantStats extends React.Component {
         renderList = null;
       else
         renderList = this.state.dataSource;
-    }    
+    }   
 
+    console.log("state logico", this.state.myOffers[0].offer_title);
+    
     return (
+      <View style={styles.container}>
+         <Text style={{}}>Black Order</Text>
+            <FlatList         
+            data={ this.state.myOffers } 
+            extraData={this.state}       
+            style={{ marginTop:2, backgroundColor:'red' }}
+            keyExtractor={(item, index) => item[index]['remain']}
+            renderItem={({ item, index }) => {
+              console.log(item[index].offer_title)
+              return (
+                  <ListItem
+                    title={item[index].offer_title}
+                    key={item[index].offer_id.toString()} 
+                    titleStyle={ {color: '#000'} }
+                  />
+              ),
+              <ListItem
+              title="Pruebga"
+              key="none"
+              />          
+            }}        
+          />  
 
-      <MainWrapper
-        //title="Savings Zone"
-        onScanPress={() => this.props.navigation.navigate('Scanner', {'destiny':'MerchantHome'} )}
-        rightIcon = 'md-qr-scanner'
-        view='horizontal'
-        searchFunction = {this.handleSearchFilter}
-        nav = { this.props.navigation }     
-        refreshFunction={
-          <RefreshControl
-            refreshing={this.state.refreshing} 
-            onRefresh={()=> this.refreshOffers() }
-          />
-        }
-        showFooter={false}         
-      > 
-      <Text style={{margin:20, flex:1, textAlign:'center', fontSize:20}} >Merchant Stats</Text> 
-      <View testID="merchantView" style={{margin:20, flex:1}}>
-          <Button 
-            testID="btnScan"          
-            iconLeft full bordered rounded success 
-            style={{margin:10, flex:1}}
-            onPress={() => this.props.navigation.navigate('Scanner', {'destiny':'MerchantHome'} )}
-          >
-            <Icon name='md-qr-scanner' />
-            <Text>Redeem Offers</Text>
-          </Button>
-          <Button
-            testID="btnStats"
-            iconLeft full bordered rounded primary
-            style={{margin:10, flex:1}} 
-            onPress={ () => {} }
-          >
-            <Icon name='md-stats' />
-            <Text>Stats</Text>
-          </Button>
 
-          <Button 
-            testID="btnExit"
-            iconLeft full bordered rounded warning
-            style={{margin:10, flex:1}} 
-            onPress={ ()=>{ this._handleLogOut() } }
-          >
-            <Icon name='exit' />
-            <Text>Log Out</Text>
-          </Button>
-                 
-      </View>     
 
-      </MainWrapper>
+      <Text style={{}}>Black Order</Text>    
+    </View>
     );
   }
 }
 
 const styles = StyleSheet.create({  
-
+  container: {
+    flex: 1,
+    paddingTop: 22
+   },
+   item: {
+     padding: 10,
+     fontSize: 18,
+     height: 44,
+   },
 });
 
 
 const mapStateToProps = state => {
-	const { user, offerList } = state;
-	return { user: { ...user, ...user.user }, offerList };
+	const { user, merchant } = state;
+	return { user: { ...user, ...user.user }, merchant}; 
 };
 
-export default connect(mapStateToProps, { fetchOffersDataSource, saveOffer })(MerchantStats);
+export default connect(mapStateToProps, { fetchOffersDataSource, saveOffer, getMerchantStats })(MerchantStats);

@@ -39,10 +39,10 @@ import screenDev from './screens/Login/screenDev';
 import { Lang } from './components/language';
 
 //Dev Remote
-global.wpSite = "https://sv.artemisoftnian.com";
+//global.wpSite = "https://sv.artemisoftnian.com";
 
 //Dev Local
-//global.wpSite = "http://www.svz.com:8080"  
+global.wpSite = "http://www.svz.com:8080";
 
 //Production
 //global.wpSite = "https://savingszonepr.com";
