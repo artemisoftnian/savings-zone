@@ -171,11 +171,11 @@ class MerchantStats extends React.Component {
                       <CardItem>
                         <Left style={{width:'50%'}}>
                           <Button transparent>                            
-                            <Badge warning><Text>Redemmed: {item.reddemend}</Text></Badge>                              
+                            <Badge warning><Text>Redimidos: <Text style={{fontWeight:'bold'}}>{item.reddemend}</Text></Text></Badge>                              
                           </Button>
                         </Left>
                         <Right style={{width:'50%'}}>                           
-                          <Badge><Text>Remain: {item.remain}</Text></Badge>
+                          <Badge><Text>Restantes: <Text style={{fontWeight:'bold'}}>{item.remain}</Text></Text></Badge>
                         </Right>
                       </CardItem>                        
                   </Card>
