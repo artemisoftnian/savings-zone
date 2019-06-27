@@ -5,6 +5,12 @@ const FETCH_USER_LOGOUT = 'FETCH_USER_LOGOUT';
 const FETCH_OFFERS = 'FETCH_OFFERS';
 const FETCH_OFFERS_FAILED = 'FETCH_OFFERS_FAILED';
 const FETCH_OFFERS_SUCCESS= 'FETCH_OFFERS_SUCCESS';
+
+const FETCH_OFFER_REMAIN = 'FETCH_OFFER_REMAIN';
+const FETCH_OFFER_REMAIN_FAILED = 'FETCH_OFFER_REMAIN_FAILED';
+const FETCH_OFFER_REMAIN_SUCCESS = 'FETCH_OFFER_REMAIN_SUCCESS';
+
+
 const SET_NEW_LOCAL_OFFER = 'SET_NEW_LOCAL_OFFER';
 const REMOVE_LOCAL_OFFER = 'REMOVE_LOCAL_OFFER';
 
@@ -13,6 +19,7 @@ const INITIAL_STATE = {
 	loading: false,
 	isSync: false,
 	offlineDataSource: [],
+	remainDataSource: [],	
 	error: null, 
 	markers: []
 	
@@ -25,6 +32,42 @@ export const fetchOffersDataSource = () => async dispatch => {
     return false;
   }
 }
+
+export const fetchOffersRemains = () => async dispatch => {
+	try{
+		return fetchRemainOffers(dispatch);		
+	}catch(error){
+		return false;
+	}
+}
+
+const fetchRemainOffers = async (dispatch) => {
+	try {
+		dispatch({ type: FETCH_OFFER_REMAIN });
+		const pathService = `${global.wpSite}/wp-json/svapphelper/v2/offers/remain`; 
+		let data = await fetch(pathService,{
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				'Content-Ads': helpers.getAvertisingID()
+			},
+		});
+		if (data.status === 200) {
+			data = await data.json();
+			dispatch({ type: FETCH_OFFER_REMAIN_SUCCESS, payload: data });
+			return true;
+		}
+		dispatch({ type: FETCH_OFFER_REMAIN_FAILED, error: 'Something error!' });
+		return false;
+	} catch (error) {
+		dispatch({
+			type: FETCH_OFFER_REMAIN_FAILED,
+			error:
+				'A network error (such as timeout, interrupted connection or unreachable host) has occurred'
+		});
+		return false;
+	}
+};
 
 const fetchOffers = async (dispatch) => {
 	try {
@@ -101,6 +144,16 @@ export default (state = INITIAL_STATE, action) => {
 		case FETCH_OFFERS_FAILED: {
 			return { ...state, loading: false, error: action.error };
 		}
+
+		case FETCH_OFFER_REMAIN: {
+			return { ...state, loading: true, error: null };
+	   }
+	   case FETCH_OFFER_REMAIN_SUCCESS: {
+		   return { ...state, loading: false, error: null, remainDataSource: action.payload };
+	   }
+	   case FETCH_OFFER_REMAIN_FAILED: {
+		   return { ...state, loading: false, error: action.error };
+	   }		
 		default:
 			return state;
 	}
