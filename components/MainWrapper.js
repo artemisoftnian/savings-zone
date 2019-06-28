@@ -139,9 +139,9 @@ const styles = StyleSheet.create({
   },
   footerMain:{  
     backgroundColor:"#4e2e59",
-    height: ( Platform.OS === 'ios' && isIPhoneXrSize(dim) )?89: 55,
+    height: ( Platform.OS === 'ios' && isIPhoneXrSize(dim) )?70: 55,
      //paddingBottom: ( Platform.OS === 'ios' && isIPhoneXrSize(dim) )?20:null,
-    paddingBottom: ( Platform.OS === 'ios' && isIPhoneXrSize(dim) )?29: 4,
+    paddingBottom: ( Platform.OS === 'ios' && isIPhoneXrSize(dim) )?15: 4,
   }
   
 

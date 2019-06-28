@@ -64,7 +64,7 @@ class Offers extends React.Component {
     this.props.fetchOffersDataSource();
     this.arrayholder = this.props.offerList.dataSource;
     this.setState({ start: true, dataSource: this.props.offerList.dataSource });
-    this.remainIntervalID = setInterval( ()=> this.remainOffers() , 1000);
+    this.remainIntervalID = setInterval( async ()=> await this.remainOffers() , 1000);
   }
 
   componentWillUnmount() {
@@ -81,7 +81,7 @@ class Offers extends React.Component {
     
     this.intervalCounter++;
     if(this.intervalCounter == 1){
-       test = this.props.fetchOffersRemains().then(
+       test = await this.props.fetchOffersRemains().then(
         this.setState({ remainOffers: this.props.offerList.remainDataSource})
       );      
       console.log(this.state.remainOffers);
