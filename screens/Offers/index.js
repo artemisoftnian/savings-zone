@@ -6,7 +6,7 @@ import { FlatList, ActivityIndicator, View, StyleSheet, TouchableHighlight,
 import { Toast} from 'native-base'; 
 
 import { connect } from 'react-redux';
-import { fetchOffersDataSource, saveOffer } from './reducer';
+import { fetchOffersDataSource, fetchOffersRemains,  saveOffer } from './reducer';
 
 import { Text, Button,  Icon, Picker, Form, Root }  from 'native-base';
 
@@ -16,6 +16,9 @@ import OfferPoster from '../../components/OfferPoster';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
 class Offers extends React.Component {
+
+  remainIntervalID = 0;
+  intervalCounter = 0;
 
   constructor(props) {
     super(props);
@@ -35,7 +38,8 @@ class Offers extends React.Component {
       result: [],
       dataSource: [],
 			filter: '',
-			offlineData: [],
+      offlineData: [],
+      remainOffers: [],
 			refreshing: false,
 			isConnected: true,
 			start: false,
@@ -59,13 +63,38 @@ class Offers extends React.Component {
     const { user_id } = this.props.user;
     this.props.fetchOffersDataSource();
     this.arrayholder = this.props.offerList.dataSource;
-    this.setState({ start: true, dataSource: this.props.offerList.dataSource });    
+    this.setState({ start: true, dataSource: this.props.offerList.dataSource });
+    this.remainIntervalID = setInterval( ()=> this.remainOffers() , 1000);
+  }
 
+  componentWillUnmount() {
+    clearInterval(this.remainIntervalID);
   }
 
   async componentDidMount() {
     //this.setState({ start: true });
+    //Check Remains Offers Every X time
+    
   }
+
+  remainOffers = async () => {
+    
+    this.intervalCounter++;
+    if(this.intervalCounter == 1){
+       test = this.props.fetchOffersRemains().then(
+        this.setState({ remainOffers: this.props.offerList.remainDataSource})
+      );      
+      console.log(this.state.remainOffers);
+    }
+
+    if (this.intervalCounter >= 5) {
+      clearInterval(this.remainIntervalID);
+    }  
+    
+  }
+
+
+
 
 	refreshOffers = async () => {
 		this.setState({ isLoading: false, dataSource: null }); 
@@ -502,4 +531,4 @@ const mapStateToProps = state => {
 	return { user: { ...user, ...user.user }, offerList };
 };
 
-export default connect(mapStateToProps, { fetchOffersDataSource, saveOffer })(Offers);
+export default connect(mapStateToProps, { fetchOffersDataSource, fetchOffersRemains,  saveOffer })(Offers);

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, Dimensions, Platform } from 'react-native';
 import {Constants} from 'expo'; 
 
 import { SearchBar } from 'react-native-elements'; 
@@ -31,8 +31,8 @@ export default class MainWrapper extends React.Component {
   showFooter = () => {
     if(this.props.showFooter){
       return ( 
-        <Footer> 
-          <FooterTab  style={{backgroundColor:"#4e2e59"}}> 
+        <Footer style={styles.footerMain}> 
+          <FooterTab  style={{backgroundColor:"#4e2e59", }}> 
             <Button vertical 
               testID="toOffers"
               onPress={ () => this.props.nav.navigate('Offers') }
@@ -114,6 +114,15 @@ MainWrapper.defaultProps = {
   showFooter: true,
 };
 
+function isIPhoneXSize(dim) {
+  return dim.height == 812 || dim.width == 812;
+}
+
+function isIPhoneXrSize(dim) {
+  return dim.height == 896 || dim.width == 896;
+}
+
+const dim = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   header:{
@@ -127,7 +136,14 @@ const styles = StyleSheet.create({
   },
   iconColor:{
     color:'#fff'
+  },
+  footerMain:{  
+    backgroundColor:"#4e2e59",
+    height: ( Platform.OS === 'ios' && isIPhoneXrSize(dim) )?89: 55,
+     //paddingBottom: ( Platform.OS === 'ios' && isIPhoneXrSize(dim) )?20:null,
+    paddingBottom: ( Platform.OS === 'ios' && isIPhoneXrSize(dim) )?29: 4,
   }
+  
 
 });
 
