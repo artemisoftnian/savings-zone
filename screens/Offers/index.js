@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { FlatList, ActivityIndicator, View, StyleSheet, TouchableHighlight,  
-  Modal, Alert,  RefreshControl, Image } from 'react-native';
+  Modal, Alert,  RefreshControl, Image, InteractionManager } from 'react-native';
 
 import { Toast} from 'native-base'; 
 
@@ -14,11 +14,14 @@ import MainWrapper from '../../components/MainWrapper';
 import OfferInfo from '../../components/OfferInfo';
 import OfferPoster from '../../components/OfferPoster';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import helpers from '../../components/helpers';
 
 class Offers extends React.Component {
 
   remainIntervalID = 0;
-  intervalCounter = 0;
+  remainIntervalTimer = 5000;
+  updateTimeout;
+  pathService = `${global.wpSite}/wp-json/svapphelper/v2/offers/remain`; 
 
   constructor(props) {
     super(props);
@@ -39,14 +42,15 @@ class Offers extends React.Component {
       dataSource: [],
 			filter: '',
       offlineData: [],
-      remainOffers: [],
+      remainOffers: this.props.offerList.remainDataSource,
 			refreshing: false,
 			isConnected: true,
 			start: false,
       selected: "*",
       showAlert: false,
       alertType: 'got',
-      expired: false    
+      expired: false,
+      isFetching: false  
     };
 
   }
@@ -64,35 +68,72 @@ class Offers extends React.Component {
     this.props.fetchOffersDataSource();
     this.arrayholder = this.props.offerList.dataSource;
     this.setState({ start: true, dataSource: this.props.offerList.dataSource });
-    this.remainIntervalID = setInterval( async ()=> await this.remainOffers() , 1000);
+    //this.remainIntervalID = setInterval( ()=> this.noReduxRemains() , this.remainIntervalTimer); 
   }
 
+  
   componentWillUnmount() {
     clearInterval(this.remainIntervalID);
+    clearTimeout(updateTimeout);
   }
 
   async componentDidMount() {
+    console.log("componentDidMount");
     //this.setState({ start: true });
-    //Check Remains Offers Every X time
-    
+    //Check Remains Offers Every X timeexp
+    //this.updateMessages(); 
+      
   }
+
+
+  noReduxRemains = async () => {
+
+    this.counter++;
+    console.log(this.counter, 'isFetching', this.state.isFetching );
+      
+      if(this.state.isFetching == false){
+
+        try{
+          //clearInterval(this.remainIntervalID);
+         this.setState({ isFetching:true});
+
+         test = await this.props.fetchOffersRemains().then(this.setState({ isFetching:false}));        
+         console.log('corrida', this.counter, this.props.offerList.remainDataSource);  
+        }
+        catch(e){
+          console.log(e.message);
+        }
+        finally{
+          //this.updateTimeout = setTimeout(this.noReduxRemains, this.remainIntervalTimer);
+        }     
+      
+      }
+      else{
+        return false;
+      }
+  }
+
+
+  counter = 0;
 
   remainOffers = async () => {
-    
-    this.intervalCounter++;
-    if(this.intervalCounter == 1){
-       test = await this.props.fetchOffersRemains().then(
-        this.setState({ remainOffers: this.props.offerList.remainDataSource})
-      );      
-      console.log(this.state.remainOffers);
-    }
+    this.counter++;
+    InteractionManager.runAfterInteractions(async () => {
+      try{
+        clearInterval(this.remainIntervalID);
+        test = await this.props.fetchOffersRemains();
+        //this.setState({ remainOffers: this.props.offerList.remainDataSource})
+        console.log('lo que hay', this.counter, this.state.remainOffers)
+      }
+      catch(e){
+        console.log(e.message);
+      }
+      finally{
+        this.remainIntervalID = setInterval( async ()=> await this.remainOffers() , this.remainIntervalTimer);
+      }    
+    });    
 
-    if (this.intervalCounter >= 5) {
-      clearInterval(this.remainIntervalID);
-    }  
-    
   }
-
 
 
 
@@ -357,8 +398,8 @@ class Offers extends React.Component {
   */
 
   render() {
-    const {showAlert} = this.state;
-    const { loading, dataSource } = this.props.offerList;
+    const {showAlert, remainOffers} = this.state;
+    const { loading, dataSource, remainDataSource } = this.props.offerList;
     const getDataSourceFilter = this.getDataSourceFilter();
     const { navigate } = this.props.navigation; 
     const { screenProps } = this.props;
@@ -397,7 +438,8 @@ class Offers extends React.Component {
           />
         } 
         lang={screenProps.lang}        
-      > 
+      >
+      <Text>Remain: {remainDataSource.or[0].remain}</Text>
       <FlatList
         testID="offersView"
         ListHeaderComponent={  

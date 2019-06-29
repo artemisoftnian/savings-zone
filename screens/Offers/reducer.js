@@ -14,6 +14,9 @@ const FETCH_OFFER_REMAIN_SUCCESS = 'FETCH_OFFER_REMAIN_SUCCESS';
 const SET_NEW_LOCAL_OFFER = 'SET_NEW_LOCAL_OFFER';
 const REMOVE_LOCAL_OFFER = 'REMOVE_LOCAL_OFFER';
 
+const START_POLLING = 'START_POLLING';
+const STOP_POLLING = 'STOP_POLLING';
+
 const INITIAL_STATE = {
 	dataSource: [],
 	loading: false,
@@ -25,13 +28,19 @@ const INITIAL_STATE = {
 	
 };
 
-export const fetchOffersDataSource = () => async dispatch => {
-  try{
-    return fetchOffers(dispatch);
-  } catch (error){
-    return false;
+
+function startPolling() {
+	return {
+	  type: START_POLLING
+	};
   }
-}
+
+function stopPolling() {
+	return {
+	  type: STOP_POLLING
+	};
+  }
+
 
 export const fetchOffersRemains = () => async dispatch => {
 	try{
@@ -42,9 +51,10 @@ export const fetchOffersRemains = () => async dispatch => {
 }
 
 const fetchRemainOffers = async (dispatch) => {
+	console.log("llamando esto");
 	try {
 		dispatch({ type: FETCH_OFFER_REMAIN });
-		const pathService = `${global.wpSite}/wp-json/svapphelper/v2/offers/remain`; 
+		const pathService = `${global.wpSite}/wp-json/svapphelper/v2/offers/remain`;  
 		let data = await fetch(pathService,{
 			headers: {
 				Accept: 'application/json',
@@ -54,6 +64,7 @@ const fetchRemainOffers = async (dispatch) => {
 		});
 		if (data.status === 200) {
 			data = await data.json();
+			console.log('data', data);
 			dispatch({ type: FETCH_OFFER_REMAIN_SUCCESS, payload: data });
 			return true;
 		}
@@ -68,6 +79,15 @@ const fetchRemainOffers = async (dispatch) => {
 		return false;
 	}
 };
+
+export const fetchOffersDataSource = () => async dispatch => {
+	try{
+	  return fetchOffers(dispatch);
+	} catch (error){
+	  return false;
+	}
+  }
+  
 
 const fetchOffers = async (dispatch) => {
 	try {

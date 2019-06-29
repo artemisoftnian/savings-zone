@@ -12,6 +12,19 @@ const config = {
     blacklist: ['nav']
 };
 
+const updateMessagesMiddleware = ({ dispatch }) => next => {
+    
+    const updateMessages = async () => {
+      console.log('running updateMessagesMiddleware');  
+      await fetchOffersRemains(dispatch);
+      setTimeout(updateMessages, 1000);
+    };
+  
+    updateMessages();
+  
+    return action => next(action);
+  };
+
 const reducer = persistCombineReducers(config, rootReducer);
 
 if (__DEV__) { // eslint-disable-line
