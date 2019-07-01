@@ -146,8 +146,8 @@ class Offers extends React.Component {
     console.log("refreshing...");
     const { user_id } = this.props.user;
     await this.props.fetchOffersDataSource();
-    this.setState({ start: true, dataSource: this.props.offerList.dataSource }); 
     this.arrayholder = this.props.offerList.dataSource;
+    this.setState({ start: true, dataSource: this.props.offerList.dataSource }); 
     console.log(this.arrayholder);
     
   }

@@ -82,8 +82,10 @@ const fetchRemainOffers = async (dispatch) => {
 
 export const fetchOffersDataSource = () => async dispatch => {
 	try{
+		console.log(dispatch);
 	  return fetchOffers(dispatch);
 	} catch (error){
+		console.log(error);
 	  return false;
 	}
   }
@@ -100,11 +102,22 @@ const fetchOffers = async (dispatch) => {
 				'Content-Ads': helpers.getAvertisingID()
 			},
 		});
+
+		console.log('from server', data);
+
+
 		if (data.status === 200) {
-			data = await data.json();
+			data = await data.json();			
 			dispatch({ type: FETCH_OFFERS_SUCCESS, payload: data });
 			return true;
 		}
+
+		if (data.status === 404) {
+			data = await data.json();			
+			dispatch({ type: FETCH_OFFERS_SUCCESS, payload: [] });
+			return true;
+		}
+
 		dispatch({ type: FETCH_OFFERS_FAILED, error: 'Something error!' });
 		return false;
 	} catch (error) {
