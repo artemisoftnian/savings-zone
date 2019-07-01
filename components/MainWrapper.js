@@ -49,7 +49,7 @@ export default class MainWrapper extends React.Component {
             </Button>
             {/*
             <Button vertical
-              onPress={ () => this.props.nav.navigate('MyOffers') }
+              onPress={ () => this.props.nav.navigate('MyOffers') } 
             >
               <Icon name="md-pricetags" />
               <Text>offers</Text>
@@ -138,9 +138,6 @@ const styles = StyleSheet.create({
   },
   footerMain:{  
     backgroundColor:"#4e2e59",
-    height: ( Platform.OS === 'ios' && isIPhoneXrSize(dim) )?70: 55,
-     //paddingBottom: ( Platform.OS === 'ios' && isIPhoneXrSize(dim) )?20:null,
-    paddingBottom: ( Platform.OS === 'ios' && isIPhoneXrSize(dim) )?15: 4,
   }
   
 

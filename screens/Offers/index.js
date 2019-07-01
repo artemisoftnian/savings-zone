@@ -145,10 +145,11 @@ class Offers extends React.Component {
   fetchOfferData = async () => {
     console.log("refreshing...");
     const { user_id } = this.props.user;
-    this.props.fetchOffersDataSource();
-    this.setState({ start: true, dataSource: this.props.offerList.dataSource });
+    await this.props.fetchOffersDataSource();
+    this.setState({ start: true, dataSource: this.props.offerList.dataSource }); 
     this.arrayholder = this.props.offerList.dataSource;
-    (getDataSourceFilter.length%2)==1 ?<Text>Even</Text>:<Text>Odd</Text>
+    console.log(this.arrayholder);
+    
   }
 
   _handleOfferClick = (navigation, item) => {

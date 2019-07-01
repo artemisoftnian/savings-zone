@@ -2,6 +2,12 @@
 
 console.disableYellowBox = true; 
 
+const servers = ({
+  local:"http://www.svz.com:8080", 
+  test:"https://sv.artemisoftnian.com", 
+  prod:"https://savingszonepr.com"   
+})
+
 import * as React from 'react';
 import { AppLoading, Font, Constants } from 'expo'; 
 import { persistStore } from 'redux-persist'
@@ -39,16 +45,9 @@ import screenDev from './screens/Login/screenDev';
 
 
 //LOCALIZATION
-import { Lang } from './components/language';
+import { Lang } from './components/language'; 
 
-//Dev Remote
-global.wpSite = "https://sv.artemisoftnian.com";
-
-//Dev Local
-//global.wpSite = "http://www.svz.com:8080";
-
-//Production
-//global.wpSite = "https://savingszonepr.com";
+global.wpSite = servers.prod;
 
 //Set to true for Automation Tests purposes
 global.testing = false;

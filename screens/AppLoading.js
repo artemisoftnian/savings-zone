@@ -17,15 +17,29 @@ class AppLoading extends React.Component {
    // Fetch the token from storage then navigate to our appropriate place
   _bootstrapAsync = async () => {
 
-    const {isAuth, user} = this.props.user;
-    //console.log(isAuth, user);
-    var navPath = "App";
-        
-    if(isAuth){
-      if(this.props.user.user.user_meta.cupon_capabilities.includes("merchant"))
-        navPath = "Merchant";
+    const {isAuth, user, user_meta} = this.props.user;
+    var userType = "";  
 
-      this.props.navigation.navigate(navPath);
+    var prefix = "cupon_capabilities";
+    if(user_meta[prefix] == undefined){
+      prefix = "wp_capabilities";
+    }
+    
+    userType = await user_meta[prefix];
+    isMerchant = userType.includes("merchant");
+
+    if(isAuth){
+      try{
+        if( isMerchant ){
+          this.props.navigation.navigate('Merchant');           
+        }
+        else{
+          this.props.navigation.navigate('App');
+        }
+      }
+      catch(e){
+        console.log(e);
+      }
     }
     else{
       this.props.navigation.navigate("Auth");

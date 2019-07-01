@@ -41,10 +41,19 @@ class LoginScreen extends React.Component {
           const{user,  password } = this.state;      
           const isAuth = await this.props.loginUser(user, password);
           const { user_meta } = this.props.user.user;
-          const userType = user_meta.cupon_capabilities;
+
+          var userType = "";
+
+          var prefix = "cupon_capabilities";
+          if(user_meta[prefix] == undefined){
+            prefix = "wp_capabilities";
+          }
+
+          userType = await user_meta[prefix];
+          isMerchant = userType.includes("merchant");
   
         if(isAuth) {
-            if( userType.includes("merchant") ){
+            if( isMerchant ){
               this.props.navigation.navigate('Merchant');           
             }
             else{
