@@ -340,63 +340,6 @@ class Offers extends React.Component {
     this.setState({ selected: value, filter: null });
   } 
   
-  /*
-
-  renderModalContent = () => {
-    const {screenProps} = this.props;
-
-    if(this.state.modalVisible){
-      return (
-          <Root>
-            <View enabled style={{ flex:1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-              <View style={styles.modalStyle}>
-
-                <TouchableHighlight
-                  onPress={() => { this._toggleModal(!this.state.modalVisible, null) }} 
-                  style={{  
-                            alignItems:'center', justifyContent:'center', flexDirection:'row',
-                            height:30, backgroundColor: '#393863', overflow:'visible'
-                        }}>
-                  <Icon name="chevron-down" type="FontAwesome"  style={{color:'white', backgroundColor:'purple', padding: 20, borderRadius:50}}/> 
-                </TouchableHighlight>
-                
-                <OfferInfo 
-                  title={this.state.title}
-                  image={this.state.image}
-                  desc={this.state.desc}
-                  price={this.state.price}
-                  daysRemain={this.state.daysRemain}
-                  lang = { screenProps.lang.offerScreen }
-                />
-
-                {
-                    (!this.state.expired)
-                    ?
-                      <Button full onPress = { () => this._handleAddToMyOffers(this.state.offer) } >
-                        <Text>{ screenProps.lang.offerScreen.getBtnMessage }</Text> 
-                      </Button> 
-                    :
-                      <Button danger full onPress={() => { this._toggleModal(!this.state.modalVisible, null) }}  >
-                        <Text>{ screenProps.lang.offerScreen.expiredMessage }</Text> 
-                      </Button>
-                }
-                
-              </View>
-
-            </View>
-          </Root>
-      );
-    }
-    else{
-      return(
-        <View style={styles.modalStyle} /> 
-      )
-    }
-
-  };        
-
-  */
-
   render() {
     const {showAlert, remainOffers} = this.state;
     const { loading, dataSource, remainDataSource } = this.props.offerList;
@@ -439,7 +382,7 @@ class Offers extends React.Component {
         } 
         lang={screenProps.lang}        
       >
-      <Text>Remain: {remainDataSource.or[0].remain}</Text>
+      
       <FlatList
         testID="offersView"
         ListHeaderComponent={  

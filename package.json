@@ -19,7 +19,7 @@
     "expokit": "32.1.1",
     "in-app-purchase": "1.10.5",
     "moment": "2.22.2",
-    "native-base": "2.8.1",
+    "native-base": "2.12.1",
     "prop-types": "15.6.2",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",

@@ -69,31 +69,33 @@ class Oferta extends React.Component {
 
    //await AsyncStorage.removeItem('user')
   async componentWillMount() {
-    const { user_id } = this.props.user;
 
-    let data = await this.props.navigation.getParam('offer','no_offer_data');  
-
-    this.setState({ 
-        title: data.title,
-        //category: data.data_post.post,
-        desc:  data.desc,
-        price: data.price,
-        image: data.image,
-        offer: data.offer,
-        daysRemain: this._getDaysRemain(data.offer.post_meta.offer_exp_date), 
-      });
-
-
-      this.props.navigation.setParams({ 
-        title: this.state.title,
-        getDirections: () => { this._handlePressDirections(data.offer.post_meta.offer_location) } , 
-        shareFunction: () => { this.onShare() }
-       });
 
   }
 
   async componentDidMount() {
     //this.props.navigation.setParams({ cosa: this.state.title });
+    const { user_id } = this.props.user;
+
+    let data = await this.props.navigation.getParam('offer','no_offer_data');  
+    console.log(data.image);
+
+    await this.setState({ 
+      title: data.title,
+      //category: data.data_post.post,
+      desc:  data.desc,
+      price: data.price,
+      image: data.image,
+      offer: data.offer,
+      daysRemain: this._getDaysRemain(data.offer.post_meta.offer_exp_date), 
+    });
+
+
+    await this.props.navigation.setParams({ 
+      title: this.state.title,
+      getDirections: () => { this._handlePressDirections(data.offer.post_meta.offer_location) } , 
+      shareFunction: () => { this.onShare() }
+    });    
   }
 
   _handleOfferClick = (navigation, item) => {
@@ -195,10 +197,7 @@ class Oferta extends React.Component {
       if(alertType == 'fail'){
         return(
           <View style= {styles.customMessage}>
-            <Image
-                style={{width: 50, height: 50}}
-                source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png', cache: 'force-cache'}}
-            />    
+            <Icon name="ios-close-circle" type="Ionicons" style={[styles.alertMessageIcon, {backgroundColor:'#d9534f'}]} />  
             <Text style={{ marginTop:20 }}>¡oooohh ohhh!</Text>
             <Text>Ya tienes esta oferta</Text>
           </View>
@@ -270,28 +269,7 @@ class Oferta extends React.Component {
                   lang = { screenProps.lang.offerScreen }
                   />                
               </View>
-
-              { /*
-
-                <Fab
-                active={this.state.active}
-                direction="right"
-                containerStyle={{left: '43.5%', top:170}}
-                style={{ backgroundColor: '#4e2e59', borderWidth:2, borderColor:'#fff' }}
-                position="topRight"
-                //onPress={ () => this._handleAddToMyOffers(this.state.offer) }
-                onPress={() => this.setState({ active: !this.state.active })}>                
-                  <Icon name="add" />
-                  <Button style={{ backgroundColor: '#34A34F' }}>
-                    <Icon name="share" />
-                  </Button>
-                  <Button style={{ backgroundColor: '#3B5998' }}>
-                    <Icon name="pin" />
-                  </Button>
-                </Fab>      
-               */
-              }
-         
+        
               <View style={{backgroundColor:"#fff", padding:6}}></View>
               <Footer style={{backgroundColor:"#f7f7f7"}}>
               <FooterTab style={{backgroundColor:"#f7f7f7", padding:10}}>
@@ -303,9 +281,7 @@ class Oferta extends React.Component {
                         <Text  adjustsFontSizeToFit numberOfLines={1} style={{fontSize:12, color:'gray'}}> <Icon name="md-alarm" style={{fontSize:13, color:'gray'}}/> { screenProps.lang.offerScreen.expiresInDays.replace('$days',this.state.daysRemain) }  </Text>
                       :
                         <Text  adjustsFontSizeToFit numberOfLines={1} style={{fontSize:12, color:'red'}}> <Icon name="md-alarm" style={{fontSize:13, color:'red'}}/> { screenProps.lang.offerScreen.expiredMessage }   </Text>
-                    }
-
-                    
+                    }                    
                 </Left>
 
                 </FooterTab>

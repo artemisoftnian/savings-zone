@@ -3,6 +3,8 @@ import { View, Root, Icon, Button, Text,Toast} from 'native-base';
 import { Constants, MapView , Location, Permissions } from 'expo';
 import { StyleSheet, Platform, Linking, Modal, TouchableHighlight, Alert } from 'react-native';
 
+
+
 import { connect } from 'react-redux';
 
 import OfferInfo from '../../components/OfferInfo';
@@ -121,15 +123,45 @@ class MapScreen extends React.Component {
   }
 
   _getLocationAsync = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
 
-    if (status !== 'granted') {
-      this.setState({
-        //locationResult: 'Permission to access location was denied',
-      });
-    } else {
-      //this.setState({ hasLocationPermissions: true });
-    }
+    //Get Current Location - if location services its off will send message to user as a toast
+    try {
+      let { status } = await Permissions.askAsync(Permissions.LOCATION);
+      if (status !== 'granted') {
+
+        Toast.show({
+          textStyle: {textAlign:'center' },
+          text: 'Permission to access location was denied',
+          buttonText: "Ok!",
+          duration: 4000,
+          type: "danger"
+        })  
+
+        this.setState({ hasLocationPermissions: false});
+
+      } else {
+        Toast.show({
+          textStyle: {textAlign:'center' },
+          text: 'Permission to access location granted!',
+          duration: 1000,
+          type: "success"
+        })            
+        this.setState({ hasLocationPermissions: true });
+      }
+
+    } catch (e) {
+      Toast.show({
+        textStyle: {textAlign:'center' },
+        text: e.message,
+        buttonText: "Ok!",
+        duration: 3000,
+        type: "danger"
+      })
+    }    
+
+    
+
+
 
     if(this.state.locationResult === null){
       //this.setState({debugData: 'Finding your current location...'})  
@@ -141,9 +173,24 @@ class MapScreen extends React.Component {
 
     if(this.state.mapRegion === null){
       //this.setState({debugData: "Map region doesn't exist."}) 
+    }  
+    
+
+    //Get Current Location - if location services its off will send message to user as a toast
+    try {
+      let location = await Location.getCurrentPositionAsync({});
+      console.log(location);
+    } catch (e) {
+      Toast.show({
+        textStyle: {textAlign:'center' },
+        text: e.message,
+        buttonText: "Ok!",
+        duration: 4000,
+        type: "danger"
+      })
     }    
 
-    let location = await Location.getCurrentPositionAsync({});
+    
     //this.setState({ locationResult: JSON.stringify(location) });
     
     // Center the map on the location we just fetched.
@@ -169,7 +216,7 @@ class MapScreen extends React.Component {
               <MapView.Marker
                 key="me-car-hunting-offers"
                 coordinate={mapRegion}
-                title={"I'ts me Ma...?"}
+                title={"Look It's Me!"}
                 description={'In the hunt for offers!'}
                 image={require('../../assets/icons/szCarMarker.png')}
               />,*/

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Image, StyleSheet, Dimensions, Platform } from 'react-native';
-import {Constants} from 'expo'; 
+import Constants from 'expo-constants';
 
 import { SearchBar } from 'react-native-elements'; 
 
@@ -73,7 +73,7 @@ export default class MainWrapper extends React.Component {
     const {screenProps} = this.props;
 
     return (
-      <Container style={{flex: 1, backgroundColor:'#F5F5F5'}}>
+      <Container style={{flex: 1, backgroundColor:'#F5F5F5', paddingTop: Constants.statusBarHeight,}}>
         <Header
         style={styles.header}
         noLeft
@@ -125,11 +125,10 @@ function isIPhoneXrSize(dim) {
 const dim = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  header:{
-    paddingTop: Constants.statusBarHeight,
+  header:{    
+    paddingTop:20,
     paddingLeft:0,
-    paddingBottom:20,
-    marginTop:20, 
+    paddingBottom:20,    
     backgroundColor:'#fff',
     borderBottomWidth:1,
     borderBottomColor:'#a182cc'  

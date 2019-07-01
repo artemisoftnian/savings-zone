@@ -221,6 +221,16 @@ class SubscriptionScreen extends React.Component {
     Linking.openURL(url).catch((err) => console.error('An error occurred', err));
   }
 
+
+ swapArrayElements = (list, iA, iB) =>  {
+    var memo = list[iA];
+    console.log(memo);
+    list[0][iA] = list[0][iB];
+    list[0][iB] = memo;
+    return list; 
+  };
+  // You would use this like: swapArrayElements(myArray, 3, 7);
+
   render() {
 
     if (this.state.isLoading) {
@@ -234,7 +244,13 @@ class SubscriptionScreen extends React.Component {
 
     const { navigate } = this.props.navigation;
     const {screenProps} = this.props;
+    const {subscriptions} = this.state;
+    var subs = subscriptions;
 
+    if(subscriptions.length > 0){
+      subs = [subscriptions[0], subscriptions[2], subscriptions[1]];
+    }
+    
     return (
       <ScrollView style={[styles.mainView,{backgroundColor:'#efeff4'}]}  behavior="padding" enabled>
           
@@ -252,10 +268,9 @@ class SubscriptionScreen extends React.Component {
 
               <View style={{backgroundColor:'#efeff4', maxWidth:400}}>
                 {this.state.loadingAssets?[<ActivityIndicator key="loading-indicator" size="large" style={{flex:1}} />,<Text style={{textAlign:"center"}} key="loading-text">loading Subscriptions...</Text>] :null} 
-                  
-                    
+                                     
                   {
-                      this.state.subscriptions.map((product, i) => {
+                      subs.map((product, i) => {
                         return (
                           <ListItem
                               onPress={() => this.onSelectedItem(product) }

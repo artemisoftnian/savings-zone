@@ -7,7 +7,7 @@ import {
   ImageBackground, ActivityIndicator
 } from 'react-native';
 
-import { Container,  Text,  Button,  Icon, Item, Input } from 'native-base'; 
+import { Container,  Text,  Button,  Icon, Item, Input, Toast} from 'native-base'; 
 
 import { connect } from 'react-redux';
 import { loginUser, logOutUser } from './reducer';
@@ -77,7 +77,7 @@ class LoginScreen extends React.Component {
               <ImageBackground source={require('../../assets/logo-full.png')} style={styles.logo} />
             </View>   
             <KeyboardAvoidingView behavior="padding" enabled style={{margin:20}}>
-                <Text style={{color:'red'}}>{ this.props.user.error }</Text>
+                 
                  <Button 
                     style={{backgroundColor:'rgba(41, 30, 38, 0.92)', marginBottom:30, width:'100%', borderRadius:10 }}
                     disabled={this.state.validating}
@@ -87,7 +87,7 @@ class LoginScreen extends React.Component {
                   >
                   <Text adjustsFontSizeToFit numberOfLines={1} style={{fontWeight:'bold', textAlign:'center', width:'100%'}}>{screenProps.lang.login.registerButton}</Text>
                 </Button>
-
+              
 
                 <Item rounded  style={styles.inputContainer} accessible={global.testing==true?false:true} >
                   <Icon name='md-contact' style={{fontSize: 30, color: '#fff'}}/>
@@ -138,7 +138,7 @@ class LoginScreen extends React.Component {
                 {  } 
                   
                 </Button>
-
+                <Text style={{color:'yellow', textAlign:'center'}}>{ this.props.user.error }</Text>
             </KeyboardAvoidingView>
         </ImageBackground>
       </Container>

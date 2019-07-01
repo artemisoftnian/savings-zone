@@ -84,7 +84,10 @@ export default class OfferPoster extends React.Component {
                 </CardItem>
                 <CardItem testID={testID} style={styles.offerPriceContainer} button onPress={() => _openOffer(offer, expired) } >  
                   <Left style={{ paddingLeft:0}} >
-                    <Text adjustsFontSizeToFit numberOfLines={1} style={styles.offerPrice}>${post_meta.offer_price}</Text>  
+                    <Text style={{flex:1}}>
+                      <Text style={{fontSize:8, color:'darkgray', fontWeight:'bold'}}> Usted Paga </Text> 
+                      <Text adjustsFontSizeToFit numberOfLines={1} style={styles.offerPrice}>${post_meta.offer_price}</Text> 
+                    </Text>
                   </Left>
                   <Right>
                     { this._isExperiedIcon(expired) }
@@ -113,7 +116,7 @@ const styles = StyleSheet.create({
     paddingTop: 0, paddingBottom: 0, paddingLeft:0
   },
   offerPrice:{
-    fontSize: 19, fontWeight:'bold',  color:'purple', paddingLeft:0
+    fontSize: 19, fontWeight:'bold',  color:'purple', paddingLeft:0,flex: 1
   },
   addIcon:{
     fontSize:40

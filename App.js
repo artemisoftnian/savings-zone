@@ -1,4 +1,7 @@
 //REACT / REACT NATIVE IMPORTS
+
+console.disableYellowBox = true; 
+
 import * as React from 'react';
 import { AppLoading, Font, Constants } from 'expo'; 
 import { persistStore } from 'redux-persist'
@@ -92,7 +95,7 @@ const MainNav = createSwitchNavigator(
   }
 );
 
-console.disableYellowBox = true; 
+
 
 export default class App extends React.Component {
 
