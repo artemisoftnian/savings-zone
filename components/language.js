@@ -10,7 +10,7 @@ export const Lang = {
             registerButton: "¿No tienes cuenta? Regístrese aquí"
         },
         register:{
-            screenTitle: "Step 1: Sign Up",
+            screenTitle: "Paso 1: Registrarse",
             welcomeMessage: "Bienvenido",
             signUpMessage: "Regístrate con tu dirección de correo electrónico.",
             emailPH: "EMAIL",
