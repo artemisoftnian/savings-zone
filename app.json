@@ -33,7 +33,12 @@
         "ACCESS_FINE_LOCATION",
         "CAMERA",
         "com.android.vending.BILLING"
-      ]
+      ],
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCPyKmt6in3JwAsogYikNNjor8qgU9stRQ"
+        }
+      }
     },
     "ios": {
       "supportsTablet": true,
