@@ -62,10 +62,14 @@ class ScannerScreen extends React.Component {
                 <View style={styles.bottomScanBar}/>
             </BarCodeScanner>            
         }
-        
+        {
+         /*
         <Button full round success onPress = { () => this.testRedem(this.state.qrData) } >
           <Text>Test Redemption Here</Text>
         </Button>
+         */
+        }
+
         <Text>{this.state.returnMessage.message}</Text>
         
       </View>

@@ -218,7 +218,7 @@ class SubscriptionScreen extends React.Component {
     console.log(product.productId);
     this.setState({ 
       selectedPlan: product.productId, 
-      selectedPlanPrice: product.priceText, 
+      selectedPlanPrice: product.localizedPrice, 
       selectedPlanCode: product.productId,
       selectedPeriod: product.productId
     })

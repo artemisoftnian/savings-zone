@@ -22,7 +22,7 @@ export const Lang = {
         subscriptionScreen:{
             title: "Suscripciones Savings Zone",
             noteTitle: "NOTA IMPORTANTE:",
-            whatYouGetText: "Todas las subscripciones te permiten Obtener y Canjear ofertas durante el periodo seleccionado.",
+            whatYouGetText: "Todas las suscripciones te permiten Obtener y Canjear ofertas durante el periodo seleccionado.",
             noteMessage: "Los planes se renuevan automáticamente al final del período del plan aplicable, al final de ese período se le cobrará la tarifa estándar de $price hasta que cancele.",
             planSelectBtnText: 'Seleccione este plan',
             freeText: 'Continuar Gratis (Solo Ver Ofertas)',
@@ -51,7 +51,7 @@ export const Lang = {
                 viajes: 'Viajes'
             },
             noSubscriptionMsg:{
-                h1:'Lo Sentimos! Pero estas en Test Drive',
+                h1:'¡Lo Sentimos! Pero estas en el modo gratuito',
                 h2:'Nesesitas una subscripción para poder obtener o redimir ofertas',
                 confirm:'SUBSCRIBETE AQUÍ',
                 cancel:'CANCELAR'

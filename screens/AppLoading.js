@@ -18,17 +18,18 @@ class AppLoading extends React.Component {
   _bootstrapAsync = async () => {
 
     const {isAuth, user, user_meta} = this.props.user;
-    var userType = "";  
-
-    var prefix = "cupon_capabilities";
-    if(user_meta[prefix] == undefined){
-      prefix = "wp_capabilities";
-    }
-    
-    userType = await user_meta[prefix];
-    isMerchant = userType.includes("merchant");
 
     if(isAuth){
+
+      var userType = "";  
+      var prefix = "cupon_capabilities";
+      if(user_meta[prefix] == undefined){
+        prefix = "wp_capabilities";
+      }
+      
+      userType = await user_meta[prefix];
+      isMerchant = userType.includes("merchant");
+
       try{
         if( isMerchant ){
           this.props.navigation.navigate('Merchant');           

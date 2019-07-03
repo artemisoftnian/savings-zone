@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {  View, StyleSheet, TouchableHighlight, Image, Platform, Linking, Share } from 'react-native';
+import {  View, StyleSheet, TouchableHighlight, Image, Platform, Linking, Share, Modal, Dimensions, } from 'react-native';
 
 import { connect } from 'react-redux';
 import { fetchOffersDataSource, saveOffer } from './reducer';
@@ -9,6 +9,7 @@ import { Toast, Text, Button,  Icon, Root, Right, Left, Footer,  FooterTab }  fr
 
 import OfferInfo from '../../components/OfferInfo';
 import AwesomeAlert from 'react-native-awesome-alerts';
+const dim = Dimensions.get('window');
 
 class Oferta extends React.Component { 
 
@@ -155,7 +156,7 @@ class Oferta extends React.Component {
   _handleAddToMyOffers = async (item) => {
 
     const {user} = this.props;
-    if(user.user_meta.app_subscribed == 'false'){
+    if( user.user_meta.app_subscribed == 'false' || !user.user_meta.app_subscribed ){    
         // Works on both iOS and Android
         this.showAlert('unsubscribed');
     }
@@ -165,16 +166,18 @@ class Oferta extends React.Component {
         
         Toast.show({
             text: "You Alaready Have This Offer!",
-            buttonText: "Okay",
-            duration: 4000,
+            buttonText: "Ok",
+            duration: 2000,
             type: "danger"
         })
 
         return;
       }
 
-      await this.props.saveOffer(item);
-      this.showAlert('got');
+      this.props.saveOffer(item).then(
+        this.showAlert('got')
+      );
+      
     }
     
   }
@@ -229,7 +232,7 @@ class Oferta extends React.Component {
             <View style={[styles.alertMessageBorder,{borderColor:'#47d782'}]}>
               <Text style={styles.alertMessageH1}>{screenProps.lang.offerScreen.gotItMsg.h1}</Text>
               <Text style={styles.alertMessageH2}>{screenProps.lang.offerScreen.gotItMsg.h2}</Text>
-              <Button small full transparent warning 
+              <Button small full transparent 
                 style={styles.myOffersBtn} 
                 onPress = { () => { this.hideAlert(); this.props.navigation.navigate('MyOffers')} } >
                 <Text>{screenProps.lang.offerScreen.gotItMsg.confirm}</Text>               
@@ -256,12 +259,10 @@ class Oferta extends React.Component {
 
     return (
 
-        <Root>
             <View enabled style={{ flex:1, marginTop:0, marginBottom:0, marginLeft:0, marginRight:0 }}>
               <View style={[styles.modalStyle,{ marginTop:0, marginLeft:0, marginRight:0, paddingLeft:0, paddingRight:0, padding:0, paddingTop:0,}]}>
                   <OfferInfo 
                   title={this.state.title}
-                  //category={this.state.category}
                   image={this.state.image}
                   desc={this.state.desc}
                   price={this.state.price}
@@ -302,27 +303,36 @@ class Oferta extends React.Component {
                 </FooterTab>
               </Footer> 
 
-            </View>
+              <Modal visible={showAlert} transparent={true} onRequestClose={ {}} > 
+                <AwesomeAlert
+                    contentContainerStyle={{margin:0, width:'70%', zIndex: 5 }} 
+                    overlayStyle={{height: dim.height+300 }} 
+                    overflow='visible'
+                    show={showAlert}
+                    showProgress={false}
+                    onDismiss={() => {this.setState({showAlert:false})} }
+                    title=""
+                    message=""
+                    closeOnTouchOutside={true}
+                    closeOnHardwareBackPress={false}
+                    showCancelButton={false}
+                    showConfirmButton={false}
+                    cancelButtonStyle={{}}  
+                    confirmButtonStyle={{}}        
+                    onCancelPressed={() => { this.hideAlert() }}
+                    onConfirmPressed={() => { this.hideAlert() }}
+                    customView={ this.alertContents() }
+                />   
+            </Modal>
+      
 
-            <AwesomeAlert
-                contentContainerStyle={{margin:0, width:'70%' }} 
-                overflow='visible'
-                show={showAlert}
-                showProgress={false}
-                title=""
-                message=""
-                closeOnTouchOutside={true}
-                closeOnHardwareBackPress={false}
-                showCancelButton={false}
-                showConfirmButton={false}
-                cancelButtonStyle={{}}  
-                confirmButtonStyle={{}}        
-                onCancelPressed={() => { this.hideAlert() }}
-                onConfirmPressed={() => { this.hideAlert() }}
-                customView={ this.alertContents() }
-            /> 
+          </View>
 
-        </Root>
+
+
+
+
+
     );
   }
 }

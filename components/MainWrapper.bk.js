@@ -1,0 +1,169 @@
+import * as React from 'react';
+import { Image, StyleSheet, Dimensions, Platform } from 'react-native';
+import Constants from 'expo-constants';
+
+import { SearchBar } from 'react-native-elements'; 
+
+import {
+  Container,  Header,  Content,  Text,  Button,  Icon, Left,  Body,  Right,  Footer, FooterTab
+} from 'native-base';
+
+import PopMessages from '../components/popMessages';
+
+export default class MainWrapper extends React.Component {
+
+
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showAlert: this.props.showAlert,
+      alertType: 'got',      
+    };
+
+   }
+
+
+  searchBar = () => {
+
+    if(this.props.useSearchBar){  
+      return ( 
+        <SearchBar 
+          lightTheme
+          placeholder= { this.props.lang.main.searchBarPH }//"Offer Search" 
+          onChangeText={text => this.props.searchFunction(text) }  
+          containerStyle={ { backgroundColor:'transparent', borderBottomWidth:0} }
+          inputStyle={ { backgroundColor:'#fff',  borderStyle:'solid', borderWidth:0, elevation:2 } } 
+        />
+
+      );
+    }
+  }; 
+
+  showMessage = () =>{
+    //console.log('MainWrapper - showAlertState: ', this.state.showAlert);
+    //console.log('MainWrapper - showAlertProps: ', this.props.showAlert);
+
+    return(
+      <PopMessages 
+        language={this.props.lang}
+        alertType = {this.props.alertType}
+        showAlert = { this.props.showAlert }
+        navigation = {this.props.nav }
+        //key={'popMessage_'+this.state.showAlert} 
+        _hideAlert = {this.props.changeState}
+      /> 
+    )    
+  }
+
+  showFooter = () => {
+    if(this.props.showFooter){
+      return ( 
+        <Footer style={styles.footerMain}> 
+          <FooterTab  style={{backgroundColor:"#4e2e59", }}> 
+            <Button vertical 
+              testID="toOffers"
+              onPress={ () => this.props.nav.navigate('Offers') }
+            >
+              <Icon name="md-home" type="Ionicons" style={styles.iconColor} /> 
+              <Text adjustsFontSizeToFit numberOfLines={1} style={styles.iconColor}>{this.props.lang.main.homeIconText}</Text>
+            </Button>
+            <Button vertical
+              testID="toMap"
+              onPress={ () => this.props.nav.navigate('Map') }
+            >
+              <Icon name="md-map" style={styles.iconColor}/>
+              <Text adjustsFontSizeToFit numberOfLines={1} style={styles.iconColor}>{this.props.lang.main.mapsIconText}</Text>
+            </Button>
+            <Button vertical
+              testID="toProfile"
+              onPress={ () => this.props.nav.navigate('UserProfile') }
+            >
+              <Icon name="md-person" style={styles.iconColor}/>
+              <Text adjustsFontSizeToFit numberOfLines={1} style={styles.iconColor} >{this.props.lang.main.accountIconText}</Text>
+            </Button>
+          </FooterTab>
+        </Footer> 
+      );
+    }
+  };         
+
+  render() {
+
+    const {screenProps, navigation} = this.props;
+
+    return (
+      <Container style={{flex: 1, backgroundColor:'#F5F5F5', paddingTop: Constants.statusBarHeight,}}>
+        <Header
+        style={styles.header}
+        noLeft
+        >
+          <Left>
+            <Image  source={require('../assets/logo-text.png')}  style={{  height: 25 }} resizeMode="contain" /> 
+          </Left>
+          <Body>
+            {/*<Title>{this.props.title}</Title>*/}
+          </Body>
+          <Right>
+              <Button
+                transparent
+                onPress={ this.props.onScanPress  }
+              >
+
+              <Icon name={ (this.props.rightIcon)?this.props.rightIcon:'md-cart'  } type='Ionicons' style={{color:'#4e2e59', fontSize:30}}/>
+            </Button>
+          </Right> 
+        </Header>
+
+        {this.searchBar()}         
+        
+        <Content
+          style={{ flex: 1 }}
+          refreshControl={this.props.refreshFunction}
+        >
+          {this.props.children}       
+        </Content>
+        {this.showFooter()}   
+
+        {this.showMessage()}         
+
+      </Container>     
+      
+    );
+  }
+}
+
+MainWrapper.defaultProps = { 
+  showFooter: true,
+};
+
+function isIPhoneXSize(dim) {
+  return dim.height == 812 || dim.width == 812;
+}
+
+function isIPhoneXrSize(dim) {
+  return dim.height == 896 || dim.width == 896;
+}
+
+const dim = Dimensions.get('window');
+
+const styles = StyleSheet.create({
+  header:{    
+    paddingTop:20,
+    paddingLeft:0,
+    paddingBottom:20,    
+    backgroundColor:'#fff',
+    borderBottomWidth:1,
+    borderBottomColor:'#a182cc'  
+  },
+  iconColor:{
+    color:'#fff'
+  },
+  footerMain:{  
+    backgroundColor:"#4e2e59",
+  }
+  
+
+});
+

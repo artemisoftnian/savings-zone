@@ -1,12 +1,16 @@
 //REACT / REACT NATIVE IMPORTS
-
-console.disableYellowBox = true; 
-
 const servers = ({
   local:"http://www.svz.com:8080", 
   test:"https://sv.artemisoftnian.com", 
   prod:"https://savingszonepr.com"   
 })
+
+
+console.disableYellowBox = true; 
+global.wpSite = servers.prod;
+
+//Set to true for Automation Tests purposes
+global.testing = false;
 
 import * as React from 'react';
 import { AppLoading, Font, Constants } from 'expo'; 
@@ -47,10 +51,7 @@ import screenDev from './screens/Login/screenDev';
 //LOCALIZATION
 import { Lang } from './components/language'; 
 
-global.wpSite = servers.prod;
 
-//Set to true for Automation Tests purposes
-global.testing = false;
 
 
 //(node:81872) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 change listeners added. Use emitter.setMaxListeners() to increase limit

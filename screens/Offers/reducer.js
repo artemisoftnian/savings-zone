@@ -82,7 +82,6 @@ const fetchRemainOffers = async (dispatch) => {
 
 export const fetchOffersDataSource = () => async dispatch => {
 	try{
-		console.log(dispatch);
 	  return fetchOffers(dispatch);
 	} catch (error){
 		console.log(error);
@@ -102,9 +101,6 @@ const fetchOffers = async (dispatch) => {
 				'Content-Ads': helpers.getAvertisingID()
 			},
 		});
-
-		console.log('from server', data);
-
 
 		if (data.status === 200) {
 			data = await data.json();			

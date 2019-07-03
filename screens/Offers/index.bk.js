@@ -10,12 +10,13 @@ import { fetchOffersDataSource, fetchOffersRemains,  saveOffer } from './reducer
 
 import { Text, Button,  Icon, Picker, Form, Root }  from 'native-base';
 
+import Constants from 'expo-constants';
+
 import MainWrapper from '../../components/MainWrapper';
 import OfferInfo from '../../components/OfferInfo';
 import OfferPoster from '../../components/OfferPoster';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import helpers from '../../components/helpers';
-import { Constants } from 'expo-camera';
 
 const dim = Dimensions.get('window');
 
@@ -50,12 +51,13 @@ class Offers extends React.Component {
 			isConnected: true,
 			start: false,
       selected: "*",
-      showAlert: false,
-      showModal: false,
       alertType: 'got',
       expired: false,
-      isFetching: false  
+      isFetching: false ,
+      showAlert: false 
     };
+
+    this.changeState = this.changeState.bind(this);
 
   }
 
@@ -77,12 +79,12 @@ class Offers extends React.Component {
 
   
   componentWillUnmount() {
-    clearInterval(this.remainIntervalID);
+    clearInterval(this.remainIntervalID); 
     clearTimeout(updateTimeout);
   }
 
   async componentDidMount() {
-    console.log("componentDidMount");
+    //console.log("componentDidMount");
     //this.setState({ start: true });
     //Check Remains Offers Every X timeexp
     //this.updateMessages(); 
@@ -171,39 +173,41 @@ class Offers extends React.Component {
 
   _handleAddToMyOffers = async (item) => {
     const {user} = this.props;
-    if( user.user_meta.app_subscribed == 'false' || !user.user_meta.app_subscribed ){       
+    if( user.user_meta.app_subscribed == 'false' || !user.user_meta.app_subscribed ){ 
         // Works on both iOS and Android
         this.showAlert('unsubscribed'); 
     }
     else{  
-
       if( this._checkOfferOwnership(item.post_data.ID) ) {           
         
         Toast.show({
             text: "You Alaready Have This Offer!",
             buttonText: "Ok!",
-            duration: 4000,
+            duration: 3000,
             type: "danger"
         })
 
         return;
       }
 
-      this.props.saveOffer(item).then(
-        this.showAlert('got')
-      );
-
+      await this.props.saveOffer(item);
+      //this._toggleModal(false, null)
+      this.showAlert('got');
     }
     
   }
 
-
-  showAlert = (type) => {
-    this.setState({showModal:true, showAlert: true, alertType:type }); 
+  showAlert = async (type) => {
+    await this.setState({ showAlert: true, alertType:type });
+    console.log('Offer AlertData:', this.state.showAlert, this.state.alertType);
   }
 
-  hideAlert = () => {
-    this.setState({showModal:false, showAlert: false });
+  changeState = async (navigate) => { 
+    console.log("acativado");
+    this.setState({ showAlert: false }) 
+    //Go to view if needed
+    if(navigate)
+      this.props.navigation.navigate(navigate)
   }
 
   alertContents = () => {
@@ -343,9 +347,21 @@ class Offers extends React.Component {
   onValueChange(value) {
     this.setState({ selected: value, filter: null });
   } 
+
+  emptyComponent =() => {
+    return(
+      <View style={styles.emptyContainer}>
+        <Text  style={styles.emptyActionText} >Arrastre el cohete hacia abajo para refrescar</Text>
+        <View style={styles.CircleShapeView}>
+          <Icon  style={[styles.emptyIcon, {marginLeft:45, marginTop:20}]} name='md-rocket' type='Ionicons'/>
+        </View>
+        <Text  style={styles.emptyText} >Estamos localizando nuevas ofertas para usted.</Text>        
+      </View>
+    )
+  }
   
   render() {
-    const {showAlert, remainOffers} = this.state;
+    const {showAlert, alertType, remainOffers} = this.state;
     const { loading, dataSource, remainDataSource } = this.props.offerList;
     const getDataSourceFilter = this.getDataSourceFilter();
     const { navigate } = this.props.navigation; 
@@ -370,7 +386,6 @@ class Offers extends React.Component {
     }    
 
     return (
-      <View style={{flex:1}}>
       <MainWrapper
         //title="Savings Zone"
         onScanPress={() => this.props.navigation.navigate('MyOffers')} 
@@ -381,14 +396,19 @@ class Offers extends React.Component {
         refreshFunction={
           <RefreshControl
             refreshing={this.state.refreshing} 
-            onRefresh={()=> this.refreshOffers() }
+            onRefresh={()=> this.refreshOffers() } 
           />
         } 
-        lang={screenProps.lang}        
+        lang={screenProps.lang}
+        alertType = { alertType }
+        showAlert = { this.state.showAlert }   
+        changeState = { this.changeState }          
       >
       
       <FlatList
+        style={{minHeight: dim.height}}
         testID="offersView"
+        ListEmptyComponent = { this.emptyComponent() }
         ListHeaderComponent={  
           <View>
             <View style={{flexDirection:"row"}}>
@@ -440,31 +460,7 @@ class Offers extends React.Component {
         }}
       />
 
-
       </MainWrapper>
-
-      
-        <AwesomeAlert
-          contentContainerStyle={{margin:0, width:'70%', zIndex: 5}} 
-          overlayStyle={{height: dim.height+300 }} 
-          overflow='visible' 
-          show={this.state.showAlert}
-          showProgress={false}
-          title=""
-          message=""
-          closeOnTouchOutside={true}
-          closeOnHardwareBackPress={false}
-          showCancelButton={false}
-          showConfirmButton={false}
-          cancelButtonStyle={{}}  
-          confirmButtonStyle={{}}        
-          onCancelPressed={() => { this.hideAlert() }}
-          onConfirmPressed={() => { this.hideAlert() }}
-          customView={ this.alertContents() }
-        /> 
-     
-
-      </View>
     );
   }
 }
@@ -516,7 +512,48 @@ const styles = StyleSheet.create({
     marginTop:0,
     paddingTop:0,
     color: 'red'
-  }
+  },
+
+  emptyContainer: {    
+    flex:1,
+		alignItems: 'center',
+    justifyContent: "center",
+	},
+  emptyIcon:{
+    color:'#ff704d',
+    fontSize:100
+  },
+  emptyText:{
+    fontSize:20,
+    color:'darkgray',
+    fontWeight:'bold',
+    padding:30,
+    paddingTop:20, paddingBottom:5,
+		justifyContent: 'center', 
+    textShadowColor: 'rgba(0, 0, 0, 0.1)', 
+    textShadowRadius: 10,
+    textAlign:'center'  
+  },
+  emptyActionText:{
+    fontSize:15,
+    color:'darkgray',
+    fontWeight:'bold',
+    padding:60,
+    paddingTop:5,
+    marginTop:40,
+    paddingBottom:10,
+		justifyContent: 'center', 
+    textShadowColor: 'rgba(0, 0, 0, 0.1)', 
+    textShadowRadius: 10,
+    textAlign:'center' 
+  },
+  CircleShapeView: {
+    width: 150,
+    height: 150,
+    borderRadius: 150/2,
+    backgroundColor: '#E0E0E0',
+    textAlign:'center'
+  },
 
 });
 
