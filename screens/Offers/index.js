@@ -54,7 +54,8 @@ class Offers extends React.Component {
       showModal: false,
       alertType: 'got',
       expired: false,
-      isFetching: false  
+      isFetching: false,
+      filterByCategory: false
     };
 
   }
@@ -82,7 +83,7 @@ class Offers extends React.Component {
   }
 
   async componentDidMount() {
-    console.log("componentDidMount");
+    //console.log("componentDidMount");
     //this.setState({ start: true });
     //Check Remains Offers Every X timeexp
     //this.updateMessages(); 
@@ -147,12 +148,12 @@ class Offers extends React.Component {
 	};
 
   fetchOfferData = async () => {
-    console.log("refreshing...");
+    //console.log("refreshing...");
     const { user_id } = this.props.user;
     await this.props.fetchOffersDataSource();
     this.arrayholder = this.props.offerList.dataSource;
     this.setState({ start: true, dataSource: this.props.offerList.dataSource }); 
-    console.log(this.arrayholder);
+    //console.log(this.arrayholder);
     
   }
 
@@ -322,10 +323,13 @@ class Offers extends React.Component {
     const { selected, filter } = this.state;
     const { dataSource } = this.props.offerList;
 
-    if (!filter && selected === "*") return dataSource;    
+    if (!filter && selected === "*"){
+      return dataSource; 
+    }    
 
 		if(selected && !filter){
-      return dataSource.filter(item => {
+      return dataSource.filter(item => {        
+        //console.log(item);
         const itemData = `${item.taxonomy[0]['category_nicename'].toUpperCase()}`;
         const textData = selected.toUpperCase();
         return itemData.indexOf(textData) > -1;
@@ -341,8 +345,37 @@ class Offers extends React.Component {
 	}
 
   onValueChange(value) {
+    
+    if(value == '*')
+      this.setState({filterByCategory:false})
+    else{
+      this.setState({filterByCategory:true})
+    }
     this.setState({ selected: value, filter: null });
   } 
+
+  emptyComponent =() => {
+    return(
+
+        (this.state.filterByCategory == true) ?
+
+        <View style={styles.emptyContainer}>          
+          <View style={[styles.CircleShapeView, {marginTop:40}]}>
+            <Icon  style={[styles.emptyIcon, {marginLeft:35, marginTop:20, color:'green'}]} name='md-planet' type='Ionicons'/>
+          </View>
+          <Text  style={styles.emptyText} >No existen ofertas con esta categoría</Text> 
+          <Text  style={[styles.emptyActionText, {marginTop:5}]} >Seleccione otra categoría</Text>       
+        </View>
+        :
+        <View style={styles.emptyContainer}>
+          <Text  style={styles.emptyActionText} >Arrastre el cohete hacia abajo para refrescar</Text>
+          <View style={styles.CircleShapeView}>
+            <Icon  style={[styles.emptyIcon, {marginLeft:45, marginTop:20}]} name='md-rocket' type='Ionicons'/>
+          </View>
+          <Text  style={styles.emptyText} >Estamos localizando nuevas ofertas para usted.</Text>        
+        </View>  
+    )
+  }  
   
   render() {
     const {showAlert, remainOffers} = this.state;
@@ -389,6 +422,7 @@ class Offers extends React.Component {
       
       <FlatList
         testID="offersView"
+        ListEmptyComponent = { this.emptyComponent() }
         ListHeaderComponent={  
           <View>
             <View style={{flexDirection:"row"}}>
@@ -516,7 +550,47 @@ const styles = StyleSheet.create({
     marginTop:0,
     paddingTop:0,
     color: 'red'
-  }
+  },
+  emptyContainer: {    
+    flex:1,
+		alignItems: 'center',
+    justifyContent: "center",
+	},
+  emptyIcon:{
+    color:'#ff704d',
+    fontSize:100
+  },
+  emptyText:{
+    fontSize:20,
+    color:'darkgray',
+    fontWeight:'bold',
+    padding:30,
+    paddingTop:20, paddingBottom:5,
+		justifyContent: 'center', 
+    textShadowColor: 'rgba(0, 0, 0, 0.1)', 
+    textShadowRadius: 10,
+    textAlign:'center'  
+  },
+  emptyActionText:{
+    fontSize:15,
+    color:'darkgray',
+    fontWeight:'bold',
+    padding:60,
+    paddingTop:5,
+    marginTop:40,
+    paddingBottom:10,
+		justifyContent: 'center', 
+    textShadowColor: 'rgba(0, 0, 0, 0.1)', 
+    textShadowRadius: 10,
+    textAlign:'center' 
+  },
+  CircleShapeView: {
+    width: 150,
+    height: 150,
+    borderRadius: 150/2,
+    backgroundColor: '#E0E0E0',
+    textAlign:'center'
+  },  
 
 });
 

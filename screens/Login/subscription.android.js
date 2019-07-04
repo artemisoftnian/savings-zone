@@ -104,26 +104,54 @@ class SubscriptionScreen extends React.Component {
 
     purchaseUpdateSubscription = purchaseUpdatedListener((purchase: ProductPurchase) => {
       console.log('purchaseUpdatedListener', purchase);
-      this.setState({ receipt: purchase.transactionReceipt }, () => this.goNext());
+      this.setState({ receipt: purchase.transactionReceipt }, () => this.processReturnedPurchase (purchase));
     });
 
     purchaseErrorSubscription = purchaseErrorListener((error: PurchaseError) => {
+      const {screenProps} = this.props;
       console.log('purchaseErrorListener', error);
-      Alert.alert('purchase error', JSON.stringify(error));
+
+      
+      if (error.responseCode === 1) {
+        Alert.alert(screenProps.lang.subscriptionScreen.errorCancelledTitle, screenProps.lang.subscriptionScreen.errorCancelledMessage);
+      }
+      if (error.responseCode === 6) {
+        Alert.alert('Purchase error', 'Pago declinado');
+      }  
+      if (error.responseCode === 7) {
+        Alert.alert('Purchase error', 'Ya tienes este articulo');
+      }              
+      else{
+        Alert.alert('Purchase error', JSON.stringify(error));
+      }
+
+       //Alert.alert(screenProps.lang.subscriptionScreen.errorDeclinedTitle, screenProps.lang.subscriptionScreen.errorDeclinedMessage); 
+      
     });
 
   } 
 
   processReturnedPurchase = async (details) => { 
-    await console.log('a ver que retorno', details);  
-    if(details.purchaseState == 'PurchasedSuccessfully'){ 
-       console.log('compras procesada por google correctametne');
+
+    try{
+      console.info('compras procesada por google correctametne');
       //Update User Data on server here
       var detail = await this.props.updateSubscription(this.props.user.user.user_id, details, "android");
-      //then if all went good!
-      console.log('detalle del server', detail);
-      //this.props.navigation.navigate('Offers');
-    }  
+
+      console.log("que retorno?",detail);
+
+      if(detail){
+        this.props.navigation.navigate('Offers'); 
+      }
+      else{
+        console.log("que error retorno?",detail);
+        console.log("something went wrong", detail.message)
+      }
+    }
+    catch(e){
+      console.warn(e.message);
+    }
+
   }
 
   getSubscription = async ( selectedProduct ) =>{
@@ -146,25 +174,11 @@ class SubscriptionScreen extends React.Component {
    
       } catch (error) {
 
-          console.log(error);
+          console.warn(error);
 
-          this.subscription = RNIap.addAdditionalSuccessPurchaseListenerIOS(async (purchase) => {
-            this.setState({ receipt: purchase.transactionReceipt }, () => this.goToNext());
-            this.subscription.remove();
-          });
-        
-          if (error.message === gpbErrors.PAYMENT_BUG) {
-
-          } else if ( error.message === gpbErrors.PAYMENT_DECLINED ) {
-            // Communicate to the user that the payment was declined
-            Alert.alert(screenProps.lang.subscriptionScreen.errorDeclinedTitle, screenProps.lang.subscriptionScreen.errorDeclinedMessage);
-          } else if ( error.message === gpbErrors.PAYMENT_CANCELLED ) {
-            Alert.alert(screenProps.lang.subscriptionScreen.errorCancelledTitle, screenProps.lang.subscriptionScreen.errorCancelledMessage);
-          }
-        
       } finally {
   
-        await RNIap.endConnection();
+        await RNIap.endConnectionAndroid();
       } 
     }
     else{

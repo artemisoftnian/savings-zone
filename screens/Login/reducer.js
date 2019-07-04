@@ -13,6 +13,10 @@ const FETCH_SUBSCRIPTION_UPDATE = 'FETCH_SUBSCRIPTION_UPDATE';
 const FETCH_SUBSCRIPTION_UPDATE_FAILED = 'FETCH_SUBSCRIPTION_UPDATE_FAILED';
 const FETCH_SUBSCRIPTION_UPDATE_SUCCESS = 'FETCH_SUBSCRIPTION_UPDATE_SUCCESS';
 
+const FETCH_SUBSCRIPTION_CHECK = 'FETCH_SUBSCRIPTION_CHECK';
+const FETCH_SUBSCRIPTION_CHECK_FAILED = 'FETCH_SUBSCRIPTION_UPDATE_CHECK';
+const FETCH_SUBSCRIPTION_CHECK_SUCCESS = 'FETCH_SUBSCRIPTION_UPDATE_CHECK';
+
 
 const INITIAL_STATE = {
     user: null,
@@ -50,16 +54,16 @@ export const updateSubscription = ( userId = null, detail = null, osType = null,
                 toSendData = {
                     user_id: userId,
                     subscription_type: detail.productId,
-                    subscription_exp_date: detail.purchaseTime,
-                    subscription_receipt: detail.receiptData,
-                    subscription_expired: detail.purchaseState,
+                    subscription_exp_date: detail.transactionDate,
+                    subscription_receipt: detail.transactionReceipt,
+                    subscription_expired: '',
                     subscription_os_type: osType,
                 }
             }
             else if(osType === "ios"){
                 toSendData = {
                     user_id: userId,
-                    subscription_type: detail.productIdentifier,
+                    subscription_type: detail.productId,
                     subscription_exp_date: detail.transactionDate,
                     subscription_receipt: detail.transactionReceipt,
                     subscription_expired: '',
@@ -95,6 +99,49 @@ export const updateSubscription = ( userId = null, detail = null, osType = null,
 
     }catch (error){
         dispatch({type: FETCH_SUBSCRIPTION_UPDATE_FAILED, error: error});
+        return false;
+    }
+};
+
+export const checkSubscription = ( userId = null ) => async dispatch => {
+    try{
+        dispatch({ type: FETCH_SUBSCRIPTION_CHECK });
+        const pathService = global.wpSite + '/wp-json/svapphelper/v2/subscription/restore';
+
+        console.log(pathService);
+        var toSendData = null;
+
+        toSendData = {
+            user_id: userId,
+        } 
+
+        //console.log('this',toSendData);
+
+        let data = await fetch(pathService, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              accept: 'application/json',
+              'Content-Ads': helpers.getAvertisingID(),
+            },
+            body: JSON.stringify(toSendData)
+        });
+
+        if (data.status === 200){
+            data = await data.json();
+
+            if(data.status){
+                dispatch({type: FETCH_SUBSCRIPTION_CHECK_SUCCESS, payload: data });
+                return true;
+            }
+            else{
+                dispatch({ type:FETCH_SUBSCRIPTION_CHECK_FAILED, error: data.message  }) //data.message
+                return false;
+            }
+        }
+
+    }catch (error){
+        dispatch({type: FETCH_SUBSCRIPTION_CHECK_FAILED, error: error});
         return false;
     }
 };
@@ -165,8 +212,8 @@ export const loginUser = (username= null, password = null) => async dispatch => 
         dispatch({type: FETCH_USER_FAILED, error: 'Invalid User Name or Password!'});
         return false;
     } catch (error) {
-        console.log('advertising ID:', advertId);
-        dispatch({type: FETCH_USER_FAILED, error: 'A network error (such as timeout, interrupted connection or unreachable host) has occurred'});
+            console.warn(error);
+            dispatch({type: FETCH_USER_FAILED, error: 'Probably a connection error!, If connection is available, re check user and password'});
         return false;
     }
 };
@@ -204,7 +251,18 @@ export default (state = INITIAL_STATE, action) => {
         }
         case FETCH_SUBSCRIPTION_UPDATE_FAILED: {
             return { ...INITIAL_STATE, error: action.error }; 
-        }        
+        }   
+        
+        case FETCH_SUBSCRIPTION_CHECK: {
+            return { ...INITIAL_STATE, registered: true, subscribed: true };
+        }
+        case FETCH_SUBSCRIPTION_CHECK_SUCCESS: {
+            return { ...INITIAL_STATE, registered: true, isAuth: true, subscribed: true, user: action.payload };
+        }
+        case FETCH_SUBSCRIPTION_CHECK_FAILED: {
+            return { ...INITIAL_STATE, error: action.error }; 
+        }    
+        
         default:
             return state;
     }
