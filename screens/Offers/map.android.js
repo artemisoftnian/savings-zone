@@ -219,7 +219,7 @@ class MapScreen extends React.Component {
                 title={"Look It's Me!"}
                 description={'In the hunt for offers!'}
                 image={require('../../assets/icons/szCarMarker.png')}
-              />,
+              />,*/
 
               offerMarkers.map( (item, index) => (
                 <MapView.Marker
@@ -231,7 +231,7 @@ class MapScreen extends React.Component {
                   //onCalloutPress={() => { this._handlePressDirections(item.latlng) } }
                   onCalloutPress={() => { this._openOffer(item.offer) }}
                 />
-              ))*/
+              ))
               
             ]
           }
