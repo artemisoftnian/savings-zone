@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Root, Icon, Button, Text,Toast} from 'native-base';
 import { Constants, MapView , Location, Permissions } from 'expo';
-import { StyleSheet, Platform, Linking, Modal, TouchableHighlight, Alert } from 'react-native';
+import { StyleSheet, Platform, Linking, Modal, TouchableHighlight, Alert, Image } from 'react-native';
 
 
 
@@ -227,10 +227,12 @@ class MapScreen extends React.Component {
                   coordinate={item.latlng}
                   title={item.title}
                   description={item.description}
-                  image={require('../../assets/icons/szMapMarker.png')}
+                  //image={require('../../assets/icons/szMapMarker.png')}                   
                   //onCalloutPress={() => { this._handlePressDirections(item.latlng) } }
                   onCalloutPress={() => { this._openOffer(item.offer) }}
-                />
+                >
+                  <Image style={style={width: 50, height: 50}} source={require('../../assets/icons/szMapMarker.png')} />
+                </MapView.Marker>
               ))
               
             ]

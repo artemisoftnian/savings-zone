@@ -79,7 +79,7 @@ class Oferta extends React.Component {
     const { user_id } = this.props.user;
 
     let data = await this.props.navigation.getParam('offer','no_offer_data');  
-    console.log(data.image);
+    //console.log(data.image);
 
     await this.setState({ 
       title: data.title,
@@ -100,7 +100,7 @@ class Oferta extends React.Component {
   }
 
   _handleOfferClick = (navigation, item) => {
-    console.log("offer clicked",item);
+    //console.log("offer clicked",item);
   };
 
   onShare = async () => {
@@ -134,7 +134,7 @@ class Oferta extends React.Component {
 
   _handlePressDirections = (data) => {
 
-    console.log("coords", data);
+    //console.log("coords", data);
 
       let coords = `${data.latitude},${data.longitude}`;
 
@@ -303,7 +303,7 @@ class Oferta extends React.Component {
                 </FooterTab>
               </Footer> 
 
-              <Modal visible={showAlert} transparent={true} onRequestClose={ {}} > 
+              <Modal visible={showAlert} transparent={true} onRequestClose = {() => {console.log('')} } > 
                 <AwesomeAlert
                     contentContainerStyle={{margin:0, width:'70%', zIndex: 5 }} 
                     overlayStyle={{height: dim.height+300 }} 

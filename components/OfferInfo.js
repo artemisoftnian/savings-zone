@@ -46,10 +46,15 @@ export default class OfferInfo extends React.Component {
   render() {  
 
     const { image, category, title, desc  } = this.props;
-    //remove
-    imageArray = image.filter(function(str){
-      return str != "";
-    })
+
+    var imageArray = image.filter(function(img) {
+      if (img == "") {
+        return false; // skip
+      }
+      return true;
+    });   
+
+    //console.log("final Image Array", imageArray);
 
     
     return (

@@ -13,7 +13,7 @@ global.wpSite = servers.prod;
 global.testing = false;
 
 import * as React from 'react';
-import { AppLoading, Font, Constants } from 'expo'; 
+import { AppLoading, Font, Asset,  Constants } from 'expo'; 
 import { persistStore } from 'redux-persist'
 import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import { Root, Container } from "native-base"; 
@@ -109,13 +109,11 @@ export default class App extends React.Component {
     
     if(!global.testing){
 
-        OneSignal.init("d40ccaf4-8671-49c4-820e-a6d5e5a09d8c");
-        
+        OneSignal.init("d40ccaf4-8671-49c4-820e-a6d5e5a09d8c");        
         OneSignal.addEventListener('received', this.onReceived);
         OneSignal.addEventListener('opened', this.onOpened);
         OneSignal.addEventListener('ids', this.onIds);
-        OneSignal.configure();
-        
+        OneSignal.configure();        
     }
     
 
@@ -148,9 +146,21 @@ export default class App extends React.Component {
 
     await Font.loadAsync({
       'Roboto': require("native-base/Fonts/Roboto.ttf"),
-    });
-    await Font.loadAsync({
       'Roboto_medium': require("native-base/Fonts/Roboto_medium.ttf"),
+      'Ionicons': require('@expo/vector-icons/fonts/Ionicons.ttf'),
+      'FontAwesome': require('@expo/vector-icons/fonts/FontAwesome.ttf'),
+      'MaterialIcons': require('@expo/vector-icons/fonts/MaterialIcons.ttf'),
+      'Material Icons': require('@expo/vector-icons/fonts/MaterialIcons.ttf'),
+    });
+
+    const imageAssets = await Asset.loadAsync([
+      require('./assets/icons/szCarMarker.png'),
+      require('./assets/icons/szMapMarker.png'),
+    ]);
+
+    /*
+    await Font.loadAsync({
+      //'Roboto_medium': require("native-base/Fonts/Roboto_medium.ttf"),
     });
     await Font.loadAsync({
       'Ionicons': require('@expo/vector-icons/fonts/Ionicons.ttf'),
@@ -163,7 +173,10 @@ export default class App extends React.Component {
     }); 
     await Font.loadAsync({
       'Material Icons': require('@expo/vector-icons/fonts/MaterialIcons.ttf'),
-    });     
+    }); 
+    */
+    
+
 
     
     this.setState({ loadingAssets: true }); 
