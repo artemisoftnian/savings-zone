@@ -16,6 +16,7 @@ import {Content,  Card,  CardItem,  Thumbnail,  Text, Icon,  Left,  Body, Button
 
 import MainWrapper from '../../components/MainWrapper';
 const avatarImg = require('../../assets/avatar.png');
+let appInfo = require('../../build.json')
 
 import { logOutUser } from '../Login/reducer';
 
@@ -213,7 +214,7 @@ class UserProfileScreen extends React.Component {
           );
         }}        
       />
-
+        <Text style={{fontSize:9, textAlign:'center', color:'gray'}}>r.{appInfo.version}.{appInfo.build}.{appInfo.jsBuildNumber}</Text>
       </MainWrapper>
     );
   }

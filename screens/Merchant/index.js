@@ -11,7 +11,8 @@ import { fetchOffersDataSource, saveOffer } from './reducer';
 
 import { Text,  Button,  Icon } from 'native-base';
 
-import MainWrapper from '../../components/MainWrapper';  
+import MainWrapper from '../../components/MainWrapper'; 
+let appInfo = require('../../build.json') 
 
 
 class MerchantHomeScreen extends React.Component {
@@ -150,7 +151,7 @@ class MerchantHomeScreen extends React.Component {
           </Button>
                  
       </View>     
-
+       <Text style={{fontSize:9, textAlign:'center', color:'gray'}}>r.{appInfo.version}.{appInfo.build}.{appInfo.jsBuildNumber}</Text>
       </MainWrapper>
     );
   }

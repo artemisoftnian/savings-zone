@@ -93,7 +93,7 @@ class ScannerScreen extends React.Component {
       return;
 
     const ENDPATTERN = [0, 200, 50, 200];
-    Vibration.vibrate(ENDPATTERN);
+    //Vibration.vibrate(ENDPATTERN);
 
     if(data && !this.state.pause){
        this.setState({pause: true, isCanjeando:true});
