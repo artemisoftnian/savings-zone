@@ -86,7 +86,7 @@ export const Lang = {
         },
         myOffers:{
             emptyListMessage: "No tienes ninguna oferta en este momento.",
-            redeemMessage: "Para redimir la oferta muestre este codigo al comerciante"
+            redeemMessage: "Para redimir la oferta muestre este código al comerciante"
         },
         mapScreen:{
 

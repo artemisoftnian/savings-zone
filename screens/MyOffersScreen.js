@@ -41,7 +41,8 @@ class MyOffersScreen extends React.Component {
       basic: true,
       listViewData: this.props.offerList.offlineDataSource,
       debug: true,
-      returnMessage: 'mensaje returno aqui'
+      returnMessage: 'mensaje returno aqui',
+      notification: {},
     };
 
     this.offlineUserOffers = [];
@@ -55,10 +56,15 @@ class MyOffersScreen extends React.Component {
   taskListurl = global.wpSite + '/wp-json/apphelper/v2/tasks';
 
   async componentWillMount() {
-    this.setState({myOffers: this.props.offerList.offlineDataSource});
+    this.setState({myOffers: this.props.offerList.offlineDataSource });   
+
   }
 
   async componentDidMount() {
+    let token = await Notifications.getExpoPushTokenAsync();
+    this.setState({userPushToken: token });
+    console.log('expo notification token', this.state.userPushToken);
+
     this.checkOrFetchData();
   }
 
@@ -87,6 +93,8 @@ class MyOffersScreen extends React.Component {
 
   }
 
+
+
   _toggleModal = (visible, data) => {
 
     if(data){
@@ -94,7 +102,8 @@ class MyOffersScreen extends React.Component {
       var qrData = {
         "redemption_user_id":  this.props.user.user.user_id,
         "redemption_offer_id": data.post_data.ID,
-        "redemption_date_time": Date.now()
+        "redemption_date_time": Date.now(),
+        "token": this.state.userPushToken
       }
 
       this.setState({ 
@@ -209,16 +218,20 @@ class MyOffersScreen extends React.Component {
 
 
         {/*REDEMTION MODAL*/}
+
+
         <Modal
           visible={this.state.modalVisible}
-          transparent
+          transparent={true}
           animationType="slide"
           style={{margin:15}}
           onRequestClose = {() => console.log("closing modal now!")} 
-          avoidKeyboard={true}>
+          avoidKeyboard={false}
+          hardwareAccelerated={true}
+          >
 
-            <View enabled style={{ flex:1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-              <View style={[styles.modalStyle]} >
+            <View enabled style={{ flex:1, justifyContent: 'center', alignItems: 'center' }}>
+              <View style={[styles.modalStyle]} >               
               
                 <TouchableHighlight
                   onPress={() => { this._toggleModal(!this.state.modalVisible, null) }} 
@@ -226,23 +239,24 @@ class MyOffersScreen extends React.Component {
                   <Icon name="md-close-circle"  style={{color:'black', padding:20}}/> 
                 </TouchableHighlight>
 
-                <Text style={{textAlign:'center'}}>{screenProps.lang.myOffers.redeemMessage}</Text>
+                <Text style={{textAlign:'center', fontSize:18}}>{screenProps.lang.myOffers.redeemMessage}</Text>
+                
 
-              <View style={[{flex:1, alignItems: 'center', justifyContent: 'center'}]}>
-              
-                <QRCode    
-          
-                  value={JSON.stringify(this.state.qrData)} 
-                  size={200}
-                  bgColor='purple'
-                  fgColor='white'
+              <View style={[ {flex:1, alignItems: 'center', justifyContent: 'center', overflow:'hidden'} ]}>             
+
+                <QRCode
+                    value={JSON.stringify(this.state.qrData)} 
+                    size={300}
+                    bgColor='purple'
+                    fgColor='white'
                 />
-
 
               </View>
             </View>
           </View>
         </Modal>
+
+
       </MainWrapper>
     );
   }

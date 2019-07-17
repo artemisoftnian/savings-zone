@@ -4,10 +4,11 @@ import {
   View,
   StyleSheet,
   Vibration,
-  Dimensions
+  Dimensions,
+  ActivityIndicator
 } from 'react-native';
 
-import { Constants, BarCodeScanner, Permissions } from 'expo';
+import { Constants, BarCodeScanner, Permissions, Notifications } from 'expo';
 
 import { Text, Button } from 'native-base';
 
@@ -25,17 +26,20 @@ class ScannerScreen extends React.Component {
       hasCameraPermission: null,
       pause: false,
       destino: 'Offers', 
-      returnMessage: { message:''}
+      returnMessage: { message:''},
+      isCanjeando: false,
     };
 
   }
 
   async componentWillMount(){
-     let destino = await this.props.navigation.getParam('destiny','Offers'); 
-     this.setState({ destino });
+
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    let destino = await this.props.navigation.getParam('destiny','Offers'); 
+    this.setState({ destino });
+    console.log(this.state.destino);    
     this._requestCameraPermission();
   }
 
@@ -63,11 +67,7 @@ class ScannerScreen extends React.Component {
             </BarCodeScanner>            
         }
         {
-         /*
-        <Button full round success onPress = { () => this.testRedem(this.state.qrData) } >
-          <Text>Test Redemption Here</Text>
-        </Button>
-         */
+        this.state.isCanjeando?<ActivityIndicator style={{flex:1}}  size="large" color="yellow" />:null        
         }
 
         <Text>{this.state.returnMessage.message}</Text>
@@ -79,25 +79,78 @@ class ScannerScreen extends React.Component {
   testRedem = async (data) => {
     // Get the token that uniquely identifies this device
     //let token = await Notifications.getExpoPushTokenAsync();
-    console.log('pushToken', token);
+    //console.log('pushToken', token);
 
     var test = await this.props.merchantRedeemOffer(data);
     this.setState({returnMessage: this.props.merchant.message})    
   }
 
-  _handleBarCodeRead = async ({ type, data }) => {
+  _handleBarCodeRead = async ({ data }) => {   
+
+    data = JSON.parse(data);
+
+    if(this.state.pause)
+      return;
+
     const ENDPATTERN = [0, 200, 50, 200];
     Vibration.vibrate(ENDPATTERN);
 
     if(data && !this.state.pause){
-       this.setState({pause: true});
-       var test = await this.props.merchantRedeemOffer(data);
-       //alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-       if(test){
-         this.props.nav.navigate(this.state.destino, screenProps.lang.myOffers.redeemMessage);
-       }
+       this.setState({pause: true, isCanjeando:true});
+      // var test= true;
+       await this.props.merchantRedeemOffer(data).then(async (responseJson) => {
+         console.log('response from server', responseJson)
+          if(responseJson){
+            //first send Notification then navigate back to merchant home
+              var redimedData = this.props.merchant.message;
+
+              if(redimedData.goodToGo){
+                await this.sendNotification(data['token']);
+                this.props.navigation.navigate(this.state.destino, this.props.screenProps.lang.myOffers.redeemMessage);
+              }
+              else{
+                alert(redimedData.message); 
+                this.props.navigation.navigate(this.state.destino, this.props.screenProps.lang.myOffers.redeemMessage);
+              }          
+
+          }else{
+                            
+          }
+       })
+
     }
     
+  }
+
+  sendNotification = async (token) =>  {
+    let response = null;
+    try{
+      response = await fetch("https://exp.host/--/api/v2/push/send",{
+        method: 'POST',
+        headers: {
+          host: 'exp.host',
+          accept: 'application/json',
+          'accept-encoding': 'gzip, deflate',
+          'content-type': 'application/json' 
+        },
+        body: JSON.stringify({
+          to: token,
+          data: {offerID:'123'},
+          title: 'Offer Redemption',
+          body: 'Oferta Redimida Exitosamente',
+          priority: 'default',
+          sound: 'default',
+        })
+      });      
+    }
+    catch(e){
+      console.warn(e.message);
+      response = e.message;
+    }
+    finally{
+      //console.log(response);
+    }    
+
   }
 
 }

@@ -51,7 +51,7 @@ export const fetchOffersRemains = () => async dispatch => {
 }
 
 const fetchRemainOffers = async (dispatch) => {
-	console.log("llamando esto");
+	//console.log("llamando esto");
 	try {
 		dispatch({ type: FETCH_OFFER_REMAIN });
 		const pathService = `${global.wpSite}/wp-json/svapphelper/v2/offers/remain`;  
