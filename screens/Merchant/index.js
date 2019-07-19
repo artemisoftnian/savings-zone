@@ -89,7 +89,6 @@ class MerchantHomeScreen extends React.Component {
 
   render() {
 
-    console.log(this.props.user.merchant_meta.merchant_id);
     const { navigate } = this.props.navigation; 
 
     let renderList = null;

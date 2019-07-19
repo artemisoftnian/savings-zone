@@ -80,7 +80,7 @@ export default class OfferPoster extends React.Component {
                   <Image  source={ {uri:post_meta.offer_image_1 , cache: 'force-cache'} }  style={styles.offerImage} resizeMode="cover" /> 
                 </CardItem>
                 <CardItem style={ [styles.noPadding,{padding:10, marginTop:5}] } button onPress={() => _openOffer(offer) } > 
-                    <Text numberOfLines={2} >{post_data.post_title}</Text> 
+                    <Text numberOfLines={2} style={{ paddingRight: post_data.post_title.length <= 20 ? 5:0 }}>{post_data.post_title}</Text> 
                 </CardItem>
                 <CardItem testID={testID} style={styles.offerPriceContainer} button onPress={() => _openOffer(offer, expired) } >   
                   <Left style={{ paddingLeft:0}} >

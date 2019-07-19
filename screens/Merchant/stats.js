@@ -3,36 +3,17 @@ import * as React from 'react';
 import {
   View,
   StyleSheet,
-  AsyncStorage, FlatList, Image
+  AsyncStorage, FlatList,
+  ActivityIndicator, RefreshControl
 } from 'react-native';
 
 import { connect } from 'react-redux';
 import { fetchOffersDataSource, saveOffer, getMerchantStats } from './reducer'; 
 
-import { Text,  Button,  Badge ,  Body, Card, CardItem, Icon, Left, Right, Thumbnail} from 'native-base';
+import { Text,  Button,  Badge ,  Body, Card, CardItem, Left, Right, Icon} from 'native-base';
 import reducer from '../Offers/reducer';
 
 
-const testData = [
-  {
-    "offer_id": 12,
-    "offer_title": "Hotel San Walde, San Juan: Estadía de 2 noches para 2 personas que incluye cama full, wifi y desayuno continental",
-    "reddemend": "38",
-    "remain": "-17",
-  },
-  {
-    "offer_id": 11,
-    "offer_title": "Pesca Fresca Beer Garden, Fajardo: 2 Platos a escoger: Chillo Entero, El Volcán o Chuleta Can Can + Sangría + Flan",
-    "reddemend": "5",
-    "remain": "5",
-  },
-  {
-    "offer_id": 9,
-    "offer_title": "¡Road Trip por Utuado con Spotin! Visita a la Piedra Sofá + Ruta del Río Cañon Blanco y más",
-    "reddemend": "7",
-    "remain": "93",
-  },
-]
 
 class MerchantStats extends React.Component {
 
@@ -59,8 +40,8 @@ class MerchantStats extends React.Component {
 			isConnected: true,
 			start: false,
       selected: "key1",
-      myOffers: testData,
-      myStats: testData
+      myStats: [],
+      myOffers: []
     };
 
   }
@@ -91,32 +72,26 @@ class MerchantStats extends React.Component {
 
    //await AsyncStorage.removeItem('user')
   async componentWillMount() {
-    const { user_id } = this.props.user;
-    var test = await this.props.getMerchantStats( user_id );
-
-    //this.props.fetchOffersDataSource();
-    //this.arrayholder = this.props.offerList.dataSource;
-    //this.setState({ start: true, dataSource: this.props.offerList.dataSource });
+    this.fetchOfferData();
+    //this.setState({ isLoading: false }); 
   }
 
-  async componentDidMount() {
-    const { user_id } = this.props.user;
-    //console.log("diMount", this.props.merchant.merchantStats.myOffers);
-    this.setState({ myOffers: this.props.merchant.merchantStats.myOffers})
-  }
+  async componentDidMount() {  }
 
 	refreshOffers = async () => {
-		this.setState({ isLoading: false, dataSource: null }); 
-    this.fetchOfferData();
-    
-	};
+		this.setState({myOffers:[], isRefreshing: true }); 
+    this.fetchOfferData();   
+  }; 
 
   fetchOfferData = async () => {
     console.log("refreshing...");
-    const { user_id } = this.props.user;
-    this.props.fetchOffersDataSource();
-    this.setState({ start: true, dataSource: this.props.offerList.dataSource });
-    this.arrayholder = this.props.offerList.dataSource;
+    const { user_id } = this.props.user;    
+    this.props.getMerchantStats( user_id )
+    .then( offers => {
+      if(offers){
+        this.setState({ myOffers: this.props.merchant.merchantStats.myOffers})
+      }      
+    })
   }
 
   _handleLogOut = async () => {
@@ -129,6 +104,30 @@ class MerchantStats extends React.Component {
         return false;
       }
   };  
+
+  emptyComponent =() => {
+    return(
+        (this.state.refreshing == true) ?
+
+        <View style={styles.emptyContainer}>
+          <Text  style={styles.emptyActionText} >Arrastre el cohete hacia abajo para refrescar</Text>
+          <View style={styles.CircleShapeView}>
+            <Icon  style={[styles.emptyIcon, {marginLeft:45, marginTop:20}]} name='md-rocket' type='Ionicons'/>
+          </View>
+          <Text  style={styles.emptyText} >No hay datos disponibles en estos momentos.</Text>         
+        </View>         
+        :
+        <View style={styles.emptyContainer}>
+          <Text  style={styles.emptyActionText} >Refrescando Datos  </Text>
+          
+          <View style={styles.CircleShapeView}>            
+            <Icon  style={[styles.emptyIcon, {marginLeft:40, marginTop:25, color:'gray'}]} name='md-refresh' type='Ionicons'/>    
+            <ActivityIndicator /> 
+          </View>  
+            
+        </View> 
+    )
+  }    
 
   render() {
 
@@ -149,14 +148,22 @@ class MerchantStats extends React.Component {
     //console.log("state logico", this.state.myOffers[0].offer_title);
     
     return (
-      <View style={{}}>
+      <View style={{ width: '100%', height: '100%' }}>          
             <FlatList         
             data={ this.state.myOffers } 
+            ListEmptyComponent = { this.emptyComponent() }
             extraData={this.state}       
             style={{ marginTop:2 }}
-            keyExtractor={(item, index) => index}
+            refreshing={this.state.refreshing} 
+            onRefresh={()=> this.refreshOffers() }            
+            refreshFunction={
+              <RefreshControl
+                refreshing={this.state.refreshing} 
+                onRefresh={()=> this.refreshOffers() }
+              />
+            }             
+            keyExtractor={(item, index) => item.toString()}
             renderItem={({item, index}) => {
-              console.log("joder->",item.offer_title);
               return (
                 <View>
                   <Card>
@@ -183,8 +190,8 @@ class MerchantStats extends React.Component {
               )       
               }
             }        
-            />  
-
+            /> 
+            
 
     </View>
     );
@@ -201,6 +208,46 @@ const styles = StyleSheet.create({
      fontSize: 18,
      height: 44,
    },
+   emptyContainer: {    
+    flex:1,
+		alignItems: 'center',
+    justifyContent: "center",
+	},
+  emptyIcon:{
+    color:'#ff704d',
+    fontSize:100
+  },
+  emptyText:{
+    fontSize:20,
+    color:'darkgray',
+    fontWeight:'bold',
+    padding:30,
+    paddingTop:20, paddingBottom:5,
+		justifyContent: 'center', 
+    textShadowColor: 'rgba(0, 0, 0, 0.1)', 
+    textShadowRadius: 10,
+    textAlign:'center'  
+  },
+  emptyActionText:{
+    fontSize:15,
+    color:'darkgray',
+    fontWeight:'bold',
+    padding:60,
+    paddingTop:5,
+    marginTop:40,
+    paddingBottom:10,
+		justifyContent: 'center', 
+    textShadowColor: 'rgba(0, 0, 0, 0.1)', 
+    textShadowRadius: 10,
+    textAlign:'center' 
+  },
+  CircleShapeView: {
+    width: 150,
+    height: 150,
+    borderRadius: 150/2,
+    backgroundColor: '#E0E0E0',
+    textAlign:'center'
+  },  
 });
 
 

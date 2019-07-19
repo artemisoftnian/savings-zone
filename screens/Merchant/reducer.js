@@ -35,12 +35,10 @@ export const getMerchantStats = (merchant_id = null) => async dispatch => {
       });        
       if (data.status === 200) {            
           data = await data.json();
-          console.log(data);
           
           if(data.message){
-              console.log(data.message);
-              dispatch({type: FETCH_STATS_SUCCESS, payload: data}); 
-              return true;
+            dispatch({type: FETCH_STATS_SUCCESS, payload: data}); 
+            return true;
           }
       }
       dispatch({type: FETCH_STATS_FAILED, error: 'No se pudo aceder a los stats!'});
@@ -67,11 +65,8 @@ export const merchantRedeemOffer = (offer= null) => async dispatch => {
           body: JSON.stringify(offer)
         });        
         if (data.status === 200) {            
-            data = await data.json();
-            console.log(data);
-            
+            data = await data.json();           
             if(data.message){
-                console.log(data.message);
                 dispatch({type: FETCH_REDEEM_OFFER_SUCCESS, payload: data}); 
                 return true;
             }
