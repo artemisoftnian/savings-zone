@@ -82,11 +82,11 @@ export default class OfferPoster extends React.Component {
                 <CardItem style={ [styles.noPadding,{padding:10, marginTop:5}] } button onPress={() => _openOffer(offer) } > 
                     <Text numberOfLines={2} >{post_data.post_title}</Text> 
                 </CardItem>
-                <CardItem testID={testID} style={styles.offerPriceContainer} button onPress={() => _openOffer(offer, expired) } >  
+                <CardItem testID={testID} style={styles.offerPriceContainer} button onPress={() => _openOffer(offer, expired) } >   
                   <Left style={{ paddingLeft:0}} >
                     <Text style={{flex:1}}>
                       <Text style={{fontSize:8, color:'darkgray', fontWeight:'bold'}}> Usted Paga </Text> 
-                      <Text adjustsFontSizeToFit numberOfLines={1} style={styles.offerPrice}>${post_meta.offer_price}</Text> 
+                      <Text adjustsFontSizeToFit numberOfLines={1} style={styles.offerPrice}> {isNaN(post_meta.offer_price)?null:'$' }{post_meta.offer_price}</Text> 
                     </Text>
                   </Left>
                   <Right>

@@ -275,7 +275,7 @@ class Oferta extends React.Component {
               <Footer style={{backgroundColor:"#f7f7f7"}}>
               <FooterTab style={{backgroundColor:"#f7f7f7", padding:10}}>
                 <Left style={[styles.priceText, {paddingLeft:20, justifyContent:'center'}]}>                              
-                    <Text style={{fontSize:21, color:'purple', fontWeight:'bold'}}>${ this.state.price }</Text>
+                    <Text style={{fontSize:21, color:'purple', fontWeight:'bold'}}> {isNaN(this.state.price)?null:'$' }{ this.state.price }</Text>
                     {
                       (this.state.daysRemain >= 0)
                       ?
@@ -323,15 +323,9 @@ class Oferta extends React.Component {
                     onConfirmPressed={() => { this.hideAlert() }}
                     customView={ this.alertContents() }
                 />   
-            </Modal>
-      
+            </Modal>      
 
           </View>
-
-
-
-
-
 
     );
   }

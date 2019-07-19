@@ -454,6 +454,7 @@ class Offers extends React.Component {
         }
           
         data={getDataSourceFilter}
+        initialNumToRender={6} 
         numColumns={2}        
         extraData={this.state}
         keyExtractor={(item, index) => index.toString()}
