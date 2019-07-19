@@ -89,7 +89,7 @@ class MerchantHomeScreen extends React.Component {
 
   render() {
 
-
+    console.log(this.props.user.merchant_meta.merchant_id);
     const { navigate } = this.props.navigation; 
 
     let renderList = null;
@@ -106,7 +106,7 @@ class MerchantHomeScreen extends React.Component {
 
       <MainWrapper
         //title="Savings Zone"
-        onScanPress={() => this.props.navigation.navigate('Scanner', {'destiny':'MerchantHome'} )}
+        onScanPress={() => this.props.navigation.navigate('Scanner', {'destiny':'MerchantHome'} )} 
         rightIcon = 'md-qr-scanner'
         view='horizontal'
         searchFunction = {this.handleSearchFilter}
@@ -119,7 +119,8 @@ class MerchantHomeScreen extends React.Component {
         }
         showFooter={false}         
       > 
-      <Text style={{margin:20, flex:1, textAlign:'center', fontSize:20}} >Merchant Tools</Text> 
+      <Text style={{margin:20, marginBottom:5, flex:1, textAlign:'center', fontSize:20}} >Merchant Tools</Text>
+      <Text style={{marginTop:5, flex:1, textAlign:'center', fontSize:15}} >{this.props.user.merchant_meta.merchant_name}</Text> 
       <View testID="merchantView" style={{margin:20, flex:1}}>
           <Button 
             testID="btnScan"          
@@ -152,6 +153,8 @@ class MerchantHomeScreen extends React.Component {
                  
       </View>     
        <Text style={{fontSize:9, textAlign:'center', color:'gray'}}>r.{appInfo.version}.{appInfo.build}.{appInfo.jsBuildNumber}</Text>
+       <Text style={{fontSize:9, textAlign:'center', color:'gray'}}>m({this.props.user.merchant_meta.merchant_id}).({this.props.user.merchant_meta.user_id})</Text>
+       
       </MainWrapper>
     );
   }

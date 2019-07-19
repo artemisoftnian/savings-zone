@@ -97,12 +97,15 @@ class MyOffersScreen extends React.Component {
 
   _toggleModal = (visible, data) => {
 
+
     if(data){
+      console.log('merchant_ID', data.post_meta.offer_merchant_id);
 
       var qrData = {
         "redemption_user_id":  this.props.user.user.user_id,
         "redemption_offer_id": data.post_data.ID,
         "redemption_date_time": Date.now(),
+        "merchant_id": data.post_meta.offer_merchant_id,
         "token": this.state.userPushToken
       }
 

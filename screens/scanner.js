@@ -39,7 +39,7 @@ class ScannerScreen extends React.Component {
   async componentDidMount() {
     let destino = await this.props.navigation.getParam('destiny','Offers'); 
     this.setState({ destino });
-    console.log(this.state.destino);    
+    //console.log(this.state.destino);    
     this._requestCameraPermission();
   }
 
@@ -88,6 +88,8 @@ class ScannerScreen extends React.Component {
   _handleBarCodeRead = async ({ data }) => {   
 
     data = JSON.parse(data);
+    
+    //console.log('merchant',this.props.user);
 
     if(this.state.pause)
       return;
@@ -95,11 +97,20 @@ class ScannerScreen extends React.Component {
     const ENDPATTERN = [0, 200, 50, 200];
     //Vibration.vibrate(ENDPATTERN);
 
+    //Verify if offers belongs to this merchant
+    if(data.merchant_id != this.props.user.merchant_meta.merchant_id){  //check first with merchant_id if not match 
+      if(data.merchant_id != this.props.user.merchant_meta.user_id){ //check then with user_id
+        alert("La oferta que intentan redimir le pertenece a otro comerciante. Verifique con el cliente."); 
+        return;
+      }
+    }
+
+
     if(data && !this.state.pause){
        this.setState({pause: true, isCanjeando:true});
       // var test= true;
        await this.props.merchantRedeemOffer(data).then(async (responseJson) => {
-         console.log('response from server', responseJson)
+         //console.log('response from server', responseJson)
           if(responseJson){
             //first send Notification then navigate back to merchant home
               var redimedData = this.props.merchant.message;
