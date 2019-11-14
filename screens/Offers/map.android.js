@@ -1,11 +1,16 @@
 import * as React from 'react';
-import { View, Root, Icon, Button, Text,Toast} from 'native-base';
-import { Constants, MapView , Location, Permissions } from 'expo';
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+
+import { View, Root, Icon, Button, Text,Toast } from 'native-base';
+import MapView from 'react-native-maps';
+
+import Constants from 'expo-constants';
 import { StyleSheet, Platform, Linking, Modal, TouchableHighlight, Alert, Image } from 'react-native';
 
 
 
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'; 
 
 import OfferInfo from '../../components/OfferInfo';
 
