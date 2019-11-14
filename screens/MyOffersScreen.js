@@ -10,7 +10,9 @@ import {
   Dimensions
 } from 'react-native'; 
 
-import {Permissions, Notifications , Constants} from 'expo';
+import {Permissions, Notifications} from 'expo';
+import Constants from 'expo-constants';
+
 
 import QRCode from 'react-native-qrcode';
 import { Toast,  Thumbnail,  Text,  Button,  Icon,   SwipeRow } from 'native-base';

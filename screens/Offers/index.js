@@ -15,7 +15,8 @@ import OfferInfo from '../../components/OfferInfo';
 import OfferPoster from '../../components/OfferPoster';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import helpers from '../../components/helpers';
-import { Constants } from 'expo-camera';
+//import { Constants } from 'expo-camera';
+
 
 const dim = Dimensions.get('window');
 

@@ -1,15 +1,17 @@
+import { AsyncStorage } from 'react-native';
 import { createStore, applyMiddleware } from 'redux';
 import { persistCombineReducers } from 'redux-persist';
 import thunk from 'redux-thunk';
-import storage from 'redux-persist/es/storage';
+//import storage from 'redux-persist/es/storage';
+
 import rootReducer from './rootReducer';
 
 let middleware = [thunk];
 
 const config = {
     key: 'root',
-    storage,
-    blacklist: ['nav']
+    blacklist: ['nav'],
+    storage: AsyncStorage
 };
 
 const updateMessagesMiddleware = ({ dispatch }) => next => {

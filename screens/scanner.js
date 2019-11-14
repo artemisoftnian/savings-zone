@@ -8,7 +8,8 @@ import {
   ActivityIndicator
 } from 'react-native';
 
-import { Constants, BarCodeScanner, Permissions, Notifications } from 'expo';
+import { BarCodeScanner, Permissions, Notifications } from 'expo';
+import Constants from 'expo-constants';
 
 import { Text, Button } from 'native-base';
 
