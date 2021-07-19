@@ -1,3 +1,5 @@
 # savings-zone
 savings-zone repo 
-a ver que sale cuando le de commit 
+
+Made with: React Native 
+Description:  Groupon Like Application that use Wordpress as backend
