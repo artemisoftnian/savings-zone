@@ -18,7 +18,7 @@
     "expo-google-sign-in": "^3.0.0",
     "expokit": "32.1.1",
     "in-app-purchase": "1.10.5",
-    "moment": "2.22.2",
+    "moment": "2.29.4",
     "native-base": "2.12.1",
     "prop-types": "15.6.2",
     "react": "16.5.0",
